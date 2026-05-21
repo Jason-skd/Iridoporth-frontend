@@ -26,8 +26,10 @@ src/assets/
       cabin-window.svg
       paper-texture.webp
   status/
-    lonely-planet.svg
-    passing-plane.svg
+    planet/
+      lonely-planet.svg
+    airplane/
+      passing-plane.svg
   shared/
     README.md
 ```
@@ -184,7 +186,7 @@ texture opacity: 8% - 14%
 交付文件：
 
 ```text
-src/assets/status/lonely-planet.svg
+src/assets/status/planet/lonely-planet.svg
 ```
 
 设计目标：
@@ -201,7 +203,7 @@ src/assets/status/lonely-planet.svg
 交付文件：
 
 ```text
-src/assets/status/passing-plane.svg
+src/assets/status/airplane/passing-plane.svg
 ```
 
 设计目标：
@@ -216,7 +218,7 @@ src/assets/status/passing-plane.svg
 可选交付：
 
 ```text
-src/assets/status/plane-trail.svg
+src/assets/status/airplane/plane-trail.svg
 ```
 
 ## 7. 颜色与设计 token

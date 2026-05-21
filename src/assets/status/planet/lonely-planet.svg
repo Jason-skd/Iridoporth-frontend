@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 560" role="img" aria-labelledby="title desc">
+  <title id="title">Lonely Planet</title>
+  <desc id="desc">A quiet single-color planet based on the frontend placeholder, with a soft surface highlight, inner contour, and tilted orbit.</desc>
+
+  <defs>
+    <clipPath id="planet-disc">
+      <circle cx="380" cy="282" r="172"/>
+    </clipPath>
+  </defs>
+
+  <g fill="none" stroke="#5f563f" stroke-linecap="round" stroke-linejoin="round">
+    <ellipse cx="380" cy="282" rx="274" ry="78" transform="rotate(-18 380 282)" stroke-width="1.7" stroke-dasharray="8 8" opacity=".28"/>
+    <ellipse cx="380" cy="282" rx="214" ry="54" transform="rotate(-18 380 282)" stroke-width="1.1" opacity=".16"/>
+
+    <circle cx="380" cy="282" r="172" stroke-width="3.8" opacity=".82"/>
+    <circle cx="380" cy="282" r="126" stroke-width="1.5" opacity=".24"/>
+
+    <g clip-path="url(#planet-disc)">
+      <circle cx="326" cy="226" r="96" fill="#5f563f" stroke="none" opacity=".06"/>
+
+      <path d="M174 255 C242 238 316 236 386 254 C459 273 531 274 594 253" stroke-width="1.5" opacity=".12"/>
+      <path d="M178 291 C252 274 329 274 402 294 C471 313 536 312 598 291" stroke-width="1.5" opacity=".14"/>
+      <path d="M190 329 C258 315 330 318 398 336 C462 353 526 352 588 330" stroke-width="1.3" opacity=".11"/>
+
+      <path d="M210 186 L594 104" stroke-width="2" opacity=".05"/>
+      <path d="M184 236 L638 139" stroke-width="2" opacity=".05"/>
+      <path d="M160 286 L662 179" stroke-width="2" opacity=".05"/>
+      <path d="M140 336 L654 226" stroke-width="2" opacity=".05"/>
+      <path d="M162 386 L620 288" stroke-width="2" opacity=".05"/>
+    </g>
+
+    <circle cx="236" cy="176" r="2.5" fill="#5f563f" stroke="none" opacity=".28"/>
+    <circle cx="590" cy="204" r="2" fill="#5f563f" stroke="none" opacity=".2"/>
+    <circle cx="610" cy="414" r="2.5" fill="#5f563f" stroke="none" opacity=".18"/>
+  </g>
+</svg>

@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react'
 import cabinWindow from './assets/home/porthole/cabin-window.svg'
 import iridoporthTitle from './assets/home/title/iridoporth-title.svg'
+import passingPlane from './assets/status/airplane/passing-plane.svg'
+import lonelyPlanet from './assets/status/planet/lonely-planet.svg'
 import './App.css'
 
 type DeviceStatus = {
@@ -160,8 +162,8 @@ function StatusSection() {
   return (
     <section className="status-section" aria-labelledby="status-title">
       <div className="status-scene" aria-hidden="true">
-        <div className="planet-placeholder" />
-        <div className="plane-placeholder" />
+        <img className="planet-asset" src={lonelyPlanet} alt="" />
+        <img className="plane-asset" src={passingPlane} alt="" />
       </div>
 
       <div className="status-panel">

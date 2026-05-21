@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 140" role="img" aria-labelledby="title desc">
+  <title id="title">Passing Plane</title>
+  <desc id="desc">A restrained single-color line drawing of a small airplane passing across the Raspberry Pi status scene.</desc>
+
+  <g fill="none" stroke="#5f563f" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M32 77 C82 66 134 57 186 50 C222 45 257 44 287 48" stroke-width="5.2" opacity=".86"/>
+    <path d="M188 50 L259 25 C267 22 275 23 282 28 L293 36 C296 38 295 42 292 43 L238 57" stroke-width="4.8" opacity=".9"/>
+    <path d="M176 52 L111 18 C105 15 98 16 93 21 L88 26 C86 29 87 32 91 34 L147 61" stroke-width="4.8" opacity=".82"/>
+    <path d="M79 67 L42 45 C38 43 34 44 31 47 L25 54 C23 57 24 60 28 61 L62 71" stroke-width="4.2" opacity=".78"/>
+    <path d="M74 76 L38 101 C35 103 35 107 38 109 L47 113 C51 115 56 114 60 111 L99 84" stroke-width="4.2" opacity=".74"/>
+
+    <path d="M76 70 C118 62 167 56 215 54" stroke-width="1.6" opacity=".38"/>
+    <path d="M212 51 C228 49 246 49 265 51" stroke-width="1.4" opacity=".28"/>
+    <path d="M107 63 L142 78" stroke-width="1.5" opacity=".32"/>
+    <path d="M162 56 L189 69" stroke-width="1.5" opacity=".28"/>
+    <path d="M55 73 L28 78" stroke-width="1.5" opacity=".2"/>
+
+    <circle cx="239" cy="50" r="2.2" fill="#5f563f" stroke="none" opacity=".34"/>
+    <circle cx="255" cy="49" r="1.8" fill="#5f563f" stroke="none" opacity=".28"/>
+  </g>
+</svg>

@@ -346,74 +346,25 @@ main {
   z-index: -1;
 }
 
-.planet-placeholder {
+.planet-asset {
   position: absolute;
-  top: 50%;
+  top: 48%;
   left: 50%;
-  aspect-ratio: 1;
-  width: min(46vw, 520px);
-  border: 2px solid var(--line);
-  border-radius: 50%;
-  background:
-    radial-gradient(circle at 38% 32%, rgba(247, 241, 223, 0.36), transparent 22%),
-    repeating-linear-gradient(
-      -12deg,
-      transparent 0 18px,
-      rgba(51, 45, 36, 0.045) 18px 20px
-    );
+  width: min(56vw, 660px);
+  color: var(--ink);
+  opacity: 0.9;
   transform: translate(-50%, -48%);
 }
 
-.planet-placeholder::before,
-.planet-placeholder::after {
+.plane-asset {
   position: absolute;
-  border: 1px solid var(--line-soft);
-  border-radius: 50%;
-  content: '';
-}
-
-.planet-placeholder::before {
-  inset: 13%;
-}
-
-.planet-placeholder::after {
-  inset: -14%;
-  border-style: dashed;
-  transform: rotate(-18deg) scaleY(0.28);
-}
-
-.plane-placeholder {
-  position: absolute;
-  top: 25%;
-  right: 12%;
-  width: 108px;
-  height: 44px;
-  border-top: 2px solid var(--line);
-  transform: rotate(-12deg);
+  top: 22%;
+  right: 9%;
+  width: min(22vw, 220px);
+  color: var(--ink);
+  opacity: 0.86;
+  transform: rotate(-10deg);
   transform-origin: center;
-}
-
-.plane-placeholder::before,
-.plane-placeholder::after {
-  position: absolute;
-  background: var(--line);
-  content: '';
-}
-
-.plane-placeholder::before {
-  top: -12px;
-  right: 8px;
-  width: 42px;
-  height: 2px;
-  transform: rotate(23deg);
-}
-
-.plane-placeholder::after {
-  top: -1px;
-  right: 0;
-  width: 18px;
-  height: 2px;
-  transform: rotate(-32deg);
 }
 
 .status-panel {
@@ -516,15 +467,15 @@ main {
     margin-inline: auto;
   }
 
-  .planet-placeholder {
+  .planet-asset {
     top: 43%;
-    width: min(76vw, 380px);
+    width: min(92vw, 520px);
   }
 
-  .plane-placeholder {
+  .plane-asset {
     top: 18%;
-    right: 16%;
-    width: 84px;
+    right: 9%;
+    width: min(34vw, 150px);
   }
 
   .status-section {
