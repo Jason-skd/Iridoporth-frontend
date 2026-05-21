@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" role="img" aria-labelledby="title desc">
+  <title id="title">View Outside The Cabin Window</title>
+  <desc id="desc">A restrained single-color line scene of clouds, horizon, and flight trails for clipping inside a cabin-window shape.</desc>
+
+  <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M94 410 C258 370 402 372 554 413 C718 457 868 458 1156 390" stroke-width="4" opacity=".34"/>
+    <path d="M20 474 C184 434 338 439 496 483 C656 528 840 525 1180 456" stroke-width="2" opacity=".2"/>
+    <path d="M142 326 C310 294 472 299 624 332 C790 368 948 361 1110 318" stroke-width="1.6" opacity=".18"/>
+
+    <path d="M244 318 C280 286 333 292 358 331 C383 309 424 316 442 350 C477 348 504 367 514 398" stroke-width="4.2" opacity=".44"/>
+    <path d="M602 244 C633 217 679 223 702 257 C723 241 756 247 772 276 C800 275 822 292 831 318" stroke-width="3.6" opacity=".34"/>
+    <path d="M748 476 C784 448 835 455 859 490 C879 474 914 481 930 510" stroke-width="3" opacity=".28"/>
+
+    <path d="M690 190 C790 151 894 146 1006 174" stroke-width="2.2" opacity=".24"/>
+    <path d="M720 213 C820 180 916 177 1022 202" stroke-width="1.3" opacity=".18"/>
+    <path d="M178 248 C278 210 382 207 494 236" stroke-width="1.4" opacity=".18"/>
+
+    <path d="M728 180 L812 128" stroke-width="2.4" opacity=".3"/>
+    <path d="M744 195 L830 142" stroke-width="1.3" opacity=".2"/>
+
+    <path d="M314 584 C428 616 554 619 682 588 C806 558 950 546 1160 586" stroke-width="2" opacity=".18"/>
+    <path d="M90 638 C230 606 374 615 520 646 C690 682 862 672 1150 626" stroke-width="1.6" opacity=".14"/>
+  </g>
+</svg>

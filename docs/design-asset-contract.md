@@ -18,12 +18,13 @@
 
 ```text
 src/assets/
-  title/
-    iridoporth-title-desktop.svg
-    iridoporth-title-mobile.svg
-  hero/
-    cabin-window.svg
-    paper-texture.webp
+  home/
+    title/
+      iridoporth-title-desktop.svg
+      iridoporth-title-mobile.svg
+    porthole/
+      cabin-window.svg
+      paper-texture.webp
   status/
     lonely-planet.svg
     passing-plane.svg
@@ -55,8 +56,8 @@ Iridoporth - 舷窗
 请提供两份 SVG：
 
 ```text
-src/assets/title/iridoporth-title-desktop.svg
-src/assets/title/iridoporth-title-mobile.svg
+src/assets/home/title/iridoporth-title-desktop.svg
+src/assets/home/title/iridoporth-title-mobile.svg
 ```
 
 desktop 版本：
@@ -115,14 +116,14 @@ Iridoporth - 舷窗
 请优先提供：
 
 ```text
-src/assets/hero/cabin-window.svg
+src/assets/home/porthole/cabin-window.svg
 ```
 
 如 desktop 和 mobile 构图明显不同，可提供：
 
 ```text
-src/assets/hero/cabin-window-desktop.svg
-src/assets/hero/cabin-window-mobile.svg
+src/assets/home/porthole/cabin-window-desktop.svg
+src/assets/home/porthole/cabin-window-mobile.svg
 ```
 
 ### 4.3 SVG 导出要求
@@ -152,13 +153,13 @@ src/assets/hero/cabin-window-mobile.svg
 请提供：
 
 ```text
-src/assets/hero/paper-texture.webp
+src/assets/home/porthole/paper-texture.webp
 ```
 
 如需要兼容透明叠加，也可以提供：
 
 ```text
-src/assets/hero/paper-texture.png
+src/assets/home/porthole/paper-texture.png
 ```
 
 ### 5.3 交付要求
