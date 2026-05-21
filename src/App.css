@@ -32,6 +32,7 @@ main {
     linear-gradient(0deg, rgba(255, 255, 255, 0.08) 1px, transparent 1px);
   background-size: 19px 23px;
   mask-image: linear-gradient(180deg, #000, rgba(0, 0, 0, 0.18));
+  animation: paper-drift 28s linear infinite;
 }
 
 .hero-section::before,
@@ -79,6 +80,7 @@ main {
   height: 7px;
   border: 1px solid currentColor;
   border-radius: 50%;
+  animation: line-node-flow 6s ease-in-out infinite;
   content: '';
 }
 
@@ -94,6 +96,7 @@ main {
   top: 19%;
   left: -8%;
   width: 42%;
+  animation: route-drift-one 20s ease-in-out infinite;
   transform: rotate(-12deg);
 }
 
@@ -101,6 +104,7 @@ main {
   right: -10%;
   bottom: 18%;
   width: 48%;
+  animation: route-drift-two 24s ease-in-out infinite;
   transform: rotate(14deg);
 }
 
@@ -136,17 +140,20 @@ main {
 .map-pin-one {
   top: 13%;
   right: 23%;
+  animation: pin-pulse 8s ease-in-out infinite;
 }
 
 .map-pin-two {
   bottom: 14%;
   left: 16%;
   color: var(--rust);
+  animation: pin-pulse 9s ease-in-out 1.2s infinite;
 }
 
 .corner-mark {
   width: 118px;
   height: 118px;
+  animation: notation-fade 7s ease-in-out infinite;
   opacity: 0.5;
 }
 
@@ -224,11 +231,13 @@ main {
 }
 
 .porthole-frame::before {
+  animation: line-shimmer 7s ease-in-out infinite;
   z-index: 2;
 }
 
 .porthole-frame::after {
   inset: 56px;
+  animation: line-shimmer 8.5s ease-in-out 1.4s infinite;
   opacity: 0.62;
   z-index: 2;
 }
@@ -238,6 +247,7 @@ main {
   inset: 12% 8%;
   width: 84%;
   height: 76%;
+  animation: cabin-line-flow 14s ease-in-out infinite;
   object-fit: cover;
   opacity: 0.92;
 }
@@ -246,6 +256,7 @@ main {
   position: absolute;
   z-index: 3;
   margin: 0;
+  animation: notation-fade 6.5s ease-in-out infinite;
   color: var(--ink-soft);
   font-size: 12px;
   letter-spacing: 0.16em;
@@ -281,6 +292,7 @@ main {
 .eyebrow::after {
   width: min(180px, 24vw);
   height: 1px;
+  animation: rule-flow 6s ease-in-out infinite;
   background: var(--line-soft);
   content: '';
 }
@@ -288,12 +300,15 @@ main {
 .title-asset {
   width: 100%;
   height: auto;
+  animation: title-drift 9s ease-in-out infinite;
+  transform-origin: 50% 50%;
 }
 
 .flight-strip {
   display: grid;
   width: min(100%, 560px);
   margin-top: 28px;
+  animation: notation-fade 8s ease-in-out 0.8s infinite;
   border-top: 1px solid var(--line-soft);
   border-bottom: 1px solid var(--line-soft);
   color: var(--ink-soft);
@@ -351,6 +366,7 @@ main {
   top: 48%;
   left: 50%;
   width: min(56vw, 660px);
+  animation: planet-line-flow 12s ease-in-out infinite;
   color: var(--ink);
   opacity: 0.9;
   transform: translate(-50%, -48%);
@@ -361,8 +377,9 @@ main {
   top: 22%;
   right: 9%;
   width: min(22vw, 220px);
+  animation: plane-hover 11s ease-in-out infinite;
   color: var(--ink);
-  opacity: 0.86;
+  opacity: 0.72;
   transform: rotate(-10deg);
   transform-origin: center;
 }
@@ -426,6 +443,151 @@ main {
 
 .status-updated {
   margin-top: 20px;
+}
+
+@keyframes paper-drift {
+  from {
+    background-position: 0 0, 0 0;
+  }
+
+  to {
+    background-position: 38px 46px, -19px 23px;
+  }
+}
+
+@keyframes route-drift-one {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) rotate(-12deg);
+  }
+
+  50% {
+    transform: translate3d(16px, 7px, 0) rotate(-10deg);
+  }
+}
+
+@keyframes route-drift-two {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) rotate(14deg);
+  }
+
+  50% {
+    transform: translate3d(-18px, -8px, 0) rotate(12deg);
+  }
+}
+
+@keyframes line-node-flow {
+  0%,
+  100% {
+    opacity: 0.38;
+    transform: scale(0.82);
+  }
+
+  50% {
+    opacity: 0.86;
+    transform: scale(1.14);
+  }
+}
+
+@keyframes pin-pulse {
+  0%,
+  100% {
+    opacity: 0.48;
+    transform: scale(1);
+  }
+
+  50% {
+    opacity: 0.82;
+    transform: scale(1.04);
+  }
+}
+
+@keyframes line-shimmer {
+  0%,
+  100% {
+    opacity: 0.42;
+  }
+
+  50% {
+    opacity: 0.82;
+  }
+}
+
+@keyframes rule-flow {
+  0%,
+  100% {
+    opacity: 0.36;
+    transform: scaleX(0.82);
+  }
+
+  50% {
+    opacity: 0.8;
+    transform: scaleX(1);
+  }
+}
+
+@keyframes notation-fade {
+  0%,
+  100% {
+    opacity: 0.56;
+  }
+
+  50% {
+    opacity: 0.9;
+  }
+}
+
+@keyframes cabin-line-flow {
+  0%,
+  100% {
+    opacity: 0.82;
+    transform: translate3d(0, 0, 0) scale(1.015);
+  }
+
+  50% {
+    opacity: 0.98;
+    transform: translate3d(-10px, 6px, 0) scale(1.035);
+  }
+}
+
+@keyframes title-drift {
+  0%,
+  100% {
+    opacity: 0.96;
+    transform: translate3d(0, 0, 0) rotate(0deg);
+  }
+
+  50% {
+    opacity: 1;
+    transform: translate3d(0, -5px, 0) rotate(-0.25deg);
+  }
+}
+
+@keyframes planet-line-flow {
+  0%,
+  100% {
+    opacity: 0.78;
+    transform: translate(-50%, -48%) scale(1);
+  }
+
+  50% {
+    opacity: 0.94;
+    transform: translate(-50%, -49%) scale(1.012);
+  }
+}
+
+@keyframes plane-hover {
+  0%,
+  100% {
+    opacity: 0.62;
+    transform: translate3d(0, 0, 0) rotate(-10deg);
+  }
+
+  50% {
+    opacity: 0.78;
+    transform: translate3d(-6px, 3px, 0) rotate(-9.4deg);
+  }
 }
 
 @media (max-width: 900px) {
@@ -520,5 +682,15 @@ main {
   .status-metric {
     grid-template-columns: 1fr;
     gap: 8px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
   }
 }

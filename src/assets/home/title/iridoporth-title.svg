@@ -4,6 +4,30 @@
 
   <defs>
     <style>
+      @keyframes titleLineFlow {
+        0%, 100% {
+          opacity: .46;
+          transform: translateX(0);
+        }
+
+        50% {
+          opacity: .9;
+          transform: translateX(8px);
+        }
+      }
+
+      @keyframes compassDrift {
+        0%, 100% {
+          opacity: .66;
+          transform: translateY(0);
+        }
+
+        50% {
+          opacity: .96;
+          transform: translateY(-4px);
+        }
+      }
+
       .latin {
         font-family: 'Didot', 'Bodoni 72', Georgia, 'Noto Serif', serif;
         font-size: 106px;
@@ -16,6 +40,17 @@
         font-size: 146px;
         font-weight: 900;
         letter-spacing: 10px;
+      }
+
+      .compass-lines {
+        animation: compassDrift 7s ease-in-out infinite;
+        transform-box: fill-box;
+        transform-origin: center;
+      }
+
+      .title-rules {
+        animation: titleLineFlow 5.8s ease-in-out infinite;
+        transform-box: fill-box;
       }
     </style>
 
@@ -45,13 +80,13 @@
     <text class="han" x="380" y="294" text-anchor="middle" stroke-width="1.25">舷窗</text>
   </g>
 
-  <g fill="none" stroke="#5f563f" stroke-linecap="round" stroke-linejoin="round">
+  <g class="compass-lines" fill="none" stroke="#5f563f" stroke-linecap="round" stroke-linejoin="round">
     <path d="M503 56 A118 118 0 0 1 641 154" stroke-width="3.8" opacity=".86"/>
     <path d="M528 68 A91 91 0 0 1 626 140" stroke-width="1.7" opacity=".5"/>
     <path d="M190 258 A118 118 0 0 0 310 312" stroke-width="2.8" opacity=".62"/>
   </g>
 
-  <g fill="none" stroke="#5f563f" stroke-linecap="round" stroke-linejoin="round">
+  <g class="title-rules" fill="none" stroke="#5f563f" stroke-linecap="round" stroke-linejoin="round">
     <path d="M204 168 H556" stroke-width="5.8" opacity=".9"/>
     <path d="M238 182 H522" stroke-width="1.8" opacity=".5"/>
     <path d="M306 158 H454" stroke-width="1.35" opacity=".38"/>
