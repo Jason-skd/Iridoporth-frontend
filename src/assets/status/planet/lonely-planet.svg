@@ -5,19 +5,13 @@
   <defs>
     <style>
       @keyframes orbitFlow {
-        0% {
-          stroke-dashoffset: 0;
+        0%, 100% {
           opacity: .38;
           transform: rotate(-18deg);
         }
 
         50% {
           opacity: .58;
-        }
-
-        100% {
-          stroke-dashoffset: -32;
-          opacity: .38;
           transform: rotate(-16deg);
         }
       }
@@ -57,7 +51,7 @@
       }
 
       .orbit-band {
-        animation: orbitFlow 12s linear infinite;
+        animation: orbitFlow 14s ease-in-out infinite;
         transform-box: fill-box;
         transform-origin: 380px 282px;
       }

@@ -377,6 +377,8 @@ main.planetary-main {
   position: absolute;
   inset: 0;
   z-index: -1;
+  contain: layout paint;
+  transform: translateZ(0);
 }
 
 .planet-asset {
@@ -387,7 +389,8 @@ main.planetary-main {
   animation: planet-line-flow 12s ease-in-out infinite;
   color: var(--ink);
   opacity: 0.9;
-  transform: translate(-50%, -48%);
+  transform: translate3d(-50%, -48%, 0);
+  will-change: transform, opacity;
 }
 
 .plane-asset {
@@ -400,6 +403,7 @@ main.planetary-main {
   opacity: 0.72;
   transform: rotate(-10deg);
   transform-origin: center;
+  will-change: transform, opacity;
 }
 
 .status-beacon,
@@ -417,6 +421,7 @@ main.planetary-main {
   border-radius: 50%;
   opacity: 0.44;
   animation: beacon-pulse 8s ease-in-out infinite;
+  will-change: transform, opacity;
 }
 
 .status-beacon::before,
@@ -457,6 +462,7 @@ main.planetary-main {
   border-radius: 50%;
   opacity: 0.34;
   transform: rotate(-14deg);
+  will-change: transform, opacity;
 }
 
 .status-orbit-one {
@@ -721,12 +727,12 @@ main.planetary-main {
   0%,
   100% {
     opacity: 0.78;
-    transform: translate(-50%, -48%) scale(1);
+    transform: translate3d(-50%, -48%, 0) scale(1);
   }
 
   50% {
     opacity: 0.94;
-    transform: translate(-50%, -49%) scale(1.012);
+    transform: translate3d(-50%, -49%, 0) scale(1.012);
   }
 }
 
@@ -749,12 +755,12 @@ main.planetary-main {
   0%,
   100% {
     opacity: 0.32;
-    transform: scale(1);
+    transform: translateZ(0) scale(1);
   }
 
   50% {
     opacity: 0.62;
-    transform: scale(1.08);
+    transform: translateZ(0) scale(1.08);
   }
 }
 
