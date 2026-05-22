@@ -7,18 +7,30 @@
       @keyframes orbitFlow {
         0% {
           stroke-dashoffset: 0;
-          opacity: .22;
+          opacity: .38;
           transform: rotate(-18deg);
         }
 
         50% {
-          opacity: .36;
+          opacity: .58;
         }
 
         100% {
           stroke-dashoffset: -32;
-          opacity: .22;
+          opacity: .38;
           transform: rotate(-16deg);
+        }
+      }
+
+      @keyframes satelliteDrift {
+        0%, 100% {
+          opacity: .72;
+          transform: translate3d(0, 0, 0);
+        }
+
+        50% {
+          opacity: 1;
+          transform: translate3d(9px, -3px, 0);
         }
       }
 
@@ -59,6 +71,12 @@
       .surface-lines {
         animation: surfaceFlow 10s ease-in-out infinite;
       }
+
+      .satellite-group {
+        animation: satelliteDrift 7s ease-in-out infinite;
+        transform-box: fill-box;
+        transform-origin: center;
+      }
     </style>
 
     <clipPath id="planet-disc">
@@ -68,8 +86,18 @@
 
   <g fill="none" stroke="#5f563f" stroke-linecap="round" stroke-linejoin="round">
     <g class="orbit-band">
-      <ellipse cx="380" cy="282" rx="274" ry="78" stroke-width="1.7" stroke-dasharray="8 8" opacity=".28"/>
-      <ellipse cx="380" cy="282" rx="214" ry="54" stroke-width="1.1" opacity=".16"/>
+      <ellipse cx="380" cy="282" rx="288" ry="82" stroke-width="3.2" stroke-dasharray="12 8" opacity=".46"/>
+      <ellipse cx="380" cy="282" rx="246" ry="66" stroke-width="1.8" stroke-dasharray="4 12" opacity=".28"/>
+      <ellipse cx="380" cy="282" rx="214" ry="54" stroke-width="1.35" opacity=".24"/>
+    </g>
+
+    <g class="satellite-group" opacity=".88">
+      <path d="M586 199 C604 190 623 186 642 188" stroke-width="2.4" opacity=".28"/>
+      <path d="M610 192 L638 181 L655 190 L627 202 Z" fill="#5f563f" stroke="none" opacity=".24"/>
+      <rect x="631" y="185" width="18" height="13" rx="2" fill="#5f563f" stroke="none" opacity=".72" transform="rotate(17 640 191.5)"/>
+      <path d="M626 188 L607 183" stroke-width="3.2" opacity=".74"/>
+      <path d="M652 196 L672 204" stroke-width="3.2" opacity=".7"/>
+      <path d="M604 179 L592 176 M609 187 L596 190 M674 199 L687 197 M670 209 L681 216" stroke-width="1.8" opacity=".34"/>
     </g>
 
     <g class="planet-body">

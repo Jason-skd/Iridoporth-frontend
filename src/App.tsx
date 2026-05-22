@@ -202,6 +202,10 @@ function StatusSection({ isLive, status }: StatusSectionProps) {
       <div className="status-scene" aria-hidden="true">
         <img className="planet-asset" src={lonelyPlanet} alt="" />
         <img className="plane-asset" src={passingPlane} alt="" />
+        <span className="status-beacon status-beacon-one" />
+        <span className="status-beacon status-beacon-two" />
+        <span className="status-orbit status-orbit-one" />
+        <span className="status-orbit status-orbit-two" />
       </div>
 
       <div className="status-panel">
@@ -229,6 +233,12 @@ function StatusSection({ isLive, status }: StatusSectionProps) {
                 unit="%"
               />
             </dl>
+
+            <div className="status-readout" aria-label="设备遥测概览">
+              <span>{isLive ? 'Live Link' : 'Local Signal'}</span>
+              <span>Refresh 5s</span>
+              <span>{status.data.cpu_temperature < 70 ? 'Thermal Calm' : 'Thermal Watch'}</span>
+            </div>
           </>
         ) : (
           <StatusMessage title="Signal Missing">
