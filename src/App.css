@@ -7,7 +7,29 @@ main {
     linear-gradient(180deg, var(--paper), var(--paper-deep));
 }
 
-.hero-section,
+main.planetary-main {
+  --paper: #111923;
+  --paper-warm: #1d2934;
+  --paper-deep: #05080d;
+  --ink: #ecdfc2;
+  --ink-soft: #b9ab8c;
+  --title-ink: #f0dfb4;
+  --route: #8fb4bc;
+  --route-soft: rgba(143, 180, 188, 0.28);
+  --rust: #d2a168;
+  --line: rgba(236, 223, 194, 0.72);
+  --line-soft: rgba(236, 223, 194, 0.18);
+  --surface: rgba(17, 25, 35, 0.4);
+  --surface-strong: rgba(28, 42, 54, 0.68);
+  --shadow: rgba(0, 0, 0, 0.34);
+  background:
+    radial-gradient(circle at 52% 44%, rgba(143, 180, 188, 0.2), transparent 22rem),
+    radial-gradient(circle at 17% 18%, rgba(210, 161, 104, 0.12), transparent 18rem),
+    radial-gradient(circle at 78% 80%, rgba(236, 223, 194, 0.08), transparent 24rem),
+    linear-gradient(180deg, var(--paper), var(--paper-deep));
+}
+
+.home-section,
 .status-section {
   position: relative;
   isolation: isolate;
@@ -16,7 +38,7 @@ main {
 }
 
 .paper-grain,
-.hero-section::before,
+.home-section::before,
 .status-section::before {
   position: absolute;
   inset: 0;
@@ -35,23 +57,19 @@ main {
   animation: paper-drift 28s linear infinite;
 }
 
-.hero-section::before,
+.home-section::before,
 .status-section::before {
   z-index: -2;
   background:
-    repeating-linear-gradient(
-      94deg,
+    repeating-linear-gradient(94deg,
       rgba(255, 255, 255, 0.035) 0 1px,
-      transparent 1px 11px
-    ),
-    repeating-linear-gradient(
-      7deg,
+      transparent 1px 11px),
+    repeating-linear-gradient(7deg,
       rgba(47, 42, 34, 0.025) 0 1px,
-      transparent 1px 17px
-    );
+      transparent 1px 17px);
 }
 
-.hero-ornaments {
+.home-ornaments {
   position: absolute;
   inset: 0;
   z-index: -1;
@@ -185,7 +203,7 @@ main {
   transform: rotate(180deg);
 }
 
-.hero-content {
+.home-content {
   display: grid;
   width: min(1180px, calc(100% - 48px));
   min-height: 100svh;
@@ -322,7 +340,7 @@ main {
   text-align: center;
 }
 
-.flight-strip span + span {
+.flight-strip span+span {
   border-left: 1px solid var(--line-soft);
 }
 
@@ -391,6 +409,7 @@ main {
 }
 
 .status-heading p,
+.status-message p,
 .status-updated {
   margin: 0;
   color: var(--ink-soft);
@@ -399,13 +418,37 @@ main {
   text-transform: uppercase;
 }
 
-.status-heading h2 {
+.status-heading h2,
+.status-message h2 {
   margin: 4px 0 28px;
   color: var(--ink);
   font-family: var(--serif);
   font-size: 44px;
   font-weight: 400;
   line-height: 1.1;
+}
+
+.status-message {
+  width: min(620px, 100%);
+}
+
+.status-message h2 {
+  max-width: 12em;
+  margin-bottom: 0;
+  font-size: clamp(34px, 6vw, 64px);
+  line-height: 1.18;
+}
+
+.status-section-unavailable .status-panel {
+  margin-left: min(35vw, 340px);
+}
+
+.status-section-unavailable .planet-asset {
+  opacity: 0.72;
+}
+
+.status-section-unavailable .plane-asset {
+  opacity: 0.42;
 }
 
 .status-grid {
@@ -456,6 +499,7 @@ main {
 }
 
 @keyframes route-drift-one {
+
   0%,
   100% {
     transform: translate3d(0, 0, 0) rotate(-12deg);
@@ -467,6 +511,7 @@ main {
 }
 
 @keyframes route-drift-two {
+
   0%,
   100% {
     transform: translate3d(0, 0, 0) rotate(14deg);
@@ -478,6 +523,7 @@ main {
 }
 
 @keyframes line-node-flow {
+
   0%,
   100% {
     opacity: 0.38;
@@ -491,6 +537,7 @@ main {
 }
 
 @keyframes pin-pulse {
+
   0%,
   100% {
     opacity: 0.48;
@@ -504,6 +551,7 @@ main {
 }
 
 @keyframes line-shimmer {
+
   0%,
   100% {
     opacity: 0.42;
@@ -515,6 +563,7 @@ main {
 }
 
 @keyframes rule-flow {
+
   0%,
   100% {
     opacity: 0.36;
@@ -528,6 +577,7 @@ main {
 }
 
 @keyframes notation-fade {
+
   0%,
   100% {
     opacity: 0.56;
@@ -539,6 +589,7 @@ main {
 }
 
 @keyframes cabin-line-flow {
+
   0%,
   100% {
     opacity: 0.82;
@@ -552,6 +603,7 @@ main {
 }
 
 @keyframes title-drift {
+
   0%,
   100% {
     opacity: 0.96;
@@ -565,6 +617,7 @@ main {
 }
 
 @keyframes planet-line-flow {
+
   0%,
   100% {
     opacity: 0.78;
@@ -578,6 +631,7 @@ main {
 }
 
 @keyframes plane-hover {
+
   0%,
   100% {
     opacity: 0.62;
@@ -591,7 +645,7 @@ main {
 }
 
 @media (max-width: 900px) {
-  .hero-content {
+  .home-content {
     width: min(100% - 36px, 680px);
     padding: 46px 0 54px;
     grid-template-columns: 1fr;
@@ -599,7 +653,7 @@ main {
     text-align: center;
   }
 
-  .hero-ornaments {
+  .home-ornaments {
     opacity: 0.7;
   }
 
@@ -650,8 +704,16 @@ main {
     padding: 0;
   }
 
+  .status-section-unavailable .status-panel {
+    margin-left: 0;
+  }
+
   .status-heading h2 {
     font-size: 36px;
+  }
+
+  .status-message h2 {
+    font-size: 38px;
   }
 
   .status-metric dd {
@@ -660,6 +722,7 @@ main {
 }
 
 @media (max-width: 520px) {
+
   .corner-mark,
   .map-pin-two,
   .side-note-left {
@@ -686,6 +749,7 @@ main {
 }
 
 @media (prefers-reduced-motion: reduce) {
+
   *,
   *::before,
   *::after {

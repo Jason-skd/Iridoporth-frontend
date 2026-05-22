@@ -6,48 +6,69 @@ import lonelyPlanet from './assets/status/planet/lonely-planet.svg'
 import './App.css'
 
 type DeviceStatus = {
-  cpuTemp: number
-  cpuUsage: number
-  memoryUsage: number
-  updatedAt: string
-}
-
-const STATUS_ENDPOINT = import.meta.env.VITE_STATUS_ENDPOINT as string | undefined
-
-const fallbackStatus: DeviceStatus = {
-  cpuTemp: 47.8,
-  cpuUsage: 18,
-  memoryUsage: 42,
-  updatedAt: new Date().toISOString(),
-}
-
-function createFallbackStatus(): DeviceStatus {
-  const drift = Math.sin(Date.now() / 30000)
-
-  return {
-    cpuTemp: Number((fallbackStatus.cpuTemp + drift * 2.4).toFixed(1)),
-    cpuUsage: Math.round(fallbackStatus.cpuUsage + drift * 6),
-    memoryUsage: Math.round(fallbackStatus.memoryUsage + drift * 3),
-    updatedAt: new Date().toISOString(),
+  ok: boolean
+  data: {
+    available: boolean
+    name: string | undefined
+    cpu_temperature: number | undefined
+    cpu_temprature?: number | undefined
+    cpu_usage: number | undefined
+    memory_usage: number | undefined
   }
 }
+
+type AvailableDeviceStatus = DeviceStatus & {
+  data: {
+    available: true
+    name: string
+    cpu_temperature: number
+    cpu_usage: number
+    memory_usage: number
+  }
+}
+
+const DEFAULT_STATUS_ENDPOINT = '/api/v1/device/status'
+const STATUS_ENDPOINT = import.meta.env.VITE_STATUS_ENDPOINT as string || DEFAULT_STATUS_ENDPOINT
 
 async function fetchDeviceStatus(): Promise<DeviceStatus> {
-  if (!STATUS_ENDPOINT) {
-    return createFallbackStatus()
-  }
-
   const response = await fetch(STATUS_ENDPOINT)
 
   if (!response.ok) {
-    throw new Error(`Status request failed: ${response.status}`)
+    throw new Error(`Status request failed`)
   }
 
-  return response.json() as Promise<DeviceStatus>
+  return normalizeDeviceStatus(await response.json() as DeviceStatus)
+}
+
+function normalizeDeviceStatus(status: DeviceStatus): DeviceStatus {
+  return {
+    ...status,
+    data: {
+      ...status.data,
+      cpu_temperature: status.data.cpu_temperature ?? status.data.cpu_temprature,
+    },
+  }
+}
+
+function createUnavailableStatus(): DeviceStatus {
+  return {
+    ok: false,
+    data: {
+      available: false,
+      name: undefined,
+      cpu_temperature: undefined,
+      cpu_usage: undefined,
+      memory_usage: undefined,
+    },
+  }
+}
+
+function isAvailableStatus(status: DeviceStatus): status is AvailableDeviceStatus {
+  return status.data.available === true && status.data.cpu_temperature !== undefined
 }
 
 function useDeviceStatus() {
-  const [status, setStatus] = useState<DeviceStatus>(fallbackStatus)
+  const [status, setStatus] = useState<DeviceStatus>()
   const [isLive, setIsLive] = useState(false)
 
   useEffect(() => {
@@ -63,7 +84,7 @@ function useDeviceStatus() {
         }
       } catch {
         if (isMounted) {
-          setStatus(createFallbackStatus())
+          setStatus(createUnavailableStatus())
           setIsLive(false)
         }
       }
@@ -81,11 +102,11 @@ function useDeviceStatus() {
   return { status, isLive }
 }
 
-function HeroSection() {
+function HomeSection() {
   return (
-    <section className="hero-section" aria-labelledby="site-title">
+    <section className="home-section" aria-labelledby="site-title">
       <div className="paper-grain" aria-hidden="true" />
-      <div className="hero-ornaments" aria-hidden="true">
+      <div className="home-ornaments" aria-hidden="true">
         <span className="map-line map-line-one" />
         <span className="map-line map-line-two" />
         <span className="map-pin map-pin-one" />
@@ -94,7 +115,7 @@ function HeroSection() {
         <span className="corner-mark corner-mark-bottom" />
       </div>
 
-      <div className="hero-content">
+      <div className="home-content">
         <div className="porthole-cluster">
           <p className="side-note side-note-left" aria-hidden="true">
             WINDOW / 07A
@@ -131,15 +152,13 @@ function HeroSection() {
   )
 }
 
-function StatusMetric({
-  label,
-  value,
-  unit,
-}: {
+type StatusMetricProps = {
   label: string
   value: number
   unit: string
-}) {
+}
+
+function StatusMetric({ label, value, unit }: StatusMetricProps) {
   return (
     <div className="status-metric">
       <dt>{label}</dt>
@@ -151,44 +170,84 @@ function StatusMetric({
   )
 }
 
-function StatusSection() {
-  const { status, isLive } = useDeviceStatus()
-  const updatedTime = new Intl.DateTimeFormat('zh-CN', {
-    hour: '2-digit',
-    minute: '2-digit',
-    second: '2-digit',
-  }).format(new Date(status.updatedAt))
+type StatusSectionProps = {
+  isLive: boolean
+  status: DeviceStatus | undefined
+}
+
+function StatusMessage({
+  title,
+  children,
+}: {
+  title: string
+  children: string
+}) {
+  return (
+    <div className="status-message">
+      <p>{title}</p>
+      <h2 id="status-title">{children}</h2>
+    </div>
+  )
+}
+
+function StatusSection({ isLive, status }: StatusSectionProps) {
+  const isUnavailable = status?.data.available !== true
+  const canShowDeviceInfo = status !== undefined && isAvailableStatus(status) && status.ok === true
 
   return (
-    <section className="status-section" aria-labelledby="status-title">
+    <section
+      className={`status-section${isUnavailable ? ' status-section-unavailable' : ''}`}
+      aria-labelledby="status-title"
+    >
       <div className="status-scene" aria-hidden="true">
         <img className="planet-asset" src={lonelyPlanet} alt="" />
         <img className="plane-asset" src={passingPlane} alt="" />
       </div>
 
       <div className="status-panel">
-        <div className="status-heading">
-          <p>{isLive ? 'Live Raspberry Pi' : 'Mock Raspberry Pi'}</p>
-          <h2 id="status-title">树莓派状态</h2>
-        </div>
+        {isUnavailable ? (
+          <StatusMessage title="Planet Offline">
+            星球隐入深蓝的背面，弥留的引力是它曾存在过的唯一证明。
+          </StatusMessage>
+        ) : canShowDeviceInfo ? (
+          <>
+            <div className="status-heading">
+              <p>{isLive ? status.data.name : 'Local Signal'}</p>
+              <h2 id="status-title">树莓派状态</h2>
+            </div>
 
-        <dl className="status-grid">
-          <StatusMetric label="CPU 温度" value={status.cpuTemp} unit="°C" />
-          <StatusMetric label="CPU 占用" value={status.cpuUsage} unit="%" />
-          <StatusMetric label="内存占用" value={status.memoryUsage} unit="%" />
-        </dl>
-
-        <p className="status-updated">更新时间 {updatedTime}</p>
+            <dl className="status-grid">
+              <StatusMetric
+                label="CPU 温度"
+                value={status.data.cpu_temperature}
+                unit="°C"
+              />
+              <StatusMetric label="CPU 占用" value={status.data.cpu_usage} unit="%" />
+              <StatusMetric
+                label="内存占用"
+                value={status.data.memory_usage}
+                unit="%"
+              />
+            </dl>
+          </>
+        ) : (
+          <StatusMessage title="Signal Missing">
+            设备的回声暂时沉入星尘。
+          </StatusMessage>
+        )}
       </div>
     </section>
   )
 }
 
 function App() {
+  const { status, isLive } = useDeviceStatus()
+  const isUnavailable = status?.data.available !== true
+
   return (
-    <main>
-      <HeroSection />
-      <StatusSection />
+    <main className={isUnavailable ? 'planetary-main' : undefined}>
+      <HomeSection />
+      <StatusSection status={status} isLive={isLive} />
     </main>
   )
 }
