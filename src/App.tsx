@@ -6,9 +6,9 @@ import lonelyPlanet from './assets/status/planet/lonely-planet.svg'
 import './App.css'
 
 type DeviceStatus = {
-  ok: boolean
+  ok?: boolean
   data: {
-    available: boolean
+    available?: boolean
     name: string | undefined
     cpu_temperature: number | undefined
     cpu_temprature?: number | undefined
@@ -63,8 +63,16 @@ function createUnavailableStatus(): DeviceStatus {
   }
 }
 
-function isAvailableStatus(status: DeviceStatus): status is AvailableDeviceStatus {
-  return status.data.available === true && status.data.cpu_temperature !== undefined
+function isUnavailableStatus(status: DeviceStatus | undefined) {
+  // 缺少 ok 字段时不进入深蓝离线态，把它视为信号包不完整。
+  if (status === undefined || !('ok' in status)) return false
+
+  // 缺少 available 字段时进入深蓝离线态，和明确 available: false 使用同一套视觉。
+  return status.data.available !== true
+}
+
+function canShowDeviceInfo(status: DeviceStatus | undefined): status is AvailableDeviceStatus {
+  return status?.ok === true && status.data.available === true && status.data.cpu_temperature !== undefined
 }
 
 function useDeviceStatus() {
@@ -191,8 +199,11 @@ function StatusMessage({
 }
 
 function StatusSection({ isLive, status }: StatusSectionProps) {
-  const isUnavailable = status?.data.available !== true
-  const canShowDeviceInfo = status !== undefined && isAvailableStatus(status) && status.ok === true
+  const isUnavailable = isUnavailableStatus(status)
+  const canShowStatus = canShowDeviceInfo(status)
+
+  if (isUnavailable) console.info('raspi unavailable', status)
+  if (!isUnavailable && !canShowStatus) console.info('data incomplete', status)
 
   return (
     <section
@@ -213,7 +224,7 @@ function StatusSection({ isLive, status }: StatusSectionProps) {
           <StatusMessage title="Planet Offline">
             星球隐入深蓝的背面，弥留的引力是它曾存在过的唯一证明。
           </StatusMessage>
-        ) : canShowDeviceInfo ? (
+        ) : canShowStatus ? (
           <>
             <div className="status-heading">
               <p>{isLive ? status.data.name : 'Local Signal'}</p>
@@ -252,7 +263,7 @@ function StatusSection({ isLive, status }: StatusSectionProps) {
 
 function App() {
   const { status, isLive } = useDeviceStatus()
-  const isUnavailable = status?.data.available !== true
+  const isUnavailable = isUnavailableStatus(status)
 
   return (
     <main className={isUnavailable ? 'planetary-main' : undefined}>
