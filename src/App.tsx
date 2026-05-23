@@ -5,7 +5,7 @@ import passingPlane from './assets/status/airplane/passing-plane.svg'
 import lonelyPlanet from './assets/status/planet/lonely-planet.svg'
 import './App.css'
 
-type DeviceStatus = {
+type RaspiStatus = {
   ok?: boolean
   data: {
     available?: boolean
@@ -17,7 +17,7 @@ type DeviceStatus = {
   }
 }
 
-type AvailableDeviceStatus = DeviceStatus & {
+type AvailableRaspiStatus = RaspiStatus & {
   data: {
     available: true
     name: string
@@ -27,20 +27,20 @@ type AvailableDeviceStatus = DeviceStatus & {
   }
 }
 
-const DEFAULT_STATUS_ENDPOINT = '/api/v1/device/status'
+const DEFAULT_STATUS_ENDPOINT = '/api/v1/raspi/status'
 const STATUS_ENDPOINT = import.meta.env.VITE_STATUS_ENDPOINT as string || DEFAULT_STATUS_ENDPOINT
 
-async function fetchDeviceStatus(): Promise<DeviceStatus> {
+async function fetchRaspiStatus(): Promise<RaspiStatus> {
   const response = await fetch(STATUS_ENDPOINT)
 
   if (!response.ok) {
     throw new Error(`Status request failed`)
   }
 
-  return normalizeDeviceStatus(await response.json() as DeviceStatus)
+  return normalizeRaspiStatus(await response.json() as RaspiStatus)
 }
 
-function normalizeDeviceStatus(status: DeviceStatus): DeviceStatus {
+function normalizeRaspiStatus(status: RaspiStatus): RaspiStatus {
   return {
     ...status,
     data: {
@@ -50,7 +50,7 @@ function normalizeDeviceStatus(status: DeviceStatus): DeviceStatus {
   }
 }
 
-function createUnavailableStatus(): DeviceStatus {
+function createUnavailableStatus(): RaspiStatus {
   return {
     ok: false,
     data: {
@@ -63,7 +63,7 @@ function createUnavailableStatus(): DeviceStatus {
   }
 }
 
-function isUnavailableStatus(status: DeviceStatus | undefined) {
+function isUnavailableStatus(status: RaspiStatus | undefined) {
   // 缺少 ok 字段时不进入深蓝离线态，把它视为信号包不完整。
   if (status === undefined || !('ok' in status)) return false
 
@@ -71,12 +71,12 @@ function isUnavailableStatus(status: DeviceStatus | undefined) {
   return status.data.available !== true
 }
 
-function canShowDeviceInfo(status: DeviceStatus | undefined): status is AvailableDeviceStatus {
+function canShowRaspiInfo(status: RaspiStatus | undefined): status is AvailableRaspiStatus {
   return status?.ok === true && status.data.available === true && status.data.cpu_temperature !== undefined
 }
 
-function useDeviceStatus() {
-  const [status, setStatus] = useState<DeviceStatus>()
+function useRaspiStatus() {
+  const [status, setStatus] = useState<RaspiStatus>()
   const [isLive, setIsLive] = useState(false)
 
   useEffect(() => {
@@ -84,7 +84,7 @@ function useDeviceStatus() {
 
     async function refreshStatus() {
       try {
-        const nextStatus = await fetchDeviceStatus()
+        const nextStatus = await fetchRaspiStatus()
 
         if (isMounted) {
           setStatus(nextStatus)
@@ -180,7 +180,7 @@ function StatusMetric({ label, value, unit }: StatusMetricProps) {
 
 type StatusSectionProps = {
   isLive: boolean
-  status: DeviceStatus | undefined
+  status: RaspiStatus | undefined
 }
 
 function StatusMessage({
@@ -200,7 +200,7 @@ function StatusMessage({
 
 function StatusSection({ isLive, status }: StatusSectionProps) {
   const isUnavailable = isUnavailableStatus(status)
-  const canShowStatus = canShowDeviceInfo(status)
+  const canShowStatus = canShowRaspiInfo(status)
 
   if (isUnavailable) console.info('raspi unavailable', status)
   if (!isUnavailable && !canShowStatus) console.info('data incomplete', status)
@@ -262,7 +262,7 @@ function StatusSection({ isLive, status }: StatusSectionProps) {
 }
 
 function App() {
-  const { status, isLive } = useDeviceStatus()
+  const { status, isLive } = useRaspiStatus()
   const isUnavailable = isUnavailableStatus(status)
 
   return (
