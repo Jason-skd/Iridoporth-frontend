@@ -34,6 +34,7 @@ main.planetary-main {
   position: relative;
   isolation: isolate;
   min-height: 100svh;
+  min-height: 100dvh;
   overflow: hidden;
 }
 
@@ -207,16 +208,17 @@ main.planetary-main {
   display: grid;
   width: min(1180px, calc(100% - 48px));
   min-height: 100svh;
+  min-height: 100dvh;
   margin: 0 auto;
-  padding: 72px 0 56px;
+  padding: clamp(32px, 5.5dvh, 56px) 0;
   align-items: center;
-  gap: 58px;
+  gap: clamp(32px, 5vw, 56px);
   grid-template-columns: minmax(320px, 0.86fr) minmax(360px, 1fr);
 }
 
 .porthole-cluster {
   position: relative;
-  width: min(42vw, 430px);
+  width: min(38vw, 400px, 46dvh);
   min-width: 320px;
   margin-inline: auto;
 }
@@ -292,7 +294,7 @@ main.planetary-main {
 }
 
 .title-lockup {
-  width: min(52vw, 620px);
+  width: min(48vw, 580px);
   color: var(--title-ink);
 }
 
@@ -325,7 +327,7 @@ main.planetary-main {
 .flight-strip {
   display: grid;
   width: min(100%, 560px);
-  margin-top: 28px;
+  margin-top: clamp(18px, 3dvh, 24px);
   animation: notation-fade 8s ease-in-out 0.8s infinite;
   border-top: 1px solid var(--line-soft);
   border-bottom: 1px solid var(--line-soft);
@@ -795,7 +797,8 @@ main.planetary-main {
 @media (max-width: 900px) {
   .home-content {
     width: min(100% - 36px, 680px);
-    padding: 46px 0 54px;
+    padding: clamp(22px, 4dvh, 38px) 0;
+    gap: clamp(22px, 4dvh, 34px);
     grid-template-columns: 1fr;
     justify-items: center;
     text-align: center;
@@ -811,8 +814,8 @@ main.planetary-main {
   }
 
   .porthole-cluster {
-    width: min(78vw, 360px);
-    min-width: 250px;
+    width: clamp(220px, 58vw, 280px);
+    min-width: 0;
   }
 
   .side-note-left {
@@ -820,7 +823,7 @@ main.planetary-main {
   }
 
   .title-lockup {
-    width: min(84vw, 480px);
+    width: clamp(260px, 78vw, 420px);
   }
 
   .eyebrow {
@@ -904,11 +907,16 @@ main.planetary-main {
     display: none;
   }
 
+  .porthole-cluster {
+    width: clamp(190px, 54vw, 235px);
+  }
+
   .title-lockup {
-    width: min(88vw, 360px);
+    width: min(82vw, 330px);
   }
 
   .flight-strip {
+    margin-top: 14px;
     font-size: 10px;
     letter-spacing: 0.08em;
   }
