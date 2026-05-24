@@ -1,4 +1,5 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
+import type { CSSProperties } from 'react'
 import cabinWindow from './assets/home/porthole/cabin-window.svg'
 import iridoporthTitle from './assets/home/title/iridoporth-title.svg'
 import passingPlane from './assets/status/airplane/passing-plane.svg'
@@ -29,6 +30,10 @@ type AvailableRaspiStatus = RaspiStatus & {
 
 const DEFAULT_STATUS_ENDPOINT = '/api/v1/raspi/status'
 const STATUS_ENDPOINT = import.meta.env.VITE_STATUS_ENDPOINT as string || DEFAULT_STATUS_ENDPOINT
+const PAGE_COUNT = 2
+const WHEEL_THRESHOLD = 420
+const TRANSITION_MS = 950
+const NUDGE_LIMIT = 58
 
 async function fetchRaspiStatus(): Promise<RaspiStatus> {
   const response = await fetch(STATUS_ENDPOINT)
@@ -110,6 +115,93 @@ function useRaspiStatus() {
   return { status, isLive }
 }
 
+function useWheelPager(pageCount: number) {
+  const [currentPage, setCurrentPage] = useState(0)
+  const [nudge, setNudge] = useState(0)
+  const pageRef = useRef(0)
+  const wheelTotalRef = useRef(0)
+  const transitionLockRef = useRef(false)
+  const nudgeResetRef = useRef<number | undefined>(undefined)
+
+  useEffect(() => {
+    pageRef.current = currentPage
+  }, [currentPage])
+
+  useEffect(() => {
+    function resetNudgeSoon() {
+      if (nudgeResetRef.current) window.clearTimeout(nudgeResetRef.current)
+      nudgeResetRef.current = window.setTimeout(() => {
+        wheelTotalRef.current = 0
+        setNudge(0)
+      }, 140)
+    }
+
+    function goToPage(nextPage: number) {
+      transitionLockRef.current = true
+      wheelTotalRef.current = 0
+      setNudge(0)
+      setCurrentPage(nextPage)
+
+      window.setTimeout(() => {
+        transitionLockRef.current = false
+      }, TRANSITION_MS)
+    }
+
+    function handleWheel(event: WheelEvent) {
+      event.preventDefault()
+      if (transitionLockRef.current) return
+
+      const delta = event.deltaY
+      const direction = Math.sign(delta)
+      const current = pageRef.current
+      const isAtStart = current === 0 && direction < 0
+      const isAtEnd = current === pageCount - 1 && direction > 0
+
+      if (direction === 0 || isAtStart || isAtEnd) {
+        setNudge(0)
+        wheelTotalRef.current = 0
+        return
+      }
+
+      wheelTotalRef.current += delta
+      const clampedNudge = Math.max(-NUDGE_LIMIT, Math.min(NUDGE_LIMIT, wheelTotalRef.current * 0.14))
+      setNudge(clampedNudge)
+
+      if (Math.abs(wheelTotalRef.current) >= WHEEL_THRESHOLD) {
+        goToPage(current + direction)
+        return
+      }
+
+      resetNudgeSoon()
+    }
+
+    function handleKeyDown(event: KeyboardEvent) {
+      if (transitionLockRef.current) return
+
+      if (['ArrowDown', 'PageDown', ' '].includes(event.key)) {
+        event.preventDefault()
+        if (pageRef.current < pageCount - 1) goToPage(pageRef.current + 1)
+      }
+
+      if (['ArrowUp', 'PageUp'].includes(event.key)) {
+        event.preventDefault()
+        if (pageRef.current > 0) goToPage(pageRef.current - 1)
+      }
+    }
+
+    window.addEventListener('wheel', handleWheel, { passive: false })
+    window.addEventListener('keydown', handleKeyDown)
+
+    return () => {
+      window.removeEventListener('wheel', handleWheel)
+      window.removeEventListener('keydown', handleKeyDown)
+      if (nudgeResetRef.current) window.clearTimeout(nudgeResetRef.current)
+    }
+  }, [pageCount])
+
+  return { currentPage, nudge }
+}
+
 function HomeSection() {
   return (
     <section className="home-section" aria-labelledby="site-title">
@@ -124,7 +216,7 @@ function HomeSection() {
       </div>
 
       <div className="home-content">
-        <div className="porthole-cluster">
+        <div className="porthole-cluster reveal-item">
           <p className="side-note side-note-left" aria-hidden="true">
             WINDOW / 07A
           </p>
@@ -132,24 +224,24 @@ function HomeSection() {
             <img src={cabinWindow} alt="" />
           </div>
           <p className="side-note side-note-bottom" aria-hidden="true">
-            N31.2304 E121.4737
+            N4.514738 E73.371373
           </p>
         </div>
 
         <div className="title-lockup">
-          <p className="eyebrow" aria-hidden="true">
+          <p className="eyebrow reveal-item" aria-hidden="true">
             PAPER ROUTE 01
           </p>
           <h1 id="site-title" className="sr-only">
             Iridoporth - 舷窗
           </h1>
           <img
-            className="title-asset"
+            className="title-asset reveal-item"
             src={iridoporthTitle}
             alt=""
             aria-hidden="true"
           />
-          <div className="flight-strip" aria-hidden="true">
+          <div className="flight-strip reveal-item" aria-hidden="true">
             <span>ALT 32000FT</span>
             <span>LINE STUDY</span>
             <span>DRIFT 05S</span>
@@ -192,8 +284,8 @@ function StatusMessage({
 }) {
   return (
     <div className="status-message">
-      <p>{title}</p>
-      <h2 id="status-title">{children}</h2>
+      <p className="reveal-item">{title}</p>
+      <h2 id="status-title" className="reveal-item">{children}</h2>
     </div>
   )
 }
@@ -227,8 +319,8 @@ function StatusSection({ isLive, status }: StatusSectionProps) {
         ) : canShowStatus ? (
           <>
             <div className="status-heading">
-              <p>{isLive ? status.data.name : 'Local Signal'}</p>
-              <h2 id="status-title">树莓派状态</h2>
+              <p className="reveal-item">{isLive ? status.data.name : 'Local Signal'}</p>
+              <h2 id="status-title" className="reveal-item">树莓派状态</h2>
             </div>
 
             <dl className="status-grid">
@@ -245,7 +337,7 @@ function StatusSection({ isLive, status }: StatusSectionProps) {
               />
             </dl>
 
-            <div className="status-readout" aria-label="设备遥测概览">
+            <div className="status-readout reveal-item" aria-label="设备遥测概览">
               <span>{isLive ? 'Live Link' : 'Local Signal'}</span>
               <span>Refresh 5s</span>
               <span>{status.data.cpu_temperature < 70 ? 'Thermal Calm' : 'Thermal Watch'}</span>
@@ -263,12 +355,22 @@ function StatusSection({ isLive, status }: StatusSectionProps) {
 
 function App() {
   const { status, isLive } = useRaspiStatus()
+  const { currentPage, nudge } = useWheelPager(PAGE_COUNT)
   const isUnavailable = isUnavailableStatus(status)
 
   return (
-    <main className={isUnavailable ? 'planetary-main' : undefined}>
-      <HomeSection />
-      <StatusSection status={status} isLive={isLive} />
+    <main
+      className={isUnavailable ? 'planetary-main' : undefined}
+      style={{ '--scroll-nudge': `${nudge}px` } as CSSProperties}
+    >
+      <div className="page-stack" aria-live="polite">
+        <div className={`page-shell${currentPage === 0 ? ' is-active' : ''}`}>
+          <HomeSection />
+        </div>
+        <div className={`page-shell${currentPage === 1 ? ' is-active' : ''}`}>
+          <StatusSection status={status} isLive={isLive} />
+        </div>
+      </div>
     </main>
   )
 }

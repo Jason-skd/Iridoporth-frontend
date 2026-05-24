@@ -1,10 +1,73 @@
 main {
+  height: 100svh;
+  height: 100dvh;
   min-height: 100svh;
+  overflow: hidden;
   background:
     radial-gradient(circle at 18% 16%, rgba(255, 248, 218, 0.42), transparent 28rem),
     radial-gradient(circle at 86% 18%, rgba(47, 109, 110, 0.16), transparent 24rem),
     radial-gradient(circle at 70% 88%, rgba(140, 79, 53, 0.1), transparent 26rem),
     linear-gradient(180deg, var(--paper), var(--paper-deep));
+}
+
+.page-stack {
+  position: relative;
+  height: 100svh;
+  height: 100dvh;
+  overflow: hidden;
+}
+
+.page-shell {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  pointer-events: none;
+  transform: translate3d(0, 24px, 0) scale(0.985);
+  transition:
+    opacity 760ms cubic-bezier(0.55, 0, 0.35, 1),
+    transform 900ms cubic-bezier(0.55, 0, 0.35, 1);
+  will-change: opacity, transform;
+}
+
+.page-shell.is-active {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translate3d(0, var(--scroll-nudge, 0), 0) scale(1);
+}
+
+.page-shell:not(.is-active) {
+  opacity: 0;
+}
+
+.reveal-item {
+  opacity: 0;
+  transform: translate3d(0, 22px, 0);
+  transition:
+    opacity 680ms cubic-bezier(0.55, 0, 0.35, 1),
+    transform 760ms cubic-bezier(0.55, 0, 0.35, 1);
+  transition-delay: var(--reveal-delay, 0ms);
+  will-change: opacity, transform;
+}
+
+.is-active .reveal-item {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+}
+
+.is-active .reveal-item:nth-child(1) {
+  --reveal-delay: 110ms;
+}
+
+.is-active .reveal-item:nth-child(2) {
+  --reveal-delay: 190ms;
+}
+
+.is-active .reveal-item:nth-child(3) {
+  --reveal-delay: 270ms;
+}
+
+.is-active .reveal-item:nth-child(4) {
+  --reveal-delay: 350ms;
 }
 
 main.planetary-main {
@@ -346,6 +409,32 @@ main.planetary-main {
   border-left: 1px solid var(--line-soft);
 }
 
+.status-grid .status-metric {
+  opacity: 0;
+  transform: translate3d(0, 22px, 0);
+  transition:
+    opacity 680ms cubic-bezier(0.55, 0, 0.35, 1),
+    transform 760ms cubic-bezier(0.55, 0, 0.35, 1);
+  will-change: opacity, transform;
+}
+
+.is-active .status-grid .status-metric {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+}
+
+.is-active .status-grid .status-metric:nth-child(1) {
+  transition-delay: 270ms;
+}
+
+.is-active .status-grid .status-metric:nth-child(2) {
+  transition-delay: 350ms;
+}
+
+.is-active .status-grid .status-metric:nth-child(3) {
+  transition-delay: 430ms;
+}
+
 .sr-only {
   position: absolute;
   width: 1px;
@@ -363,16 +452,6 @@ main.planetary-main {
   min-height: 100svh;
   padding: 72px 24px;
   place-items: center;
-}
-
-.status-section::after {
-  position: absolute;
-  top: 0;
-  right: 12%;
-  left: 12%;
-  height: 1px;
-  background: var(--line-soft);
-  content: '';
 }
 
 .status-scene {
@@ -943,5 +1022,13 @@ main.planetary-main {
     animation-duration: 1ms !important;
     animation-iteration-count: 1 !important;
     scroll-behavior: auto !important;
+  }
+
+  .page-shell,
+  .page-shell.is-active,
+  .reveal-item,
+  .status-grid .status-metric {
+    transition: none !important;
+    transform: none !important;
   }
 }
