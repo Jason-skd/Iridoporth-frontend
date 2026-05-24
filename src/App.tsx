@@ -28,8 +28,7 @@ type AvailableRaspiStatus = RaspiStatus & {
   }
 }
 
-const DEFAULT_STATUS_ENDPOINT = '/api/v1/raspi/status'
-const STATUS_ENDPOINT = import.meta.env.VITE_STATUS_ENDPOINT as string || DEFAULT_STATUS_ENDPOINT
+const STATUS_ENDPOINT = '/api/v1/raspi/status'
 const PAGE_COUNT = 2
 const WHEEL_THRESHOLD = 420
 const TRANSITION_MS = 950

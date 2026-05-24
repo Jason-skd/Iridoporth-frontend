@@ -10,8 +10,8 @@
    - 下滑页：树莓派状态信息、孤独星球和飞机掠过的背景占位。
 3. 建立树莓派状态轮询骨架：
    - 默认每 5 秒刷新。
-   - 支持通过 `VITE_STATUS_ENDPOINT` 指定真实接口。
-   - 接口未配置或请求失败时使用本地 mock 数据。
+   - 通过同源相对路径 `/api/v1/raspi/status` 请求真实接口。
+   - 请求失败时展示离线状态。
 4. 重写基础 CSS 变量：
    - 卡其纸色背景。
    - 深色线条。
@@ -52,10 +52,10 @@
 3. `memoryUsage`: 内存占用，百分比数值。
 4. `updatedAt`: 数据更新时间，ISO 字符串。
 
-真实接口地址通过环境变量配置：
+真实接口使用同源相对路径，避免前后端分离容器部署时触发 CORS：
 
 ```text
-VITE_STATUS_ENDPOINT=https://example.com/status
+/api/v1/raspi/status
 ```
 
 ## 下一阶段建议
