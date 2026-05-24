@@ -1,73 +1,96 @@
-# React + TypeScript + Vite
+# Iridoporth Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Iridoporth 的前端界面，使用 React、TypeScript 和 Vite 构建。页面以舷窗、航线和纸面地图为视觉主题，展示入口画面，并轮询设备状态接口呈现树莓派运行遥测。
 
-Currently, two official plugins are available:
+## 功能
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- 提供 Iridoporth 舷窗主题单页界面
+- 支持鼠标滚轮、方向键和翻页键切换页面
+- 每 5 秒请求一次树莓派状态
+- 展示 CPU 温度、CPU 占用和内存占用
+- 在设备不可用或数据缺失时显示对应的离线 / 信号缺失状态
 
-## React Compiler
+## 环境要求
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- Node.js 22 或兼容当前依赖的版本
+- npm
 
-## Expanding the ESLint configuration
+## 本地运行
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+安装依赖：
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```sh
+npm install
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+启动开发服务器：
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+```sh
+npm run dev
+```
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+前端会请求：
+
+```http
+GET /api/v1/raspi/status
+```
+
+开发环境中如需连接本地后端，可在 Vite 或本地代理中将 `/api/` 转发到后端服务。
+
+## 构建
+
+```sh
+npm run build
+```
+
+构建产物默认输出到：
+
+```text
+dist/
+```
+
+本地预览构建产物：
+
+```sh
+npm run preview
+```
+
+## 检查
+
+```sh
+npm run lint
+```
+
+## Docker
+
+构建镜像：
+
+```sh
+docker build -t iridoporth-frontend:dev .
+```
+
+运行：
+
+```sh
+docker run --rm -p 8080:80 iridoporth-frontend:dev
+```
+
+镜像使用 Nginx 托管静态文件，并将 `/api/` 代理到 `backend:3000`。
+
+## 目录结构
+
+```text
+src/
+  App.tsx                    # 页面结构、状态请求和翻页交互
+  App.css                    # 页面视觉和响应式样式
+  index.css                  # 全局变量和基础样式
+  main.tsx                   # 应用入口
+  assets/                    # 舷窗、标题和状态插画
+public/
+  favicon.svg
+  icons.svg
+docs/
+  demand.md                  # 需求说明
+  design-asset-contract.md   # 设计资产约定
+  phase-1.md                 # 阶段记录
 ```
