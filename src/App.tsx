@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { useGSAP } from '@gsap/react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import type { CSSProperties } from 'react'
 import cabinWindow from './assets/home/porthole/cabin-window.svg'
 import iridoporthTitle from './assets/home/title/iridoporth-title.svg'
 import passingPlane from './assets/status/airplane/passing-plane.svg'
@@ -34,6 +35,7 @@ type AvailableRaspiStatus = RaspiStatus & {
 
 const STATUS_ENDPOINT = '/api/v1/raspi/status'
 const PAGE_COUNT = 2
+const FOREGROUND_DRAG_LIMIT = 24
 
 async function fetchRaspiStatus(): Promise<RaspiStatus> {
   const response = await fetch(STATUS_ENDPOINT)
@@ -119,8 +121,19 @@ function getPageFromProgress(progress: number, pageCount: number) {
   return Math.max(0, Math.min(pageCount - 1, Math.round(progress * (pageCount - 1))))
 }
 
+function getForegroundDrag(progress: number, pageCount: number) {
+  const pageProgress = progress * (pageCount - 1)
+  const offsetFromSnapPoint = pageProgress - Math.round(pageProgress)
+
+  return Math.max(
+    -FOREGROUND_DRAG_LIMIT,
+    Math.min(FOREGROUND_DRAG_LIMIT, -offsetFromSnapPoint * FOREGROUND_DRAG_LIMIT),
+  )
+}
+
 function useScrollPager(pageCount: number) {
   const [currentPage, setCurrentPage] = useState(0)
+  const [foregroundDrag, setForegroundDrag] = useState(0)
   const scrollRef = useRef<HTMLDivElement>(null)
 
   useGSAP(() => {
@@ -138,17 +151,18 @@ function useScrollPager(pageCount: number) {
             duration: { min: 0.25, max: 0.55 },
             delay: 0.04,
             ease: 'power2.out',
-          },
+      },
       onUpdate: ({ progress }) => {
         const nextPage = getPageFromProgress(progress, pageCount)
         setCurrentPage((page) => (page === nextPage ? page : nextPage))
+        setForegroundDrag(getForegroundDrag(progress, pageCount))
       },
     })
 
     return () => trigger.kill()
   }, [pageCount])
 
-  return { currentPage, scrollRef }
+  return { currentPage, foregroundDrag, scrollRef }
 }
 
 function HomeSection() {
@@ -304,13 +318,17 @@ function StatusSection({ isLive, status }: StatusSectionProps) {
 
 function App() {
   const { status, isLive } = useRaspiStatus()
-  const { currentPage, scrollRef } = useScrollPager(PAGE_COUNT)
+  const { currentPage, foregroundDrag, scrollRef } = useScrollPager(PAGE_COUNT)
   const isUnavailable = isUnavailableStatus(status)
 
   return (
     <main className={isUnavailable ? 'planetary-main' : undefined}>
       <div ref={scrollRef} className="page-scroll">
-        <div className="page-stack" aria-live="polite">
+        <div
+          className="page-stack"
+          aria-live="polite"
+          style={{ '--foreground-drag': `${foregroundDrag}px` } as CSSProperties}
+        >
           <div className={`page-shell${currentPage === 0 ? ' is-active' : ''}`}>
             <HomeSection />
           </div>
