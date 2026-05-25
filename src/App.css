@@ -1,10 +1,11 @@
 main {
-  min-height: 100svh;
-  background:
+  --stage-background:
     radial-gradient(circle at 18% 16%, rgba(255, 248, 218, 0.42), transparent 28rem),
     radial-gradient(circle at 86% 18%, rgba(47, 109, 110, 0.16), transparent 24rem),
     radial-gradient(circle at 70% 88%, rgba(140, 79, 53, 0.1), transparent 26rem),
     linear-gradient(180deg, var(--paper), var(--paper-deep));
+  min-height: 100svh;
+  background: var(--paper);
 }
 
 .page-scroll {
@@ -18,6 +19,7 @@ main {
   height: 100svh;
   height: 100dvh;
   overflow: hidden;
+  background: var(--stage-background);
 }
 
 .page-shell {
@@ -74,6 +76,11 @@ main {
 }
 
 main.planetary-main {
+  --stage-background:
+    radial-gradient(circle at 52% 44%, rgba(143, 180, 188, 0.2), transparent 22rem),
+    radial-gradient(circle at 17% 18%, rgba(210, 161, 104, 0.12), transparent 18rem),
+    radial-gradient(circle at 78% 80%, rgba(236, 223, 194, 0.08), transparent 24rem),
+    linear-gradient(180deg, var(--paper), var(--paper-deep));
   --paper: #111923;
   --paper-warm: #1d2934;
   --paper-deep: #05080d;
@@ -88,11 +95,7 @@ main.planetary-main {
   --surface: rgba(17, 25, 35, 0.4);
   --surface-strong: rgba(28, 42, 54, 0.68);
   --shadow: rgba(0, 0, 0, 0.34);
-  background:
-    radial-gradient(circle at 52% 44%, rgba(143, 180, 188, 0.2), transparent 22rem),
-    radial-gradient(circle at 17% 18%, rgba(210, 161, 104, 0.12), transparent 18rem),
-    radial-gradient(circle at 78% 80%, rgba(236, 223, 194, 0.08), transparent 24rem),
-    linear-gradient(180deg, var(--paper), var(--paper-deep));
+  background: var(--paper);
 }
 
 .home-section,
@@ -280,6 +283,8 @@ main.planetary-main {
   align-items: center;
   gap: clamp(32px, 5vw, 56px);
   grid-template-columns: minmax(320px, 0.86fr) minmax(360px, 1fr);
+  transform: translate3d(0, var(--foreground-drag, 0), 0);
+  will-change: transform;
 }
 
 .porthole-cluster {
@@ -568,6 +573,8 @@ main.planetary-main {
   width: min(700px, 100%);
   margin-left: min(42vw, 440px);
   padding: 32px 0;
+  transform: translate3d(0, var(--foreground-drag, 0), 0);
+  will-change: transform;
 }
 
 .status-heading p,
