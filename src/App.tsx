@@ -35,7 +35,16 @@ type AvailableRaspiStatus = RaspiStatus & {
 
 const STATUS_ENDPOINT = '/api/v1/raspi/status'
 const PAGE_COUNT = 2
-const FOREGROUND_DRAG_LIMIT = 24
+const FOREGROUND_DRAG_UNIT = 42
+const LOG_DRAG_RESPONSE = 7
+const PAGE_SWITCH_THRESHOLD = 0.72
+const SCROLL_SEGMENT_DVH = 170
+const PAGE_FADE_MS = 760
+const FOREGROUND_DRAG_LAYERS = {
+  porthole: 1.08,
+  title: 0.72,
+  status: 0.86,
+}
 
 async function fetchRaspiStatus(): Promise<RaspiStatus> {
   const response = await fetch(STATUS_ENDPOINT)
@@ -117,24 +126,51 @@ function useRaspiStatus() {
   return { status, isLive }
 }
 
-function getPageFromProgress(progress: number, pageCount: number) {
-  return Math.max(0, Math.min(pageCount - 1, Math.round(progress * (pageCount - 1))))
+function getPageFromProgress(progress: number, currentPage: number, pageCount: number) {
+  const pageProgress = progress * (pageCount - 1)
+
+  if (currentPage < pageCount - 1 && pageProgress >= currentPage + PAGE_SWITCH_THRESHOLD) {
+    return currentPage + 1
+  }
+
+  if (currentPage > 0 && pageProgress <= currentPage - PAGE_SWITCH_THRESHOLD) {
+    return currentPage - 1
+  }
+
+  return currentPage
 }
 
-function getForegroundDrag(progress: number, pageCount: number) {
+function getForegroundDrag(progress: number, pageIndex: number, pageCount: number) {
   const pageProgress = progress * (pageCount - 1)
-  const offsetFromSnapPoint = pageProgress - Math.round(pageProgress)
+  const offsetFromPage = pageProgress - pageIndex
+  const direction = Math.sign(offsetFromPage)
+  const distance = Math.min(Math.abs(offsetFromPage), PAGE_SWITCH_THRESHOLD)
+  const dragRatio =
+    Math.log1p(distance * LOG_DRAG_RESPONSE) /
+    Math.log1p(PAGE_SWITCH_THRESHOLD * LOG_DRAG_RESPONSE)
 
-  return Math.max(
-    -FOREGROUND_DRAG_LIMIT,
-    Math.min(FOREGROUND_DRAG_LIMIT, -offsetFromSnapPoint * FOREGROUND_DRAG_LIMIT),
-  )
+  return -direction * dragRatio * FOREGROUND_DRAG_UNIT
 }
 
 function useScrollPager(pageCount: number) {
   const [currentPage, setCurrentPage] = useState(0)
-  const [foregroundDrag, setForegroundDrag] = useState(0)
+  const [leavingPage, setLeavingPage] = useState<number>()
+  const [pageDrags, setPageDrags] = useState(() =>
+    Array.from({ length: pageCount }, (_, index) => getForegroundDrag(0, index, pageCount)),
+  )
   const scrollRef = useRef<HTMLDivElement>(null)
+  const pageRef = useRef(0)
+  const leavingResetRef = useRef<number | undefined>(undefined)
+
+  useEffect(() => {
+    pageRef.current = currentPage
+  }, [currentPage])
+
+  useEffect(() => {
+    return () => {
+      if (leavingResetRef.current) window.clearTimeout(leavingResetRef.current)
+    }
+  }, [])
 
   useGSAP(() => {
     if (!scrollRef.current) return
@@ -147,22 +183,50 @@ function useScrollPager(pageCount: number) {
       snap: prefersReducedMotion
         ? undefined
         : {
-            snapTo: 1 / (pageCount - 1),
+            snapTo: (progress) => getPageFromProgress(progress, pageRef.current, pageCount) / (pageCount - 1),
             duration: { min: 0.25, max: 0.55 },
             delay: 0.04,
             ease: 'power2.out',
       },
       onUpdate: ({ progress }) => {
-        const nextPage = getPageFromProgress(progress, pageCount)
-        setCurrentPage((page) => (page === nextPage ? page : nextPage))
-        setForegroundDrag(getForegroundDrag(progress, pageCount))
+        const activePage = pageRef.current
+        const nextPage = getPageFromProgress(progress, activePage, pageCount)
+
+        setPageDrags(Array.from({ length: pageCount }, (_, index) => getForegroundDrag(progress, index, pageCount)))
+
+        if (nextPage !== activePage) {
+          pageRef.current = nextPage
+          setLeavingPage(activePage)
+          setCurrentPage(nextPage)
+
+          if (leavingResetRef.current) window.clearTimeout(leavingResetRef.current)
+          leavingResetRef.current = window.setTimeout(() => {
+            setLeavingPage(undefined)
+          }, PAGE_FADE_MS)
+        }
       },
     })
 
     return () => trigger.kill()
   }, [pageCount])
 
-  return { currentPage, foregroundDrag, scrollRef }
+  return {
+    currentPage,
+    leavingPage,
+    pageDrags,
+    scrollHeight: `calc(100dvh + ${(pageCount - 1) * SCROLL_SEGMENT_DVH}dvh)`,
+    scrollRef,
+  }
+}
+
+function getPageStyle(pageDrag: number, pageIndex: number, scrollHeight?: string) {
+  return {
+    ...(scrollHeight ? { '--page-scroll-height': scrollHeight } : {}),
+    '--porthole-drag': `${pageDrag * FOREGROUND_DRAG_LAYERS.porthole}px`,
+    '--title-drag': `${pageDrag * FOREGROUND_DRAG_LAYERS.title}px`,
+    '--status-drag': `${pageDrag * FOREGROUND_DRAG_LAYERS.status}px`,
+    '--page-index': pageIndex,
+  } as CSSProperties
 }
 
 function HomeSection() {
@@ -318,21 +382,26 @@ function StatusSection({ isLive, status }: StatusSectionProps) {
 
 function App() {
   const { status, isLive } = useRaspiStatus()
-  const { currentPage, foregroundDrag, scrollRef } = useScrollPager(PAGE_COUNT)
+  const { currentPage, leavingPage, pageDrags, scrollHeight, scrollRef } = useScrollPager(PAGE_COUNT)
   const isUnavailable = isUnavailableStatus(status)
 
   return (
     <main className={isUnavailable ? 'planetary-main' : undefined}>
-      <div ref={scrollRef} className="page-scroll">
+      <div ref={scrollRef} className="page-scroll" style={getPageStyle(0, 0, scrollHeight)}>
         <div
           className="page-stack"
           aria-live="polite"
-          style={{ '--foreground-drag': `${foregroundDrag}px` } as CSSProperties}
         >
-          <div className={`page-shell${currentPage === 0 ? ' is-active' : ''}`}>
+          <div
+            className={`page-shell${currentPage === 0 ? ' is-active' : ''}${leavingPage === 0 ? ' is-leaving' : ''}`}
+            style={getPageStyle(pageDrags[0] ?? 0, 0)}
+          >
             <HomeSection />
           </div>
-          <div className={`page-shell${currentPage === 1 ? ' is-active' : ''}`}>
+          <div
+            className={`page-shell${currentPage === 1 ? ' is-active' : ''}${leavingPage === 1 ? ' is-leaving' : ''}`}
+            style={getPageStyle(pageDrags[1] ?? 0, 1)}
+          >
             <StatusSection status={status} isLive={isLive} />
           </div>
         </div>
