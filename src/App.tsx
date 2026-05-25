@@ -1,10 +1,14 @@
 import { useEffect, useRef, useState } from 'react'
-import type { CSSProperties } from 'react'
+import { useGSAP } from '@gsap/react'
+import gsap from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import cabinWindow from './assets/home/porthole/cabin-window.svg'
 import iridoporthTitle from './assets/home/title/iridoporth-title.svg'
 import passingPlane from './assets/status/airplane/passing-plane.svg'
 import lonelyPlanet from './assets/status/planet/lonely-planet.svg'
 import './App.css'
+
+gsap.registerPlugin(ScrollTrigger, useGSAP)
 
 type RaspiStatus = {
   ok?: boolean
@@ -30,9 +34,6 @@ type AvailableRaspiStatus = RaspiStatus & {
 
 const STATUS_ENDPOINT = '/api/v1/raspi/status'
 const PAGE_COUNT = 2
-const WHEEL_THRESHOLD = 420
-const TRANSITION_MS = 950
-const NUDGE_LIMIT = 58
 
 async function fetchRaspiStatus(): Promise<RaspiStatus> {
   const response = await fetch(STATUS_ENDPOINT)
@@ -114,91 +115,40 @@ function useRaspiStatus() {
   return { status, isLive }
 }
 
-function useWheelPager(pageCount: number) {
+function getPageFromProgress(progress: number, pageCount: number) {
+  return Math.max(0, Math.min(pageCount - 1, Math.round(progress * (pageCount - 1))))
+}
+
+function useScrollPager(pageCount: number) {
   const [currentPage, setCurrentPage] = useState(0)
-  const [nudge, setNudge] = useState(0)
-  const pageRef = useRef(0)
-  const wheelTotalRef = useRef(0)
-  const transitionLockRef = useRef(false)
-  const nudgeResetRef = useRef<number | undefined>(undefined)
+  const scrollRef = useRef<HTMLDivElement>(null)
 
-  useEffect(() => {
-    pageRef.current = currentPage
-  }, [currentPage])
+  useGSAP(() => {
+    if (!scrollRef.current) return
 
-  useEffect(() => {
-    function resetNudgeSoon() {
-      if (nudgeResetRef.current) window.clearTimeout(nudgeResetRef.current)
-      nudgeResetRef.current = window.setTimeout(() => {
-        wheelTotalRef.current = 0
-        setNudge(0)
-      }, 140)
-    }
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    const trigger = ScrollTrigger.create({
+      trigger: scrollRef.current,
+      start: 'top top',
+      end: 'bottom bottom',
+      snap: prefersReducedMotion
+        ? undefined
+        : {
+            snapTo: 1 / (pageCount - 1),
+            duration: { min: 0.25, max: 0.55 },
+            delay: 0.04,
+            ease: 'power2.out',
+          },
+      onUpdate: ({ progress }) => {
+        const nextPage = getPageFromProgress(progress, pageCount)
+        setCurrentPage((page) => (page === nextPage ? page : nextPage))
+      },
+    })
 
-    function goToPage(nextPage: number) {
-      transitionLockRef.current = true
-      wheelTotalRef.current = 0
-      setNudge(0)
-      setCurrentPage(nextPage)
-
-      window.setTimeout(() => {
-        transitionLockRef.current = false
-      }, TRANSITION_MS)
-    }
-
-    function handleWheel(event: WheelEvent) {
-      event.preventDefault()
-      if (transitionLockRef.current) return
-
-      const delta = event.deltaY
-      const direction = Math.sign(delta)
-      const current = pageRef.current
-      const isAtStart = current === 0 && direction < 0
-      const isAtEnd = current === pageCount - 1 && direction > 0
-
-      if (direction === 0 || isAtStart || isAtEnd) {
-        setNudge(0)
-        wheelTotalRef.current = 0
-        return
-      }
-
-      wheelTotalRef.current += delta
-      const clampedNudge = Math.max(-NUDGE_LIMIT, Math.min(NUDGE_LIMIT, wheelTotalRef.current * 0.14))
-      setNudge(clampedNudge)
-
-      if (Math.abs(wheelTotalRef.current) >= WHEEL_THRESHOLD) {
-        goToPage(current + direction)
-        return
-      }
-
-      resetNudgeSoon()
-    }
-
-    function handleKeyDown(event: KeyboardEvent) {
-      if (transitionLockRef.current) return
-
-      if (['ArrowDown', 'PageDown', ' '].includes(event.key)) {
-        event.preventDefault()
-        if (pageRef.current < pageCount - 1) goToPage(pageRef.current + 1)
-      }
-
-      if (['ArrowUp', 'PageUp'].includes(event.key)) {
-        event.preventDefault()
-        if (pageRef.current > 0) goToPage(pageRef.current - 1)
-      }
-    }
-
-    window.addEventListener('wheel', handleWheel, { passive: false })
-    window.addEventListener('keydown', handleKeyDown)
-
-    return () => {
-      window.removeEventListener('wheel', handleWheel)
-      window.removeEventListener('keydown', handleKeyDown)
-      if (nudgeResetRef.current) window.clearTimeout(nudgeResetRef.current)
-    }
+    return () => trigger.kill()
   }, [pageCount])
 
-  return { currentPage, nudge }
+  return { currentPage, scrollRef }
 }
 
 function HomeSection() {
@@ -354,20 +304,19 @@ function StatusSection({ isLive, status }: StatusSectionProps) {
 
 function App() {
   const { status, isLive } = useRaspiStatus()
-  const { currentPage, nudge } = useWheelPager(PAGE_COUNT)
+  const { currentPage, scrollRef } = useScrollPager(PAGE_COUNT)
   const isUnavailable = isUnavailableStatus(status)
 
   return (
-    <main
-      className={isUnavailable ? 'planetary-main' : undefined}
-      style={{ '--scroll-nudge': `${nudge}px` } as CSSProperties}
-    >
-      <div className="page-stack" aria-live="polite">
-        <div className={`page-shell${currentPage === 0 ? ' is-active' : ''}`}>
-          <HomeSection />
-        </div>
-        <div className={`page-shell${currentPage === 1 ? ' is-active' : ''}`}>
-          <StatusSection status={status} isLive={isLive} />
+    <main className={isUnavailable ? 'planetary-main' : undefined}>
+      <div ref={scrollRef} className="page-scroll">
+        <div className="page-stack" aria-live="polite">
+          <div className={`page-shell${currentPage === 0 ? ' is-active' : ''}`}>
+            <HomeSection />
+          </div>
+          <div className={`page-shell${currentPage === 1 ? ' is-active' : ''}`}>
+            <StatusSection status={status} isLive={isLive} />
+          </div>
         </div>
       </div>
     </main>
