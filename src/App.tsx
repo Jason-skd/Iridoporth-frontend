@@ -3,6 +3,7 @@ import { useGSAP } from '@gsap/react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import type { CSSProperties } from 'react'
+import { request } from './api/client'
 import cabinWindow from './assets/home/porthole/cabin-window.svg'
 import iridoporthTitle from './assets/home/title/iridoporth-title.svg'
 import passingPlane from './assets/status/airplane/passing-plane.svg'
@@ -47,13 +48,8 @@ const FOREGROUND_DRAG_LAYERS = {
 }
 
 async function fetchRaspiStatus(): Promise<RaspiStatus> {
-  const response = await fetch(STATUS_ENDPOINT)
-
-  if (!response.ok) {
-    throw new Error(`Status request failed`)
-  }
-
-  return normalizeRaspiStatus(await response.json() as RaspiStatus)
+  const raw = await request<RaspiStatus>(STATUS_ENDPOINT)
+  return normalizeRaspiStatus(raw)
 }
 
 function normalizeRaspiStatus(status: RaspiStatus): RaspiStatus {
