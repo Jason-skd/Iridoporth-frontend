@@ -1045,3 +1045,438 @@ main.planetary-main {
     transform: none !important;
   }
 }
+
+/* ============================================================
+   Flight Log section (page 2)
+   ============================================================ */
+
+.flight-log-section {
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  min-height: 100svh;
+  min-height: 100dvh;
+  padding: clamp(40px, 6dvh, 72px) clamp(20px, 4vw, 56px) clamp(40px, 6dvh, 64px);
+  gap: clamp(18px, 2.4dvh, 28px);
+  align-content: start;
+  grid-template-rows: auto 1fr;
+  overflow: hidden;
+}
+
+.flight-log-section .paper-grain {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0.22;
+  background-image:
+    linear-gradient(90deg, rgba(47, 42, 34, 0.06) 1px, transparent 1px),
+    linear-gradient(0deg, rgba(255, 255, 255, 0.07) 1px, transparent 1px);
+  background-size: 21px 25px;
+  mask-image: linear-gradient(180deg, #000, rgba(0, 0, 0, 0.22));
+}
+
+.flight-log-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.flight-log-title {
+  display: block;
+  width: clamp(280px, 36vw, 520px);
+  height: auto;
+}
+
+.flight-log-title-mobile {
+  display: none;
+}
+
+.journal-stage {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  display: grid;
+  align-items: center;
+  justify-items: center;
+}
+
+.journal-bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+  pointer-events: none;
+  opacity: 0.96;
+  filter: drop-shadow(0 24px 60px var(--shadow));
+}
+
+.journal-grid {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  width: min(100%, 1480px);
+  height: 100%;
+  align-items: stretch;
+  gap: clamp(16px, 2vw, 32px);
+  /* The journal's binding is at ~48.75% of the 1600 viewBox; the left
+     page runs ~7.4%–48%, the right page ~52%–92.6%. We mirror those
+     proportions so the form and feed land visually over the page area. */
+  grid-template-columns:
+    minmax(0, 1fr)
+    minmax(0, 1fr);
+}
+
+.feed-pane,
+.compose-pane {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  min-width: 0;
+}
+
+.pane-heading {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  margin-bottom: 12px;
+  padding-left: clamp(28px, 6%, 56px);
+  color: var(--ink);
+}
+
+.pane-eyebrow {
+  color: var(--rust);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.pane-title {
+  color: var(--ink-soft);
+  font-family: var(--serif);
+  font-size: 22px;
+  letter-spacing: 0.08em;
+}
+
+/* ---------- Feed pane ---------- */
+
+.feed-pane {
+  padding: clamp(20px, 3.2dvh, 32px) clamp(20px, 3%, 36px);
+  overflow: hidden;
+}
+
+.feed-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(10px, 1.4dvh, 18px);
+  /* hide scrollbar visually but keep accessibility */
+  scrollbar-width: thin;
+  scrollbar-color: var(--line-soft) transparent;
+}
+
+.feed-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.feed-list::-webkit-scrollbar-thumb {
+  background: var(--line-soft);
+  border-radius: 999px;
+}
+
+.feed-row {
+  position: relative;
+  list-style: none;
+}
+
+.feed-row[data-temp='true'] .feed-row-card {
+  opacity: 0.78;
+}
+
+.feed-row-card {
+  width: 100%;
+  height: auto;
+  display: block;
+  pointer-events: none;
+}
+
+.feed-row-body {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 11% 9% 12%;
+  color: var(--ink);
+}
+
+.feed-row-content {
+  margin: 0;
+  font-family: var(--serif);
+  font-size: clamp(14px, 1.05vw, 17px);
+  line-height: 1.55;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+.feed-row-meta {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin: 0;
+  color: var(--ink-soft);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.feed-row-callsign {
+  color: var(--rust);
+  font-weight: 600;
+}
+
+.feed-row-dot {
+  color: var(--line);
+}
+
+.feed-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  text-align: center;
+  color: var(--ink-soft);
+  font-family: var(--serif);
+  font-size: clamp(15px, 1.2vw, 18px);
+  letter-spacing: 0.05em;
+}
+
+.feed-empty p {
+  margin: 0;
+  max-width: 18em;
+  line-height: 1.5;
+}
+
+/* ---------- Compose pane ---------- */
+
+.compose-pane {
+  padding: clamp(20px, 3.2dvh, 32px) clamp(20px, 3%, 36px);
+}
+
+.compose-card {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: fill;
+  pointer-events: none;
+  opacity: 0.96;
+}
+
+.compose-form {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(10px, 1.6dvh, 16px);
+  height: 100%;
+  padding: 14% 9% 10%;
+  min-height: 0;
+}
+
+.compose-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.compose-label {
+  color: var(--ink-soft);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.compose-textarea,
+.compose-input {
+  width: 100%;
+  padding: 10px 12px;
+  color: var(--ink);
+  background: rgba(245, 237, 210, 0.4);
+  border: 1px solid var(--line-soft);
+  border-radius: 4px;
+  font-family: var(--serif);
+  font-size: clamp(15px, 1.1vw, 17px);
+  line-height: 1.55;
+  outline: none;
+  transition:
+    border-color 200ms ease,
+    background-color 200ms ease;
+  resize: none;
+}
+
+.compose-textarea {
+  min-height: clamp(120px, 18dvh, 200px);
+}
+
+.compose-input {
+  background: rgba(245, 237, 210, 0.55);
+  font-size: clamp(14px, 1vw, 16px);
+}
+
+.compose-textarea:focus,
+.compose-input:focus {
+  border-color: var(--ink-soft);
+  background: rgba(245, 237, 210, 0.7);
+}
+
+.compose-textarea::placeholder,
+.compose-input::placeholder {
+  color: var(--ink-soft);
+  opacity: 0.6;
+}
+
+.compose-counter {
+  align-self: flex-end;
+  color: var(--ink-soft);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+}
+
+.compose-error {
+  margin: 0;
+  color: var(--rust);
+  font-size: 12px;
+  letter-spacing: 0.06em;
+}
+
+.compose-submit-row {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin-top: auto;
+  padding-top: 4px;
+}
+
+.compose-submit {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+  color: var(--ink);
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  transition:
+    transform 200ms ease,
+    opacity 200ms ease;
+}
+
+.compose-submit:hover:not(:disabled) {
+  transform: translateX(-2px);
+}
+
+.compose-submit:focus-visible {
+  outline: 2px solid var(--rust);
+  outline-offset: 4px;
+  border-radius: 6px;
+}
+
+.compose-submit:disabled {
+  cursor: not-allowed;
+  opacity: 0.4;
+}
+
+.compose-submit-icon {
+  width: 48px;
+  height: 48px;
+  display: block;
+}
+
+/* ---------- Responsive: mobile ---------- */
+
+@media (max-width: 900px) {
+  .flight-log-section {
+    padding: 28px 18px 36px;
+    gap: 16px;
+  }
+
+  .flight-log-title-desktop {
+    display: none;
+  }
+
+  .flight-log-title-mobile {
+    display: block;
+    width: clamp(220px, 56vw, 320px);
+  }
+
+  .journal-stage {
+    aspect-ratio: auto;
+  }
+
+  .journal-bg {
+    position: relative;
+    width: 100%;
+    height: auto;
+    inset: auto;
+    opacity: 0.55;
+  }
+
+  .journal-grid {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+
+  .feed-pane,
+  .compose-pane {
+    padding: 18px 14px;
+    background: rgba(245, 237, 210, 0.55);
+    border: 1px solid var(--line-soft);
+    border-radius: 10px;
+  }
+
+  .compose-card,
+  .feed-row-card {
+    display: none;
+  }
+
+  .compose-form {
+    padding: 8px 4px 4px;
+  }
+
+  .feed-row-body {
+    position: static;
+    padding: 12px 4px 14px;
+  }
+
+  .feed-empty {
+    min-height: 80px;
+  }
+}
+
+@media (max-width: 520px) {
+  .flight-log-section {
+    padding: 24px 14px 32px;
+  }
+
+  .flight-log-title-mobile {
+    width: clamp(180px, 60vw, 260px);
+  }
+}
+
+main.planetary-main .flight-log-section {
+  /* The offline/dark theme already overrides --paper/--ink/--rust, so
+     the feed + compose naturally read on the dark stage. */
+  color: var(--ink);
+}

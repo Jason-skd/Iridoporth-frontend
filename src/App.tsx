@@ -4,6 +4,7 @@ import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import type { CSSProperties } from 'react'
 import { request } from './api/client'
+import { FlightLogSection } from './features/flight-log/FlightLogSection'
 import cabinWindow from './assets/home/porthole/cabin-window.svg'
 import iridoporthTitle from './assets/home/title/iridoporth-title.svg'
 import passingPlane from './assets/status/airplane/passing-plane.svg'
@@ -35,7 +36,7 @@ type AvailableRaspiStatus = RaspiStatus & {
 }
 
 const STATUS_ENDPOINT = '/api/v1/raspi/status'
-const PAGE_COUNT = 2
+const PAGE_COUNT = 3
 const FOREGROUND_DRAG_UNIT = 42
 const LOG_DRAG_RESPONSE = 7
 const PAGE_SWITCH_THRESHOLD = 0.72
@@ -399,6 +400,12 @@ function App() {
             style={getPageStyle(pageDrags[1] ?? 0, 1)}
           >
             <StatusSection status={status} isLive={isLive} />
+          </div>
+          <div
+            className={`page-shell${currentPage === 2 ? ' is-active' : ''}${leavingPage === 2 ? ' is-leaving' : ''}`}
+            style={getPageStyle(pageDrags[2] ?? 0, 2)}
+          >
+            <FlightLogSection />
           </div>
         </div>
       </div>
