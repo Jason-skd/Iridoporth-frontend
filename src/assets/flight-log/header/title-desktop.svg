@@ -1,0 +1,83 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 320" role="img" aria-labelledby="title desc">
+  <title id="title">航行日志</title>
+  <desc id="desc">A restrained single-line Chinese title with thin rule marks above and below, in the same hand as the Iridoporth title asset.</desc>
+
+  <defs>
+    <style>
+      @keyframes logTitleDrift {
+        0%, 100% {
+          opacity: .92;
+          transform: translateY(0);
+        }
+
+        50% {
+          opacity: 1;
+          transform: translateY(-3px);
+        }
+      }
+
+      @keyframes logRuleFlow {
+        0%, 100% {
+          opacity: .36;
+          transform: scaleX(.94);
+        }
+
+        50% {
+          opacity: .82;
+          transform: scaleX(1);
+        }
+      }
+
+      .han {
+        font-family: 'Noto Serif SC', 'Songti SC', 'STSong', Georgia, serif;
+        font-size: 168px;
+        font-weight: 900;
+        letter-spacing: 18px;
+      }
+
+      .lat {
+        font-family: 'Didot', 'Bodoni 72', Georgia, 'Noto Serif', serif;
+        font-size: 26px;
+        font-weight: 600;
+        letter-spacing: 6px;
+      }
+
+      .log-body {
+        animation: logTitleDrift 8s ease-in-out infinite;
+        transform-box: fill-box;
+        transform-origin: center;
+      }
+
+      .log-rules {
+        animation: logRuleFlow 6.4s ease-in-out infinite;
+        transform-box: fill-box;
+        transform-origin: center;
+      }
+    </style>
+  </defs>
+
+  <g class="log-body" fill="#5f563f">
+    <text class="han" x="360" y="208" text-anchor="middle">航行日志</text>
+  </g>
+
+  <g fill="none" stroke="#5f563f" stroke-linecap="round" stroke-linejoin="round" opacity=".9">
+    <text class="han" x="360" y="208" text-anchor="middle" stroke-width="1.2">航行日志</text>
+  </g>
+
+  <g class="log-rules" fill="none" stroke="#5f563f" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M148 96 H572" stroke-width="2.4" opacity=".7"/>
+    <path d="M188 110 H532" stroke-width="1.1" opacity=".4"/>
+    <path d="M268 248 H452" stroke-width="1.2" opacity=".4"/>
+  </g>
+
+  <g fill="none" stroke="#5f563f" stroke-linecap="round" stroke-linejoin="round" opacity=".7">
+    <circle cx="138" cy="96" r="3.4" stroke-width="1.4"/>
+    <circle cx="582" cy="96" r="3.4" stroke-width="1.4"/>
+    <path d="M126 96 L116 96" stroke-width="1.2" opacity=".6"/>
+    <path d="M594 96 L604 96" stroke-width="1.2" opacity=".6"/>
+  </g>
+
+  <g class="log-body" fill="#8c4f35" opacity=".72">
+    <text class="lat" x="360" y="290" text-anchor="middle">FLIGHT&#160;·&#160;LOG</text>
+  </g>
+</svg>

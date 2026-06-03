@@ -1,0 +1,139 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" role="img" aria-labelledby="title desc">
+  <title id="title">Journal Spread</title>
+  <desc id="desc">A two-page open journal with binding stitch down the center. The left page has faint log rules for the entry feed; the right page is mostly empty for the compose area. Folded corner and a few pencil marks hint at use.</desc>
+
+  <defs>
+    <style>
+      @keyframes journalBreath {
+        0%, 100% {
+          opacity: .94;
+          transform: scale(1);
+        }
+
+        50% {
+          opacity: 1;
+          transform: scale(1.005);
+        }
+      }
+
+      @keyframes foldCreak {
+        0%, 100% {
+          opacity: .5;
+          transform: translate3d(0, 0, 0);
+        }
+
+        50% {
+          opacity: .72;
+          transform: translate3d(2px, -1px, 0);
+        }
+      }
+
+      .journal-body {
+        animation: journalBreath 11s ease-in-out infinite;
+        transform-box: fill-box;
+        transform-origin: 800px 480px;
+      }
+
+      .fold-mark {
+        animation: foldCreak 13s ease-in-out infinite;
+        transform-box: fill-box;
+        transform-origin: 36px 36px;
+      }
+    </style>
+
+    <clipPath id="left-page">
+      <path d="M118 96 Q200 80 360 86 Q560 92 770 96 L770 820 Q560 824 360 826 Q220 826 118 818 Z"/>
+    </clipPath>
+
+    <clipPath id="right-page">
+      <path d="M830 96 Q1040 92 1240 86 Q1400 80 1482 96 L1482 818 Q1380 826 1240 826 Q1040 824 830 820 Z"/>
+    </clipPath>
+  </defs>
+
+  <g class="journal-body">
+    <path d="M118 96 Q200 80 360 86 Q560 92 770 96 L770 820 Q560 824 360 826 Q220 826 118 818 Z"
+          fill="none" stroke="#5f563f" stroke-width="2.2" stroke-linejoin="round" opacity=".78"/>
+    <path d="M830 96 Q1040 92 1240 86 Q1400 80 1482 96 L1482 818 Q1380 826 1240 826 Q1040 824 830 820 Z"
+          fill="none" stroke="#5f563f" stroke-width="2.2" stroke-linejoin="round" opacity=".78"/>
+
+    <path d="M118 116 Q360 108 770 116 M118 132 Q360 124 770 132 M118 148 Q360 142 770 148"
+          fill="none" stroke="#5f563f" stroke-width=".6" opacity=".18" stroke-dasharray="2 6"/>
+
+    <g clip-path="url(#left-page)">
+      <g fill="none" stroke="#5f563f" stroke-width="1" opacity=".32" stroke-linecap="round">
+        <path d="M168 230 H720"/>
+        <path d="M168 290 H720"/>
+        <path d="M168 350 H720"/>
+        <path d="M168 410 H720"/>
+        <path d="M168 470 H720"/>
+        <path d="M168 530 H720"/>
+        <path d="M168 590 H720"/>
+        <path d="M168 650 H720"/>
+        <path d="M168 710 H720"/>
+        <path d="M168 770 H720"/>
+      </g>
+
+      <g fill="none" stroke="#5f563f" stroke-width="1" opacity=".22" stroke-linecap="round">
+        <path d="M148 230 V770"/>
+        <path d="M168 230 V770" stroke-dasharray="2 5"/>
+      </g>
+
+      <g fill="#5f563f" opacity=".32" font-family="'Noto Serif SC', 'Songti SC', Georgia, serif" font-size="11" letter-spacing="1.2">
+        <text x="180" y="212">DATE</text>
+        <text x="180" y="272">CALL</text>
+        <text x="180" y="332">—</text>
+        <text x="180" y="392">—</text>
+        <text x="180" y="452">—</text>
+        <text x="180" y="512">—</text>
+        <text x="180" y="572">—</text>
+        <text x="180" y="632">—</text>
+        <text x="180" y="692">—</text>
+        <text x="180" y="752">—</text>
+      </g>
+    </g>
+
+    <g fill="none" stroke="#5f563f" stroke-width="1" opacity=".26" stroke-linecap="round">
+      <path d="M880 230 H1432"/>
+      <path d="M880 290 H1432"/>
+      <path d="M880 350 H1432"/>
+      <path d="M880 410 H1432"/>
+      <path d="M880 470 H1432"/>
+      <path d="M880 530 H1432"/>
+    </g>
+
+    <g class="fold-mark" fill="none" stroke="#5f563f" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M1432 818 L1482 818 L1482 768 Z" fill="#eadfbd" fill-opacity=".4"/>
+      <path d="M1432 818 L1482 768" stroke-width="1.2" opacity=".6"/>
+      <path d="M1432 818 L1482 768" stroke-width="1.2" opacity=".6" transform="translate(-12 4)"/>
+      <path d="M1432 818 L1482 768" stroke-width="1.2" opacity=".6" transform="translate(-24 8)"/>
+    </g>
+
+    <g fill="none" stroke="#5f563f" stroke-linecap="round">
+      <path d="M780 130 C784 200 786 320 784 460 C782 600 784 720 780 800" stroke-width="1.2" opacity=".42"/>
+      <path d="M786 140 C792 220 794 340 792 470 C790 600 792 700 786 790" stroke-width=".6" opacity=".22"/>
+
+      <g stroke-width="1.4" opacity=".58">
+        <path d="M776 220 L784 226 L776 232"/>
+        <path d="M784 220 L776 226 L784 232"/>
+        <path d="M776 360 L784 366 L776 372"/>
+        <path d="M784 360 L776 366 L784 372"/>
+        <path d="M776 500 L784 506 L776 512"/>
+        <path d="M784 500 L776 506 L784 512"/>
+        <path d="M776 640 L784 646 L776 652"/>
+        <path d="M784 640 L776 646 L784 652"/>
+      </g>
+    </g>
+
+    <g fill="none" stroke="#5f563f" stroke-width=".9" opacity=".28" stroke-linecap="round">
+      <path d="M268 64 L268 86"/>
+      <path d="M580 64 L580 86"/>
+      <path d="M268 64 L580 64" stroke-dasharray="3 5"/>
+    </g>
+
+    <g fill="none" stroke="#5f563f" stroke-width=".7" opacity=".18" stroke-linecap="round">
+      <path d="M200 384 q14 -8 32 0 q12 6 28 0"/>
+      <path d="M260 580 q10 -4 22 0 q8 3 18 0"/>
+      <path d="M1200 720 q14 -6 30 0 q12 4 26 0"/>
+    </g>
+  </g>
+</svg>

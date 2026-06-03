@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080" role="img" aria-labelledby="title desc">
+  <title id="title">Route Fold</title>
+  <desc id="desc">A faint web of intersecting dashed fold lines and a few pencil creases. Intended for use as a tiled background layer behind the journal spread.</desc>
+
+  <defs>
+    <style>
+      @keyframes foldDrift {
+        0%, 100% {
+          transform: translate3d(0, 0, 0);
+        }
+
+        50% {
+          transform: translate3d(18px, -8px, 0);
+        }
+      }
+
+      .fold-group {
+        animation: foldDrift 40s linear infinite;
+        transform-box: fill-box;
+        transform-origin: center;
+      }
+    </style>
+  </defs>
+
+  <g class="fold-group" fill="none" stroke="#5f563f" stroke-linecap="round" stroke-linejoin="round">
+    <g opacity=".18" stroke-dasharray="3 9" stroke-width="1.1">
+      <path d="M-40 220 L1960 80"/>
+      <path d="M-40 480 L1960 340"/>
+      <path d="M-40 720 L1960 580"/>
+      <path d="M-40 980 L1960 840"/>
+    </g>
+
+    <g opacity=".14" stroke-dasharray="2 12" stroke-width=".9">
+      <path d="M-40 360 L1960 540"/>
+      <path d="M-40 600 L1960 780"/>
+      <path d="M-40 860 L1960 1040"/>
+    </g>
+
+    <g opacity=".1" stroke-dasharray="4 14" stroke-width=".7">
+      <path d="M120 -40 L320 1120"/>
+      <path d="M620 -40 L820 1120"/>
+      <path d="M1100 -40 L1300 1120"/>
+      <path d="M1580 -40 L1780 1120"/>
+    </g>
+
+    <g opacity=".18" stroke-width=".8" fill="none">
+      <path d="M260 160 q60 -8 110 6 q40 12 88 -2"/>
+      <path d="M1320 880 q60 -10 112 4 q40 12 86 -2"/>
+      <path d="M780 480 q40 -6 78 4 q28 8 60 -2"/>
+    </g>
+
+    <g opacity=".14" stroke-width=".6" fill="none">
+      <path d="M460 260 L488 258 L488 286"/>
+      <path d="M1480 740 L1508 738 L1508 766"/>
+      <path d="M180 700 L208 698 L208 726"/>
+    </g>
+  </g>
+</svg>

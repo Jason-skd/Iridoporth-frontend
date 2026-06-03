@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-labelledby="title desc">
+  <title id="title">Paper Plane</title>
+  <desc id="desc">A small folded paper plane used as the submit affordance for the flight-log compose card. Single-color line drawing with a soft motion tail.</desc>
+
+  <defs>
+    <style>
+      @keyframes planeTilt {
+        0%, 100% {
+          transform: rotate(0deg);
+        }
+
+        50% {
+          transform: rotate(-3deg);
+        }
+      }
+
+      @keyframes planeTrail {
+        0%, 100% {
+          opacity: .22;
+          transform: translate3d(0, 0, 0);
+        }
+
+        50% {
+          opacity: .5;
+          transform: translate3d(-4px, 1px, 0);
+        }
+      }
+
+      .plane-body {
+        animation: planeTilt 4.2s ease-in-out infinite;
+        transform-box: fill-box;
+        transform-origin: 44px 32px;
+      }
+
+      .plane-trail {
+        animation: planeTrail 4.2s ease-in-out infinite;
+        transform-box: fill-box;
+        transform-origin: right center;
+      }
+    </style>
+  </defs>
+
+  <g class="plane-trail" fill="none" stroke="#5f563f" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M4 32 H22" stroke-width="1.4" opacity=".4"/>
+    <path d="M8 26 H20" stroke-width="1" opacity=".28"/>
+    <path d="M10 38 H22" stroke-width="1" opacity=".28"/>
+  </g>
+
+  <g class="plane-body" fill="none" stroke="#5f563f" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M14 32 L58 18 L50 46 L34 36 L14 32 Z" stroke-width="1.6" fill="#eadfbd" fill-opacity=".16"/>
+    <path d="M34 36 L58 18" stroke-width="1.4"/>
+    <path d="M34 36 L42 32" stroke-width="1.1" opacity=".7"/>
+    <path d="M34 36 L40 42" stroke-width="1.1" opacity=".7"/>
+  </g>
+</svg>

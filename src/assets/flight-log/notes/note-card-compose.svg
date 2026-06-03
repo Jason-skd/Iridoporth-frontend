@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 420" role="img" aria-labelledby="title desc">
+  <title id="title">Compose Note Card</title>
+  <desc id="desc">A clean, axis-aligned paper card used as the compose surface. The top has a faint hint line and a small pencil mark. Safe inner area is reserved for the content textarea, callsign input, and submit control.</desc>
+
+  <defs>
+    <style>
+      @keyframes composeLift {
+        0%, 100% {
+          transform: translateY(0);
+        }
+
+        50% {
+          transform: translateY(-2px);
+        }
+      }
+
+      .note-compose {
+        animation: composeLift 7s ease-in-out infinite;
+        transform-box: fill-box;
+        transform-origin: center;
+      }
+    </style>
+
+    <clipPath id="note-compose-clip">
+      <rect x="40" y="40" width="640" height="340" rx="6"/>
+    </clipPath>
+  </defs>
+
+  <g class="note-compose" fill="none" stroke="#5f563f" stroke-linejoin="round" stroke-linecap="round">
+    <rect x="40" y="40" width="640" height="340" rx="6" stroke-width="1.6" opacity=".78"/>
+
+    <g stroke-width=".6" opacity=".28" stroke-dasharray="1 4">
+      <path d="M64 92 H656"/>
+    </g>
+
+    <g stroke-width=".5" opacity=".18" stroke-dasharray="2 6">
+      <path d="M64 108 H656"/>
+    </g>
+
+    <g stroke-width=".5" opacity=".16" stroke-dasharray="2 8">
+      <path d="M64 156 H656"/>
+      <path d="M64 196 H656"/>
+      <path d="M64 236 H656"/>
+      <path d="M64 276 H656"/>
+      <path d="M64 316 H656"/>
+    </g>
+
+    <g stroke-width=".7" opacity=".36">
+      <path d="M120 78 L150 70 L184 78 L218 72"/>
+    </g>
+
+    <g stroke-width="1" opacity=".5" transform="translate(80 70) rotate(8)">
+      <path d="M0 0 L20 0"/>
+      <path d="M16 -4 L24 0 L16 4 Z" fill="#5f563f" fill-opacity=".16"/>
+    </g>
+
+    <g stroke-width=".4" opacity=".22" fill="none">
+      <path d="M52 50 q-2 4 0 8"/>
+      <path d="M668 50 q-2 4 0 8"/>
+      <path d="M52 360 q-2 4 0 8"/>
+      <path d="M668 360 q-2 4 0 8"/>
+    </g>
+
+    <g opacity=".32">
+      <path d="M620 340 L656 340 L656 304" stroke-width=".9"/>
+    </g>
+  </g>
+</svg>

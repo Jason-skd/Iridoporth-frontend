@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 320" role="img" aria-labelledby="title desc">
+  <title id="title">Ink Splatter</title>
+  <desc id="desc">A quiet corner ornament: a few ink drops and a soft halo. Single-edge composition so the asset can be repeated via CSS background-position to scatter around a layout.</desc>
+
+  <defs>
+    <radialGradient id="ink-halo" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#5f563f" stop-opacity=".16"/>
+      <stop offset="60%" stop-color="#5f563f" stop-opacity=".04"/>
+      <stop offset="100%" stop-color="#5f563f" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <g>
+    <circle cx="160" cy="160" r="140" fill="url(#ink-halo)"/>
+
+    <g fill="#5f563f" fill-opacity=".18">
+      <circle cx="148" cy="152" r="9"/>
+      <circle cx="178" cy="142" r="5"/>
+      <circle cx="200" cy="168" r="3.4"/>
+      <circle cx="120" cy="180" r="2.6"/>
+      <circle cx="220" cy="200" r="2"/>
+      <circle cx="100" cy="220" r="1.6"/>
+      <circle cx="166" cy="190" r="1.4"/>
+      <circle cx="240" cy="156" r="1.2"/>
+      <circle cx="86" cy="200" r="1"/>
+    </g>
+
+    <g fill="none" stroke="#5f563f" stroke-linecap="round" stroke-opacity=".22">
+      <path d="M148 152 q-6 4 -10 14" stroke-width="1"/>
+      <path d="M178 142 q10 8 22 26" stroke-width=".8"/>
+    </g>
+  </g>
+</svg>
