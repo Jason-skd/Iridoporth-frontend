@@ -1,21 +1,24 @@
 // FlightLogSection — the third scroll page of the SPA.
 //
-// Layout strategy (simplest that preserves the artist's intent):
-//   1. Title (航行日志) centered at the top, mobile/desktop variants via
-//      CSS — same pattern used elsewhere in this app (no JS breakpoint).
-//   2. `journal-spread.svg` rendered as a 16:9 background filling the
-//      remaining viewport. Content (feed + compose) is overlaid in a
-//      two-column grid whose track sizes mirror the journal's left/right
-//      pages.
-//   3. The compose card and list rows use their corresponding
+// Layout strategy:
+//   1. Title (航行日志) is positioned absolutely above the journal, so it
+//      doesn't take a slot in the grid. It slides up + fades out as the
+//      user scrolls into the page, making room for the reading feed.
+//   2. `journal-spread.svg` is rendered as a 16:9 background filling the
+//      remaining viewport. Content (feed + compose) overlays it in a
+//      two-column grid.
+//   3. Reading (left) takes the full available height and scrolls
+//      internally. Writing (right) is shifted down a few percent so its
+//      top edge lands below the reading's top — a small staircase that
+//      echoes the journal binding.
+//   4. Each feed row and the compose card use their corresponding
 //      `note-card-*.svg` as backgrounds; text and inputs sit inside the
 //      documented safe area.
 //
-// All assets come from `src/assets/flight-log/**` and are bundled by Vite
-// (imported as URLs). No SVG editing or runtime injection.
+// All assets come from `src/assets/flight-log/**` and are bundled by Vite.
 
 import { useEffect, useState } from 'react'
-import type { ChangeEvent, FormEvent } from 'react'
+import type { ChangeEvent, CSSProperties, FormEvent } from 'react'
 import journalSpread from '../../assets/flight-log/journal/journal-spread.svg'
 import titleDesktop from '../../assets/flight-log/header/title-desktop.svg'
 import titleMobile from '../../assets/flight-log/header/title-mobile.svg'
@@ -27,6 +30,45 @@ import type { FlightLogEntry } from '../../api/flight-log'
 
 const MAX_CONTENT_LENGTH = 500
 const MAX_CALLSIGN_LENGTH = 24
+
+// How many pixels of page-scroll are needed to fully hide the title.
+// Keep it small — we want a quick, decisive dismissal, not a long drift.
+const TITLE_HIDE_RANGE_PX = 180
+
+// Drive the title's slide-up via a CSS custom property so the transform
+// stays in CSS (cheap, GPU-accelerated) and React just feeds it a 0..1
+// number. We coalesce scroll events into one rAF to keep this cheap.
+function useScrollProgress(rangePx: number): number {
+  const [progress, setProgress] = useState(0)
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      return
+    }
+
+    let frame = 0
+    function read() {
+      frame = 0
+      const next = Math.min(1, Math.max(0, window.scrollY / rangePx))
+      setProgress(next)
+    }
+
+    function onScroll() {
+      if (frame !== 0) return
+      frame = window.requestAnimationFrame(read)
+    }
+
+    read()
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => {
+      window.removeEventListener('scroll', onScroll)
+      if (frame !== 0) window.cancelAnimationFrame(frame)
+    }
+  }, [rangePx])
+
+  return progress
+}
 
 function formatStamp(seconds: number): string {
   // Backend `created_at` is Unix SECONDS. We display HH:mm in local time
@@ -76,6 +118,7 @@ function FlightLogSection() {
   const [content, setContent] = useState('')
   const [callsign, setCallsign] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const titleProgress = useScrollProgress(TITLE_HIDE_RANGE_PX)
 
   // Trimming helpers keep the form strict without surprising the user —
   // spaces in a "tree-hole" message are usually accidental.
@@ -124,12 +167,16 @@ function FlightLogSection() {
   })()
 
   return (
-    <section className="flight-log-section" aria-labelledby="flight-log-title">
+    <section
+      className="flight-log-section"
+      aria-labelledby="flight-log-title"
+      style={{ '--title-hide': titleProgress } as CSSProperties}
+    >
       <div className="paper-grain" aria-hidden="true" />
 
-      <header className="flight-log-header">
-        <img className="flight-log-title flight-log-title-desktop" src={titleDesktop} alt="" aria-hidden="true" />
-        <img className="flight-log-title flight-log-title-mobile" src={titleMobile} alt="" aria-hidden="true" />
+      <header className="flight-log-header" aria-hidden={titleProgress > 0.5 ? 'true' : undefined}>
+        <img className="flight-log-title flight-log-title-desktop" src={titleDesktop} alt="" />
+        <img className="flight-log-title flight-log-title-mobile" src={titleMobile} alt="" />
         <h2 id="flight-log-title" className="sr-only">
           航行日志
         </h2>
