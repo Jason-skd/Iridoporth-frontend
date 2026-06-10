@@ -1,0 +1,203 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1000" viewBox="0 0 1600 1000" role="img" aria-labelledby="title desc">
+  <title id="title">Iridoporth aircraft-window brand-kit overview</title>
+  <desc id="desc">A premium brand board for Iridoporth with aircraft-window logo, construction, color system, notebook fragments, and UI details.</desc>
+  <defs>
+    <filter id="paperNoise" x="-20%" y="-20%" width="140%" height="140%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.82" numOctaves="4" seed="23" result="noise" />
+      <feColorMatrix in="noise" type="saturate" values="0" result="mono" />
+      <feComponentTransfer in="mono" result="softNoise">
+        <feFuncA type="table" tableValues="0 0.16" />
+      </feComponentTransfer>
+      <feBlend in="SourceGraphic" in2="softNoise" mode="multiply" />
+    </filter>
+    <pattern id="ruled" width="42" height="42" patternUnits="userSpaceOnUse">
+      <path d="M0 41.5H42" stroke="#2f6d7b" stroke-opacity="0.12" />
+    </pattern>
+    <linearGradient id="skyView" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#f7d98a" />
+      <stop offset="28%" stop-color="#f3efe4" />
+      <stop offset="58%" stop-color="#dbe5e3" />
+      <stop offset="82%" stop-color="#6fa8bd" />
+      <stop offset="100%" stop-color="#1f5969" />
+    </linearGradient>
+    <linearGradient id="altitudeBand" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#dbe5e3" />
+      <stop offset="54%" stop-color="#6fa8bd" />
+      <stop offset="100%" stop-color="#1f5969" />
+    </linearGradient>
+    <style>
+      .outer { fill: #171715; }
+      .panel-dark { fill: #242321; }
+      .panel-paper { fill: #f3efe4; filter: url(#paperNoise); }
+      .panel-blue { fill: #dbe5e3; filter: url(#paperNoise); }
+      .ink { fill: #191816; }
+      .paper-line { stroke: #191816; stroke-opacity: .16; }
+      .vermilion { fill: #c6543f; }
+      .sky { fill: #1f5969; }
+      .glass { fill: #8fb7b2; }
+      .yellow { fill: #d8b24a; }
+      .stroke-sky { fill: none; stroke: #1f5969; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+      .stroke-paper { fill: none; stroke: #f3efe4; stroke-width: 1.4; stroke-linecap: round; stroke-linejoin: round; }
+      .stroke-red { fill: none; stroke: #c6543f; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+      .label { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; font-size: 15px; fill: #8d877c; }
+      .micro { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; font-size: 12px; fill: #8d877c; }
+      .title { font-family: Avenir Next, Helvetica Neue, Arial, sans-serif; font-weight: 650; font-size: 40px; fill: #f3efe4; }
+      .word { font-family: Avenir Next, Helvetica Neue, Arial, sans-serif; font-weight: 700; font-size: 68px; fill: #191816; }
+      .display { font-family: Avenir Next, Helvetica Neue, Arial, sans-serif; font-weight: 700; font-size: 54px; fill: #191816; }
+      .smallcap { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; font-size: 13px; fill: #191816; }
+    </style>
+  </defs>
+
+  <rect class="outer" width="1600" height="1000" />
+  <rect x="36" y="32" width="1528" height="936" rx="18" fill="#20201e" />
+  <g opacity="0.45">
+    <path d="M80 78H1520" stroke="#f3efe4" stroke-opacity="0.08" />
+    <path d="M80 922H1520" stroke="#f3efe4" stroke-opacity="0.08" />
+    <path d="M80 78V922" stroke="#f3efe4" stroke-opacity="0.08" />
+    <path d="M1520 78V922" stroke="#f3efe4" stroke-opacity="0.08" />
+  </g>
+
+  <text x="80" y="71" class="micro">IRIDOPORTH / HOME VISUAL SYSTEM / 02</text>
+  <text x="1372" y="71" class="micro">AIRCRAFT WINDOW + LOG</text>
+
+  <g transform="translate(80 100)">
+    <!-- Panel 1: Logo cover -->
+    <rect class="panel-dark" x="0" y="0" width="456" height="252" rx="10" />
+    <rect x="72" y="42" width="120" height="168" rx="60" fill="#f3efe4" />
+    <rect x="90" y="59" width="84" height="134" rx="42" fill="url(#skyView)" />
+    <path d="M96 145c22-13 43-14 64-3M116 106c22-9 43-8 62 4" stroke="#f3efe4" stroke-opacity=".72" stroke-width="5" fill="none" stroke-linecap="round" />
+    <path d="M104 152c22-12 44-12 66 0" stroke="#f3efe4" stroke-opacity=".58" stroke-width="5" fill="none" stroke-linecap="round" />
+    <rect x="58" y="28" width="148" height="196" rx="74" fill="none" stroke="#c6543f" stroke-width="2.5" stroke-dasharray="3 12" />
+    <text x="236" y="112" class="title">Iridoporth</text>
+    <text x="238" y="145" class="label">an aircraft window for small signals</text>
+    <path d="M238 168c34-8 63-8 94 0s58 8 87-1" class="stroke-paper" opacity=".55" />
+    <text x="24" y="226" class="micro">01 LOGO COVER</text>
+
+    <!-- Panel 2: Construction -->
+    <g transform="translate(480 0)">
+      <rect class="panel-paper" x="0" y="0" width="456" height="252" rx="10" />
+      <text x="24" y="34" class="smallcap">02 CONSTRUCTION</text>
+      <g transform="translate(100 28)">
+        <rect x="50" y="4" width="104" height="184" rx="52" fill="none" stroke="#191816" stroke-opacity=".18" stroke-width="1.5" />
+        <rect x="64" y="20" width="76" height="152" rx="38" fill="none" stroke="#191816" stroke-opacity=".24" stroke-width="1.5" />
+        <path d="M102 4v184M32 96h140" stroke="#191816" stroke-opacity=".13" />
+        <path d="M52 46l100 100M48 146L154 42" stroke="#191816" stroke-opacity=".1" />
+        <rect x="62" y="20" width="80" height="152" rx="40" fill="#1f5969" />
+        <path d="M78 104c18-12 38-13 58-2" stroke="#f3efe4" stroke-width="9" stroke-linecap="round" opacity=".76" />
+        <path d="M76 132c20-13 42-14 66-2" stroke="#f3efe4" stroke-width="8" stroke-linecap="round" opacity=".78" />
+        <rect x="88" y="72" width="28" height="48" rx="14" fill="#c6543f" />
+      </g>
+      <path d="M286 71h92M286 116h116M286 161h78" class="stroke-sky" opacity=".65" />
+      <text x="286" y="93" class="micro">capsule trim</text>
+      <text x="286" y="138" class="micro">window acrylic</text>
+      <text x="286" y="183" class="micro">cloud + route</text>
+    </g>
+
+    <!-- Panel 3: Digital application -->
+    <g transform="translate(960 0)">
+      <rect class="panel-blue" x="0" y="0" width="456" height="252" rx="10" />
+      <text x="24" y="34" class="smallcap">03 DIGITAL SURFACE</text>
+      <rect x="36" y="62" width="384" height="154" rx="14" fill="#191816" />
+      <rect x="36" y="62" width="384" height="34" rx="14" fill="#2d2b27" />
+      <circle cx="58" cy="79" r="4" fill="#c6543f" />
+      <circle cx="74" cy="79" r="4" fill="#d8b24a" />
+      <circle cx="90" cy="79" r="4" fill="#8fb7b2" />
+      <rect x="120" y="72" width="180" height="14" rx="7" fill="#f3efe4" opacity=".18" />
+      <text x="132" y="83" class="micro">iridoporth/home</text>
+      <rect x="66" y="112" width="58" height="86" rx="29" fill="#f3efe4" />
+      <rect x="76" y="123" width="38" height="64" rx="19" fill="url(#altitudeBand)" />
+      <path d="M162 128h194M162 154h146M162 181h212" stroke="#f3efe4" stroke-opacity=".32" stroke-width="8" stroke-linecap="round" />
+      <path d="M162 203h72" stroke="#c6543f" stroke-width="5" stroke-linecap="round" />
+    </g>
+
+    <!-- Panel 4: Brand essence -->
+    <g transform="translate(0 276)">
+      <rect class="panel-paper" x="0" y="0" width="456" height="252" rx="10" />
+      <rect x="0" y="0" width="456" height="252" rx="10" fill="url(#ruled)" opacity=".7" />
+      <text x="24" y="34" class="smallcap">04 BRAND ESSENCE</text>
+      <text x="42" y="102" class="display">Take the</text>
+      <text x="42" y="162" class="display">window seat.</text>
+      <path d="M50 187c72-20 118 20 188 0s102-25 164 0" class="stroke-red" opacity=".75" />
+      <text x="42" y="218" class="micro">Personal site as tray-table log, not product brochure.</text>
+    </g>
+
+    <!-- Panel 5: Color system -->
+    <g transform="translate(480 276)">
+      <rect class="panel-dark" x="0" y="0" width="456" height="252" rx="10" />
+      <text x="24" y="34" class="micro">05 PALETTE</text>
+      <g transform="translate(36 70)">
+        <rect x="0" y="0" width="64" height="120" rx="9" fill="#191816" />
+        <rect x="76" y="0" width="64" height="120" rx="9" fill="#f3efe4" />
+        <rect x="152" y="0" width="64" height="120" rx="9" fill="#dbe5e3" />
+        <rect x="228" y="0" width="64" height="120" rx="9" fill="#6fa8bd" />
+        <rect x="304" y="0" width="64" height="120" rx="9" fill="#c6543f" />
+        <rect x="380" y="0" width="64" height="120" rx="9" fill="#d8b24a" />
+      </g>
+      <text x="36" y="218" class="micro">ink / fuselage / cloud / altitude / signal / runway</text>
+    </g>
+
+    <!-- Panel 6: Type -->
+    <g transform="translate(960 276)">
+      <rect class="panel-paper" x="0" y="0" width="456" height="252" rx="10" />
+      <text x="24" y="34" class="smallcap">06 TYPOGRAPHY</text>
+      <text x="34" y="98" class="word">Cabin</text>
+      <text x="36" y="138" class="smallcap">LOGBOOK SANS / MONO SIGNALS</text>
+      <text x="36" y="182" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace" font-size="30" fill="#1f5969">RASPI 48.2C</text>
+      <text x="36" y="214" class="micro">Use text like boarding labels, stamps, and instrument notes.</text>
+    </g>
+
+    <!-- Panel 7: Physical application -->
+    <g transform="translate(0 552)">
+      <rect class="panel-blue" x="0" y="0" width="456" height="252" rx="10" />
+      <text x="24" y="34" class="smallcap">07 LOGBOOK OBJECTS</text>
+      <g transform="translate(72 60) rotate(-4)">
+        <rect x="0" y="0" width="270" height="142" rx="8" fill="#f3efe4" filter="url(#paperNoise)" />
+        <path d="M20 42h220M20 72h180M20 102h216" class="paper-line" stroke-width="2" />
+        <rect x="174" y="18" width="72" height="28" rx="2" fill="none" stroke="#c6543f" stroke-width="2" stroke-dasharray="4 4" />
+        <text x="187" y="37" class="micro" fill="#c6543f">LOG</text>
+      </g>
+      <g transform="translate(238 84) rotate(8)">
+        <rect x="0" y="0" width="118" height="116" rx="10" fill="#191816" />
+        <rect x="22" y="18" width="40" height="62" rx="20" fill="#8fb7b2" />
+        <path d="M74 30h28M74 48h20M74 66h32" stroke="#f3efe4" stroke-opacity=".34" stroke-width="5" stroke-linecap="round" />
+      </g>
+    </g>
+
+    <!-- Panel 8: Image direction -->
+    <g transform="translate(480 552)">
+      <rect class="panel-dark" x="0" y="0" width="456" height="252" rx="10" />
+      <text x="24" y="34" class="micro">08 IMAGE DIRECTION</text>
+      <g transform="translate(26 35)">
+        <rect x="0" y="0" width="404" height="194" rx="12" fill="#0f252b" />
+        <rect x="154" y="20" width="96" height="154" rx="48" fill="#f3efe4" />
+        <rect x="169" y="35" width="66" height="124" rx="33" fill="url(#skyView)" />
+        <path d="M174 112c20-12 41-14 62-4" stroke="#f3efe4" stroke-opacity=".72" stroke-width="6" fill="none" stroke-linecap="round" />
+        <path d="M174 132c24-14 48-14 72 0" stroke="#f3efe4" stroke-opacity=".66" stroke-width="7" fill="none" stroke-linecap="round" />
+        <rect x="139" y="6" width="126" height="184" rx="63" fill="none" stroke="#c6543f" stroke-opacity=".65" stroke-width="2" stroke-dasharray="5 13" />
+      </g>
+    </g>
+
+    <!-- Panel 9: System detail -->
+    <g transform="translate(960 552)">
+      <rect class="panel-paper" x="0" y="0" width="456" height="252" rx="10" />
+      <text x="24" y="34" class="smallcap">09 SYSTEM DETAILS</text>
+      <g transform="translate(36 66)">
+        <rect x="0" y="0" width="118" height="42" rx="21" fill="#191816" />
+        <rect x="17" y="10" width="14" height="22" rx="7" fill="#8fb7b2" />
+        <text x="44" y="27" class="micro" fill="#f3efe4">RASPI</text>
+        <rect x="138" y="0" width="118" height="42" rx="21" fill="#1f5969" />
+        <path d="M162 22h20m-10-10v20" stroke="#f3efe4" stroke-width="2" />
+        <text x="192" y="27" class="micro" fill="#f3efe4">LOG</text>
+        <rect x="276" y="0" width="108" height="42" rx="21" fill="#c6543f" />
+        <path d="M300 24c14-12 27-12 42 0" fill="none" stroke="#f3efe4" stroke-width="2" />
+        <text x="350" y="27" class="micro" fill="#f3efe4">HOME</text>
+      </g>
+      <path d="M46 156c42-40 89-54 132-28s77 40 120 3 70-41 112-16" class="stroke-sky" />
+      <circle cx="46" cy="156" r="6" class="vermilion" />
+      <circle cx="178" cy="128" r="6" class="yellow" />
+      <circle cx="298" cy="131" r="6" class="glass" />
+      <circle cx="410" cy="115" r="6" class="vermilion" />
+      <text x="38" y="212" class="micro">Navigation as flight path; status as signal chips.</text>
+    </g>
+  </g>
+</svg>
