@@ -20,12 +20,15 @@ type ApiEnvelope<T> = {
 
 const apiBase = import.meta.env.VITE_API_BASE_URL ?? ''
 
-async function readJson<T>(path: string, signal?: AbortSignal): Promise<T> {
+async function readJson<T>(path: string, options: RequestInit = {}): Promise<T> {
+  const headers = new Headers(options.headers)
+  headers.set('Accept', 'application/json')
+
   const response = await fetch(`${apiBase}${path}`, {
+    ...options,
     headers: {
-      Accept: 'application/json',
+      ...Object.fromEntries(headers),
     },
-    signal,
   })
 
   if (!response.ok) {
@@ -42,15 +45,28 @@ async function readJson<T>(path: string, signal?: AbortSignal): Promise<T> {
 }
 
 export function getRaspiStatus(signal?: AbortSignal) {
-  return readJson<RaspiStatus>('/api/v1/raspi/status', signal)
+  return readJson<RaspiStatus>('/api/v1/raspi/status', { signal })
 }
 
 export async function getFlightLogEntries(signal?: AbortSignal) {
   const data = await readJson<{ entries: FlightLogEntry[] }>(
     '/api/v1/flight-log',
-    signal,
+    { signal },
   )
 
   return data.entries
 }
 
+export function createFlightLogEntry(
+  entry: Pick<FlightLogEntry, 'content' | 'callsign'>,
+  signal?: AbortSignal,
+) {
+  return readJson<Pick<FlightLogEntry, 'id' | 'created_at'>>('/api/v1/flight-log', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(entry),
+    signal,
+  })
+}

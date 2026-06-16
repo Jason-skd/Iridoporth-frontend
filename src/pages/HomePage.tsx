@@ -9,6 +9,7 @@ import {
   type FlightLogEntry,
   type RaspiStatus,
 } from '../lib/api'
+import { formatPercent, formatTemp } from '../lib/format'
 
 type RemoteState<T> =
   | { status: 'loading' }
@@ -21,16 +22,6 @@ const flightLogFallback: FlightLogEntry = {
   content: 'Nothing has been left here yet.',
   callsign: null,
   created_at: 0,
-}
-
-function formatPercent(value: number | null) {
-  if (value === null) return '--'
-  return `${Math.round(value)}%`
-}
-
-function formatTemp(value: number | null) {
-  if (value === null) return '--'
-  return `${value.toFixed(1)}C`
 }
 
 function formatDate(seconds: number) {
