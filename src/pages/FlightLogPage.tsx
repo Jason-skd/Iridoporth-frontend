@@ -183,7 +183,7 @@ export function FlightLogPage() {
               maxLength={NOTE_LIMIT}
               required
               rows={8}
-              placeholder="Write quietly."
+              placeholder="Leave your words."
               onChange={(event) => {
                 setContent(event.target.value)
                 if (submitState.status !== 'submitting') {
@@ -234,7 +234,7 @@ export function FlightLogPage() {
           src={stampStrip}
           width="1100"
           height="240"
-          alt="Aircraft-window stamps and quiet path labels."
+          alt="Aircraft-window stamps and path labels."
         />
         <FlightLogEntries state={state} />
       </section>

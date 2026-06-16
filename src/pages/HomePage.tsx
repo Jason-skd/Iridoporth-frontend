@@ -97,7 +97,7 @@ function SignalPreview({ state }: { state: RemoteState<RaspiStatus> }) {
   if (state.status === 'error') {
     return (
       <p className="signal-preview signal-preview--note">
-        Signal is quiet. Backend preview: {state.message}
+        Signal missing. Backend preview: {state.message}
       </p>
     )
   }
@@ -158,7 +158,7 @@ function FlightLogPreview({ state }: { state: RemoteState<FlightLogEntry> }) {
   if (state.status === 'error') {
     return (
       <p className="flight-log-preview flight-log-preview--note">
-        flight-log is quiet. {state.message}
+        flight-log is empty. {state.message}
       </p>
     )
   }
@@ -210,14 +210,14 @@ export function HomePage() {
 
         <Link className="route-card route-card--flight-log" to="/flight-log">
           <span>flight-log</span>
-          <h2>Quiet notes</h2>
+          <h2>Leave your record</h2>
           <FlightLogPreview state={latestFlightLogEntry} />
         </Link>
       </section>
 
       <section className="notebook-section" aria-labelledby="notebook-title">
         <div className="notebook-copy">
-          <h2 id="notebook-title">Mostly quiet.</h2>
+          <h2 id="notebook-title">Comming soon.</h2>
         </div>
         <div className="notebook-assets">
           <img
@@ -232,7 +232,7 @@ export function HomePage() {
             src={stampStrip}
             width="1100"
             height="240"
-            alt="Aircraft-window stamps and quiet path labels."
+            alt="Aircraft-window stamps and path labels."
           />
         </div>
       </section>
