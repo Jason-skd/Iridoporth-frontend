@@ -134,20 +134,12 @@
 
 .hero-copy h1,
 .placeholder-page h1 {
-  max-width: 9ch;
+  max-width: 12ch;
   margin: 0;
   color: var(--ink);
   font-size: clamp(3.55rem, 7vw, 6.8rem);
   font-weight: 780;
   line-height: 0.93;
-}
-
-.hero-copy__lede {
-  max-width: 29rem;
-  margin: 1.5rem 0 0;
-  color: var(--text);
-  font-size: clamp(1.05rem, 1.8vw, 1.25rem);
-  line-height: 1.55;
 }
 
 .hero-actions {
@@ -289,13 +281,13 @@
   transform: rotate(12deg);
 }
 
-.route-card--log {
+.route-card--flight-log {
   background:
     linear-gradient(125deg, var(--paper), color-mix(in srgb, var(--sun) 18%, var(--paper)) 64%),
     var(--paper);
 }
 
-.route-card--log::after {
+.route-card--flight-log::after {
   content: '';
   position: absolute;
   right: -4rem;
@@ -338,13 +330,13 @@
 }
 
 .signal-preview,
-.log-preview {
+.flight-log-preview {
   position: relative;
   z-index: 1;
 }
 
 .signal-preview--note,
-.log-preview--note {
+.flight-log-preview--note {
   max-width: 26rem;
   margin: auto 0 0;
   color: var(--text);
@@ -352,14 +344,14 @@
 }
 
 .signal-preview--loading,
-.log-preview--loading {
+.flight-log-preview--loading {
   display: grid;
   gap: 0.75rem;
   margin-top: auto;
 }
 
 .signal-preview__bar,
-.log-preview--loading span {
+.flight-log-preview--loading span {
   display: block;
   height: 0.86rem;
   border-radius: 999px;
@@ -380,20 +372,19 @@
   width: 78%;
 }
 
-.log-preview {
+.flight-log-preview {
   display: grid;
   gap: 0.8rem;
   margin-top: auto;
 }
 
-.log-preview time,
-.log-preview span {
+.flight-log-preview time {
   color: var(--muted);
   font-family: var(--mono);
   font-size: 0.78rem;
 }
 
-.log-preview p {
+.flight-log-preview p {
   max-width: 36rem;
   margin: 0;
   color: var(--ink);
@@ -417,14 +408,6 @@
   color: var(--ink);
   font-size: clamp(2.5rem, 5vw, 5rem);
   line-height: 0.96;
-}
-
-.notebook-copy p {
-  max-width: 26rem;
-  margin: 1.4rem 0 0;
-  color: var(--text);
-  font-size: 1.05rem;
-  line-height: 1.6;
 }
 
 .notebook-assets {
@@ -493,7 +476,7 @@
   }
 
   .signal-preview__bar,
-  .log-preview--loading span {
+  .flight-log-preview--loading span {
     animation: shimmer 1300ms ease-in-out infinite;
   }
 }

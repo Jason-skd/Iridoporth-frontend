@@ -7,7 +7,7 @@ import { RaspiStatusPage } from './pages/RaspiStatusPage'
 const navItems = [
   { to: '/', label: 'Home' },
   { to: '/raspi-status', label: 'Raspi status' },
-  { to: '/flight-log', label: 'Flight log' },
+  { to: '/flight-log', label: 'flight-log' },
 ]
 
 function App() {
@@ -45,4 +45,3 @@ function App() {
 }
 
 export default App
-

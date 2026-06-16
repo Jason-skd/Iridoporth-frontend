@@ -49,7 +49,7 @@
     <circle cx="130" cy="55" r="8" class="yellow" />
     <circle cx="238" cy="28" r="8" class="glass" />
     <circle cx="348" cy="38" r="8" class="red" />
-    <text x="102" y="134" class="mono">flight path</text>
+    <text x="102" y="134" class="mono">quiet path</text>
   </g>
 
   <g transform="translate(54 174)">

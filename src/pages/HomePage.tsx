@@ -16,9 +16,9 @@ type RemoteState<T> =
   | { status: 'empty' }
   | { status: 'error'; message: string }
 
-const logFallback: FlightLogEntry = {
+const flightLogFallback: FlightLogEntry = {
   id: 0,
-  content: 'The logbook has not opened yet. The first note will appear here.',
+  content: 'Nothing has been left here yet.',
   callsign: null,
   created_at: 0,
 }
@@ -48,9 +48,10 @@ function useHomeSignals() {
   const [raspi, setRaspi] = useState<RemoteState<RaspiStatus>>({
     status: 'loading',
   })
-  const [latestLog, setLatestLog] = useState<RemoteState<FlightLogEntry>>({
-    status: 'loading',
-  })
+  const [latestFlightLogEntry, setLatestFlightLogEntry] =
+    useState<RemoteState<FlightLogEntry>>({
+      status: 'loading',
+    })
 
   useEffect(() => {
     const controller = new AbortController()
@@ -69,7 +70,7 @@ function useHomeSignals() {
 
     getFlightLogEntries(controller.signal)
       .then((entries) => {
-        setLatestLog(
+        setLatestFlightLogEntry(
           entries.length > 0
             ? { status: 'ready', data: entries[0] }
             : { status: 'empty' },
@@ -77,9 +78,9 @@ function useHomeSignals() {
       })
       .catch((error: unknown) => {
         if (controller.signal.aborted) return
-        setLatestLog({
+        setLatestFlightLogEntry({
           status: 'error',
-          message: error instanceof Error ? error.message : 'Log unavailable',
+          message: error instanceof Error ? error.message : 'flight-log unavailable',
         })
       })
 
@@ -88,7 +89,7 @@ function useHomeSignals() {
     }
   }, [])
 
-  return { raspi, latestLog }
+  return { raspi, latestFlightLogEntry }
 }
 
 function SignalPreview({ state }: { state: RemoteState<RaspiStatus> }) {
@@ -147,15 +148,15 @@ function SignalPreview({ state }: { state: RemoteState<RaspiStatus> }) {
   )
 }
 
-function LogPreview({ state }: { state: RemoteState<FlightLogEntry> }) {
+function FlightLogPreview({ state }: { state: RemoteState<FlightLogEntry> }) {
   const entry = useMemo(() => {
     if (state.status === 'ready') return state.data
-    return logFallback
+    return flightLogFallback
   }, [state])
 
   if (state.status === 'loading') {
     return (
-      <div className="log-preview log-preview--loading" aria-live="polite">
+      <div className="flight-log-preview flight-log-preview--loading" aria-live="polite">
         <span />
         <span />
         <span />
@@ -165,42 +166,36 @@ function LogPreview({ state }: { state: RemoteState<FlightLogEntry> }) {
 
   if (state.status === 'error') {
     return (
-      <p className="log-preview log-preview--note">
-        Log preview is offline. {state.message}
+      <p className="flight-log-preview flight-log-preview--note">
+        flight-log is quiet. {state.message}
       </p>
     )
   }
 
   return (
-    <article className="log-preview">
+    <article className="flight-log-preview">
       <time dateTime={entry.created_at > 0 ? String(entry.created_at) : undefined}>
         {formatDate(entry.created_at)}
       </time>
       <p>{entry.content}</p>
-      <span>{entry.callsign ?? 'no callsign'}</span>
     </article>
   )
 }
 
 export function HomePage() {
-  const { raspi, latestLog } = useHomeSignals()
+  const { raspi, latestFlightLogEntry } = useHomeSignals()
 
   return (
     <main className="home-page">
       <section className="hero-section" aria-labelledby="home-title">
         <div className="hero-copy">
-          <p className="section-kicker">Iridoporth</p>
-          <h1 id="home-title">Take the window seat.</h1>
-          <p className="hero-copy__lede">
-            A personal cabin notebook for live signals, routes, and small
-            observations.
-          </p>
+          <h1 id="home-title">Iridoporth</h1>
           <div className="hero-actions" aria-label="Primary navigation">
             <Link className="button button--primary" to="/flight-log">
-              Open log
+              flight-log
             </Link>
             <Link className="button button--ghost" to="/raspi-status">
-              Check signal
+              Signal
             </Link>
           </div>
         </div>
@@ -222,20 +217,16 @@ export function HomePage() {
           <SignalPreview state={raspi} />
         </Link>
 
-        <Link className="route-card route-card--log" to="/flight-log">
+        <Link className="route-card route-card--flight-log" to="/flight-log">
           <span>flight-log</span>
-          <h2>Latest note</h2>
-          <LogPreview state={latestLog} />
+          <h2>Quiet notes</h2>
+          <FlightLogPreview state={latestFlightLogEntry} />
         </Link>
       </section>
 
       <section className="notebook-section" aria-labelledby="notebook-title">
         <div className="notebook-copy">
-          <h2 id="notebook-title">A site as a folded page.</h2>
-          <p>
-            Home is the cabin table. Status is the instrument panel. The log is
-            the page that keeps the route.
-          </p>
+          <h2 id="notebook-title">Mostly quiet.</h2>
         </div>
         <div className="notebook-assets">
           <img
@@ -243,14 +234,14 @@ export function HomePage() {
             src={journalFragments}
             width="1200"
             height="820"
-            alt="Hand-journal fragments for the onboard pulse and flight log."
+            alt="Hand-journal fragments for the onboard pulse and private notes."
           />
           <img
             className="notebook-assets__stamps"
             src={stampStrip}
             width="1100"
             height="240"
-            alt="Aircraft-window stamps and flight path labels."
+            alt="Aircraft-window stamps and quiet path labels."
           />
         </div>
       </section>

@@ -58,7 +58,7 @@
   </g>
 
   <text x="80" y="71" class="micro">IRIDOPORTH / HOME VISUAL SYSTEM / 02</text>
-  <text x="1372" y="71" class="micro">AIRCRAFT WINDOW + LOG</text>
+  <text x="1324" y="71" class="micro">AIRCRAFT WINDOW + FLIGHT-LOG</text>
 
   <g transform="translate(80 100)">
     <!-- Panel 1: Logo cover -->
@@ -115,10 +115,9 @@
       <rect class="panel-paper" x="0" y="0" width="456" height="252" rx="10" />
       <rect x="0" y="0" width="456" height="252" rx="10" fill="url(#ruled)" opacity=".7" />
       <text x="24" y="34" class="smallcap">04 BRAND ESSENCE</text>
-      <text x="42" y="102" class="display">Take the</text>
-      <text x="42" y="162" class="display">window seat.</text>
+      <text x="42" y="128" class="display">Iridoporth</text>
       <path d="M50 187c72-20 118 20 188 0s102-25 164 0" class="stroke-red" opacity=".75" />
-      <text x="42" y="218" class="micro">Personal site as tray-table log, not product brochure.</text>
+      <text x="42" y="218" class="micro">Personal site as quiet tray-table notes.</text>
     </g>
 
     <!-- Panel 5: Color system -->
@@ -141,7 +140,7 @@
       <rect class="panel-paper" x="0" y="0" width="456" height="252" rx="10" />
       <text x="24" y="34" class="smallcap">06 TYPOGRAPHY</text>
       <text x="34" y="98" class="word">Cabin</text>
-      <text x="36" y="138" class="smallcap">LOGBOOK SANS / MONO SIGNALS</text>
+      <text x="36" y="138" class="smallcap">NOTEBOOK SANS / MONO SIGNALS</text>
       <text x="36" y="182" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace" font-size="30" fill="#1f5969">RASPI 48.2C</text>
       <text x="36" y="214" class="micro">Use text like boarding labels, stamps, and instrument notes.</text>
     </g>
@@ -149,12 +148,12 @@
     <!-- Panel 7: Physical application -->
     <g transform="translate(0 552)">
       <rect class="panel-blue" x="0" y="0" width="456" height="252" rx="10" />
-      <text x="24" y="34" class="smallcap">07 LOGBOOK OBJECTS</text>
+      <text x="24" y="34" class="smallcap">07 NOTE OBJECTS</text>
       <g transform="translate(72 60) rotate(-4)">
         <rect x="0" y="0" width="270" height="142" rx="8" fill="#f3efe4" filter="url(#paperNoise)" />
         <path d="M20 42h220M20 72h180M20 102h216" class="paper-line" stroke-width="2" />
         <rect x="174" y="18" width="72" height="28" rx="2" fill="none" stroke="#c6543f" stroke-width="2" stroke-dasharray="4 4" />
-        <text x="187" y="37" class="micro" fill="#c6543f">LOG</text>
+        <text x="181" y="37" class="micro" fill="#c6543f">NOTE</text>
       </g>
       <g transform="translate(238 84) rotate(8)">
         <rect x="0" y="0" width="118" height="116" rx="10" fill="#191816" />
@@ -185,19 +184,19 @@
         <rect x="0" y="0" width="118" height="42" rx="21" fill="#191816" />
         <rect x="17" y="10" width="14" height="22" rx="7" fill="#8fb7b2" />
         <text x="44" y="27" class="micro" fill="#f3efe4">RASPI</text>
-        <rect x="138" y="0" width="118" height="42" rx="21" fill="#1f5969" />
+        <rect x="138" y="0" width="132" height="42" rx="21" fill="#1f5969" />
         <path d="M162 22h20m-10-10v20" stroke="#f3efe4" stroke-width="2" />
-        <text x="192" y="27" class="micro" fill="#f3efe4">LOG</text>
-        <rect x="276" y="0" width="108" height="42" rx="21" fill="#c6543f" />
-        <path d="M300 24c14-12 27-12 42 0" fill="none" stroke="#f3efe4" stroke-width="2" />
-        <text x="350" y="27" class="micro" fill="#f3efe4">HOME</text>
+        <text x="190" y="27" class="micro" fill="#f3efe4">FLIGHT-LOG</text>
+        <rect x="290" y="0" width="108" height="42" rx="21" fill="#c6543f" />
+        <path d="M314 24c14-12 27-12 42 0" fill="none" stroke="#f3efe4" stroke-width="2" />
+        <text x="364" y="27" class="micro" fill="#f3efe4">HOME</text>
       </g>
       <path d="M46 156c42-40 89-54 132-28s77 40 120 3 70-41 112-16" class="stroke-sky" />
       <circle cx="46" cy="156" r="6" class="vermilion" />
       <circle cx="178" cy="128" r="6" class="yellow" />
       <circle cx="298" cy="131" r="6" class="glass" />
       <circle cx="410" cy="115" r="6" class="vermilion" />
-      <text x="38" y="212" class="micro">Navigation as flight path; status as signal chips.</text>
+      <text x="38" y="212" class="micro">Navigation as quiet path; status as signal chips.</text>
     </g>
   </g>
 </svg>
