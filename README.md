@@ -1,29 +1,27 @@
 # Iridoporth Frontend
 
-Personal frontend for Iridoporth, built with React, TypeScript, Vite, and a small route layer.
+Iridoporth 的个人前端，基于 React、TypeScript、Vite。
 
-The current visual direction is an aircraft-window notebook: capsule-shaped cabin window, paper texture, live raspi signal, and quiet private notes.
+## 页面
 
-## Routes
+- `/`：首页
+- `/raspi-status`：Raspi 状态
+- `/flight-log`：飞行日志
 
-- `/` - home page and narrative entry
-- `/raspi-status` - focused raspi instrument page
-- `/flight-log` - quiet anonymous notes page
-
-## Development
+## 本地运行
 
 ```sh
 npm install
 npm run dev
 ```
 
-The Vite dev server proxies `/api/*` to `http://127.0.0.1:3000` by default, matching the backend development port. Override it when needed:
+默认将 `/api/*` 代理到 `http://127.0.0.1:3000`。如需覆盖：
 
 ```sh
 VITE_DEV_API_TARGET=http://127.0.0.1:3000 npm run dev
 ```
 
-## Verification
+## 检查
 
 ```sh
 npm run lint
