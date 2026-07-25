@@ -32,3 +32,6 @@ dist-ssr
 tmp/
 logs/
 temp/
+
+### Playwright MCP artifacts (screenshots, snapshots, console logs) ###
+.playwright-mcp/
