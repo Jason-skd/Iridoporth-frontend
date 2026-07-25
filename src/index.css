@@ -1,123 +1,20 @@
-:root {
-  --ink: #191816;
-  --paper: #f3efe4;
-  --surface: #ebe4d5;
-  --surface-soft: #ded7c6;
-  --cloud: #dbe5e3;
-  --altitude: #6fa8bd;
-  --sky: #1f5969;
-  --signal: #c6543f;
-  --sun: #d8b24a;
-  --text: #4f4a43;
-  --muted: #766f64;
-  --radius-panel: 28px;
-  --radius-pill: 999px;
-  --radius-input: 18px;
-  --header-h: 72px;
-  --hero-peek: 7.5rem;
-  --shadow-soft: 0 1.2rem 3rem color-mix(in srgb, var(--ink) 11%, transparent);
-  --shadow-lift: 0 1.6rem 3.6rem color-mix(in srgb, var(--ink) 16%, transparent);
-  --sans:
-    Avenir Next, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
-    Segoe UI, sans-serif;
-  --mono:
-    ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono,
-    monospace;
-
-  color: var(--text);
-  background:
-    radial-gradient(circle at 18% 12%, color-mix(in srgb, var(--sun) 16%, transparent), transparent 28rem),
-    radial-gradient(circle at 88% 18%, color-mix(in srgb, var(--cloud) 54%, transparent), transparent 24rem),
-    linear-gradient(135deg, var(--paper), var(--surface));
-  color-scheme: light dark;
-  font-family: var(--sans);
-  font-synthesis: none;
-  font-size: 17px;
-  line-height: 1.5;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --ink: #f3efe4;
-    --paper: #242321;
-    --surface: #191816;
-    --surface-soft: #2e2b26;
-    --cloud: #38494d;
-    --altitude: #6fa8bd;
-    --sky: #8fb7b2;
-    --signal: #d96b56;
-    --sun: #d8b24a;
-    --text: #d8d0c0;
-    --muted: #a99f8e;
-    --shadow-soft: 0 1.2rem 3rem rgb(0 0 0 / 0.28);
-    --shadow-lift: 0 1.6rem 3.6rem rgb(0 0 0 / 0.34);
-  }
-}
-
-* {
-  box-sizing: border-box;
-}
-
-html {
-  min-width: 320px;
-  background: var(--surface);
-}
-
-body {
-  min-width: 320px;
-  min-height: 100dvh;
-  margin: 0;
-  background:
-    linear-gradient(color-mix(in srgb, var(--ink) 2.5%, transparent) 1px, transparent 1px),
-    linear-gradient(90deg, color-mix(in srgb, var(--ink) 2.5%, transparent) 1px, transparent 1px),
-    transparent;
-  background-size: 42px 42px;
-}
-
-body::before {
-  content: '';
-  position: fixed;
-  inset: 0;
-  z-index: 60;
-  pointer-events: none;
-  opacity: 0.11;
-  background-image:
-    url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='.42'/%3E%3C/svg%3E");
-  mix-blend-mode: multiply;
-}
-
-@media (prefers-color-scheme: dark) {
-  body::before {
-    opacity: 0.07;
-    mix-blend-mode: screen;
-  }
-}
-
-button,
-input,
-textarea,
-select {
-  font: inherit;
-}
-
-a {
-  color: inherit;
-}
-
-img,
-svg {
-  max-width: 100%;
-}
-
-:focus-visible {
-  outline: 3px solid color-mix(in srgb, var(--signal) 72%, var(--paper));
-  outline-offset: 4px;
-}
-
-::selection {
-  color: var(--paper);
-  background: var(--signal);
-}
+/* Global stylesheet manifest.
+ *
+ * The application CSS is split by concern under src/styles/. This file does
+ * nothing but import them in cascade order (mirrors the pre-split source order
+ * in the former App.css). tokens.css holds the :root design tokens every other
+ * file consumes via var(); it is imported first so the contract is defined
+ * before any rule uses it. responsive.css is intentionally imported before the
+ * auth/admin tail so it stays ahead of them in source order, exactly as before.
+ *
+ * Add new CSS to the matching concern file, not here. */
+@import './styles/tokens.css';
+@import './styles/base.css';
+@import './styles/layout.css';
+@import './styles/home.css';
+@import './styles/raspi.css';
+@import './styles/flight-log.css';
+@import './styles/animations.css';
+@import './styles/responsive.css';
+@import './styles/auth.css';
+@import './styles/admin.css';

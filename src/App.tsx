@@ -1,5 +1,4 @@
 import { NavLink, Route, Routes } from 'react-router-dom'
-import './App.css'
 import { BrandSeal } from './components/BrandSeal'
 import { useTranslation } from './lib/i18n'
 import { AdminPage } from './pages/AdminPage'

@@ -1,0 +1,137 @@
+.app-shell {
+  min-height: 100dvh;
+  position: relative;
+  overflow-x: clip;
+}
+
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 1rem;
+  min-height: 72px;
+  width: min(1180px, calc(100% - 2rem));
+  margin: 0 auto;
+  padding: 0.75rem 0;
+}
+
+.site-header::before {
+  content: '';
+  position: absolute;
+  inset: 0.65rem -0.55rem;
+  z-index: -1;
+  border: 1px solid color-mix(in srgb, var(--ink) 12%, transparent);
+  border-radius: var(--radius-panel);
+  background:
+    linear-gradient(
+      135deg,
+      color-mix(in srgb, var(--paper) 90%, transparent),
+      color-mix(in srgb, var(--cloud) 52%, transparent)
+    ),
+    color-mix(in srgb, var(--paper) 80%, transparent);
+  box-shadow: var(--shadow-soft);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+}
+
+.brand-mark,
+.site-nav__link,
+.button,
+.route-card {
+  -webkit-tap-highlight-color: transparent;
+}
+
+.brand-mark {
+  display: inline-flex;
+  align-items: center;
+  width: fit-content;
+  gap: 0.7rem;
+  color: var(--ink);
+  font-weight: 720;
+  line-height: 1;
+  text-decoration: none;
+}
+
+.brand-mark__seal {
+  flex-shrink: 0;
+  color: var(--ink);
+}
+
+.site-header__tools {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.scroll-hint {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: color-mix(in srgb, var(--ink) 62%, transparent);
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .scroll-hint svg {
+    animation: scroll-hint-bounce 2.1s ease-in-out infinite;
+  }
+}
+
+@keyframes scroll-hint-bounce {
+  0%,
+  100% {
+    transform: translateY(0);
+    opacity: 0.6;
+  }
+
+  50% {
+    transform: translateY(6px);
+    opacity: 1;
+  }
+}
+
+.site-nav {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.25rem;
+  border-radius: var(--radius-pill);
+  background: color-mix(in srgb, var(--ink) 7%, transparent);
+}
+
+.site-nav__link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.3rem;
+  padding: 0 0.85rem;
+  border-radius: var(--radius-pill);
+  color: var(--muted);
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  line-height: 1;
+  text-decoration: none;
+  white-space: nowrap;
+  transition:
+    background-color 180ms ease,
+    color 180ms ease,
+    transform 180ms ease;
+}
+
+.site-nav__link:hover {
+  color: var(--ink);
+  background: color-mix(in srgb, var(--paper) 72%, transparent);
+}
+
+.site-nav__link:active,
+.button:not(:disabled):active,
+.route-card:active {
+  transform: translateY(1px);
+}
+
+.site-nav__link.is-active {
+  color: var(--paper);
+  background: var(--ink);
+}
