@@ -190,8 +190,8 @@ export function HomePage() {
   const { raspi, latestFlightLogEntry } = useHomeSignals()
 
   return (
-    <main className="home-page">
-      <section className="hero-section" aria-labelledby="home-title">
+    <main className="home-page page">
+      <section className="hero hero--split" aria-labelledby="home-title">
         <div className="hero-copy">
           <h1 id="home-title">{t('home.title')}</h1>
           <p className="hero-copy__subtitle">{t('home.subtitle')}</p>
@@ -214,7 +214,7 @@ export function HomePage() {
           />
         </figure>
 
-        <ScrollHint className="hero-scroll-hint" />
+        <ScrollHint className="hero__cue" />
       </section>
 
       <section className="home-route-panel" aria-label={t('a11y.siteRoutes')}>

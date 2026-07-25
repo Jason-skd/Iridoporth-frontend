@@ -1,21 +1,11 @@
 
+/* Width + centering come from `.page`. No top padding — the hero owns the
+   content-start offset (this also removes the former double top padding). */
 .flight-log-page {
-  width: min(1180px, calc(100% - 2rem));
-  margin: 0 auto;
-  padding: clamp(2.5rem, 6vw, 5.5rem) 0 clamp(4rem, 8vw, 7rem);
+  padding-bottom: var(--section-pad-bottom);
 }
 
-.flight-log-hero {
-  position: relative;
-  min-height: calc(100dvh - var(--header-h) - var(--hero-peek) - clamp(2.5rem, 6vw, 5.5rem));
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  gap: 1.5rem;
-  padding: clamp(2.5rem, 6vw, 5.5rem) 0 clamp(4rem, 7vw, 6rem);
-}
+/* The hero container now uses `.hero .hero--center` (layout.css). */
 
 .flight-log-copy {
   max-width: 42rem;
@@ -318,6 +308,7 @@
 .flight-log-board {
   margin-top: 0;
   padding-top: 0;
+  scroll-margin-top: var(--header-h);
 }
 
 .flight-log-stamps {

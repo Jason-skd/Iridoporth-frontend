@@ -1,18 +1,7 @@
 
-.home-page {
-  width: min(1180px, calc(100% - 2rem));
-  margin: 0 auto;
-}
-
-.hero-section {
-  position: relative;
-  min-height: calc(100dvh - var(--header-h) - var(--hero-peek));
-  display: grid;
-  grid-template-columns: minmax(0, 0.92fr) minmax(380px, 1.08fr);
-  align-items: center;
-  gap: clamp(2rem, 5vw, 5rem);
-  padding: clamp(2.25rem, 5vw, 4.5rem) 0 clamp(4rem, 7vw, 6rem);
-}
+/* Home page wrapper + hero now use the shared `.page` / `.hero` / `.hero--split`
+   contract from layout.css. `.home-page` is kept as a selector hook for the
+   responsive overrides only. */
 
 .section-kicker {
   margin: 0 0 1.2rem;
@@ -23,8 +12,7 @@
   text-transform: uppercase;
 }
 
-.hero-copy h1,
-.placeholder-page h1 {
+.hero-copy h1 {
   max-width: 12ch;
   margin: 0;
   color: var(--ink);
@@ -176,15 +164,6 @@
   font-size: 0.82rem;
 }
 
-.hero-scroll-hint,
-.raspi-scroll-hint,
-.flight-log-scroll-hint {
-  position: absolute;
-  left: 50%;
-  bottom: clamp(1rem, 3vw, 2rem);
-  transform: translateX(-50%);
-}
-
 .route-card--signal {
   background:
     linear-gradient(145deg, color-mix(in srgb, var(--cloud) 64%, var(--paper)), var(--paper)),
@@ -327,26 +306,4 @@
   width: min(92%, 34rem);
   justify-self: end;
   transform: rotate(-1.2deg);
-}
-
-.placeholder-page {
-  width: min(900px, calc(100% - 2rem));
-  min-height: calc(100dvh - 72px);
-  display: grid;
-  align-content: center;
-  justify-items: start;
-  margin: 0 auto;
-  padding: clamp(3rem, 8vw, 7rem) 0;
-}
-
-.placeholder-page h1 {
-  max-width: 12ch;
-}
-
-.placeholder-page p:not(.section-kicker) {
-  max-width: 40rem;
-  margin: 1.5rem 0 2rem;
-  color: var(--text);
-  font-size: 1.1rem;
-  line-height: 1.6;
 }

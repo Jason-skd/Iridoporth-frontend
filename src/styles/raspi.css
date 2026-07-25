@@ -1,18 +1,12 @@
 
+/* Width + centering come from `.page`. No top padding here — the hero owns the
+   single content-start offset (--section-pad-top) so its outer box is exactly
+   --hero-min-h and the cue lands at the same Y as the other hero pages. */
 .raspi-page {
-  width: min(1180px, calc(100% - 2rem));
-  margin: 0 auto;
-  padding: clamp(2.5rem, 6vw, 5.5rem) 0 clamp(4rem, 8vw, 7rem);
+  padding-bottom: var(--section-pad-bottom);
 }
 
-.raspi-hero {
-  position: relative;
-  min-height: calc(100dvh - var(--header-h) - var(--hero-peek) - clamp(2.5rem, 6vw, 5.5rem));
-  display: grid;
-  grid-template-columns: minmax(0, 0.92fr) minmax(380px, 1.08fr);
-  align-items: center;
-  gap: clamp(2rem, 6vw, 6rem);
-}
+/* The hero container now uses `.hero .hero--split` (layout.css). */
 
 .raspi-hero__copy h1 {
   max-width: 10ch;

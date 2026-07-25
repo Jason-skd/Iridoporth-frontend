@@ -12,7 +12,7 @@
   grid-template-columns: minmax(0, 1fr) auto;
   align-items: center;
   gap: 1rem;
-  min-height: 72px;
+  min-height: var(--header-h);
   width: min(1180px, calc(100% - 2rem));
   margin: 0 auto;
   padding: 0.75rem 0;
@@ -134,4 +134,54 @@
 .site-nav__link.is-active {
   color: var(--paper);
   background: var(--ink);
+}
+
+/* ================================================================ Layout contract
+   Shared page shells and hero primitives. A page with a hero composes `.hero`
+   (+ `.hero--split` | `.hero--center`) so its outer box is exactly --hero-min-h
+   and the cue (`.hero__cue`) sits at the same viewport Y everywhere. The page
+   wrapper contributes NO top padding — the hero owns the single content-start
+   offset (--section-pad-top). Non-hero pages (admin) use `.page` + their own
+   --section-pad-top. See src/lib/layout.ts for the TS mirror. */
+
+.page {
+  width: var(--page-width);
+  margin-inline: auto;
+}
+
+.page--narrow {
+  width: var(--page-width-narrow);
+}
+
+.hero {
+  position: relative;
+  box-sizing: border-box;
+  min-height: var(--hero-min-h);
+  display: grid;
+  align-items: center;
+  gap: var(--hero-gap);
+  padding: var(--section-pad-top) 0 var(--section-pad-bottom);
+}
+
+/* Two-column hero: copy + asset/instrument (Home, Raspi). */
+.hero--split {
+  grid-template-columns: minmax(0, 0.92fr) minmax(380px, 1.08fr);
+}
+
+/* Centered hero (FlightLog). Overrides .hero's grid with a flex column. */
+.hero--center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 1.5rem;
+}
+
+/* Single cue class — positioning only; .scroll-hint supplies the glyph style. */
+.hero__cue {
+  position: absolute;
+  left: 50%;
+  bottom: var(--cue-gap);
+  transform: translateX(-50%);
 }

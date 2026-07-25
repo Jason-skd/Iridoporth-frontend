@@ -25,22 +25,18 @@
     overflow-x: auto;
   }
 
-  .hero-section,
+  .hero--split,
   .home-route-panel,
-  .notebook-section,
-  .raspi-hero {
+  .notebook-section {
     grid-template-columns: 1fr;
   }
 
-  .hero-section,
-  .raspi-hero,
-  .flight-log-hero {
+  .hero {
     min-height: auto;
     padding-top: 2.25rem;
   }
 
   .hero-copy h1,
-  .placeholder-page h1,
   .raspi-hero__copy h1,
   .flight-log-copy h1 {
     max-width: 10ch;
@@ -89,7 +85,6 @@
 @media (max-width: 560px) {
   .home-page,
   .site-header,
-  .placeholder-page,
   .raspi-page,
   .flight-log-page {
     width: min(100% - 1rem, 1180px);

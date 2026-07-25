@@ -159,8 +159,8 @@ export function RaspiStatusPage() {
   )
 
   return (
-    <main className="raspi-page" aria-labelledby="raspi-title">
-      <section className="raspi-hero">
+    <main className="raspi-page page" aria-labelledby="raspi-title">
+      <section className="hero hero--split">
         <div className="raspi-hero__copy">
           <p className="section-kicker">{t('raspi.kicker')}</p>
           <h1 id="raspi-title">{t('raspi.title')}</h1>
@@ -188,7 +188,7 @@ export function RaspiStatusPage() {
           </div>
         </div>
 
-        <ScrollHint className="raspi-scroll-hint" />
+        <ScrollHint className="hero__cue" />
       </section>
 
       <section className="raspi-readout" aria-label={t('a11y.raspiTelemetry')}>

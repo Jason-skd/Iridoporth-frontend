@@ -138,7 +138,7 @@ export function AdminPage() {
   const bucketEntries = visibleEntries.filter((entry) => bucketOf(entry) === tab)
 
   return (
-    <main className="admin-page">
+    <main className="admin-page page page--narrow">
       <header className="admin-header">
         <div className="admin-header__copy">
           <BrandSeal size={40} className="admin-header__seal" />

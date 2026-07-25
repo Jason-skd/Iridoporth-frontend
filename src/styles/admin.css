@@ -1,10 +1,10 @@
 
 /* ---------------------------------------------------------------- admin */
 
+/* Width + centering come from `.page .page--narrow`. Admin has no hero, so it
+   keeps page-level padding including the content-start offset. */
 .admin-page {
-  width: min(880px, calc(100% - 2rem));
-  margin: 0 auto;
-  padding: clamp(2.5rem, 6vw, 5rem) 0 clamp(4rem, 8vw, 7rem);
+  padding: var(--section-pad-top) 0 var(--section-pad-bottom);
 }
 
 .admin-header {

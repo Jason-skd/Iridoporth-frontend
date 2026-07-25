@@ -1,7 +1,7 @@
 /* ---------------------------------------------------------------- login */
 
 .login-page {
-  min-height: calc(100dvh - 72px);
+  min-height: calc(100dvh - var(--header-h));
   display: flex;
   align-items: center;
   justify-content: center;

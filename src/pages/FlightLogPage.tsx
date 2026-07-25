@@ -298,8 +298,8 @@ export function FlightLogPage() {
   }
 
   return (
-    <main className="flight-log-page" aria-labelledby="flight-log-title">
-      <section className="flight-log-hero">
+    <main className="flight-log-page page" aria-labelledby="flight-log-title">
+      <section className="hero hero--center">
         <div className="flight-log-copy">
           <p className="section-kicker">{t('flightLog.kicker')}</p>
           <h1 id="flight-log-title">{t('flightLog.title')}</h1>
@@ -314,7 +314,7 @@ export function FlightLogPage() {
           </button>
         </div>
 
-        <ScrollHint className="flight-log-scroll-hint" />
+        <ScrollHint className="hero__cue" />
       </section>
 
       <section
