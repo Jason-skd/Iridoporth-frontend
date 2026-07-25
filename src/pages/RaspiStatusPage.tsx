@@ -1,7 +1,8 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { getRaspiStatus, type RaspiStatus } from '../lib/api'
+import { errorMessage, getRaspiStatus, type RaspiStatus } from '../lib/api'
 import { clampPercent, formatPercent, formatTemp } from '../lib/format'
+import { useDateFormatter, useTranslation } from '../lib/i18n'
 
 const RASPI_POLL_INTERVAL_MS = 5000
 
@@ -10,11 +11,7 @@ type RaspiState =
   | { status: 'ready'; data: RaspiStatus; updatedAt: Date }
   | { status: 'error'; message: string }
 
-function getErrorMessage(error: unknown) {
-  return error instanceof Error ? error.message : 'Signal unavailable'
-}
-
-function useRaspiStatus() {
+function useRaspiStatus(locale: ReturnType<typeof useTranslation>['locale']) {
   const [state, setState] = useState<RaspiState>({ status: 'loading' })
 
   useEffect(() => {
@@ -33,7 +30,7 @@ function useRaspiStatus() {
         })
         .catch((error: unknown) => {
           if (!active || requestController.signal.aborted) return
-          setState({ status: 'error', message: getErrorMessage(error) })
+          setState({ status: 'error', message: errorMessage(error, locale) })
         })
     }
 
@@ -45,23 +42,20 @@ function useRaspiStatus() {
       window.clearInterval(intervalId)
       controller?.abort()
     }
-  }, [])
+  }, [locale])
 
   return state
 }
 
-function formatTime(date: Date) {
-  return new Intl.DateTimeFormat(undefined, {
-    hour: '2-digit',
-    minute: '2-digit',
-    second: '2-digit',
-  }).format(date)
-}
-
-function getDisplayStatus(state: RaspiState) {
-  if (state.status === 'loading') return 'listening'
-  if (state.status === 'error') return 'signal lost'
-  return state.data.available ? 'online' : 'unavailable'
+function getDisplayStatus(
+  state: RaspiState,
+  t: ReturnType<typeof useTranslation>['t'],
+): string {
+  if (state.status === 'loading') return t('raspi.status.listening')
+  if (state.status === 'error') return t('raspi.status.signalLost')
+  return state.data.available
+    ? t('raspi.status.online')
+    : t('raspi.status.unavailable')
 }
 
 function getNeedleRotation(status: RaspiStatus | null) {
@@ -77,22 +71,32 @@ function getNeedleRotation(status: RaspiStatus | null) {
   return -42 + (load / 100) * 84
 }
 
-function StatusNote({ state }: { state: RaspiState }) {
+function StatusNote({
+  state,
+  t,
+  timeFormatter,
+}: {
+  state: RaspiState
+  t: ReturnType<typeof useTranslation>['t']
+  timeFormatter: Intl.DateTimeFormat
+}) {
   if (state.status === 'loading') {
-    return <p className="raspi-status-note">Waiting for the onboard pulse.</p>
+    return <p className="raspi-status-note">{t('raspi.loadingNote')}</p>
   }
 
   if (state.status === 'error') {
-    return <p className="raspi-status-note">Backend preview: {state.message}</p>
+    return (
+      <p className="raspi-status-note">{t('raspi.errorNote', { message: state.message })}</p>
+    )
   }
 
   if (!state.data.available) {
-    return <p className="raspi-status-note">This environment is not reporting raspi telemetry.</p>
+    return <p className="raspi-status-note">{t('raspi.unavailableNote')}</p>
   }
 
   return (
     <p className="raspi-status-note">
-      Last signal {formatTime(state.updatedAt)}
+      {t('raspi.lastSignal', { time: timeFormatter.format(state.updatedAt) })}
     </p>
   )
 }
@@ -120,48 +124,54 @@ function MetricRow({
 }
 
 export function RaspiStatusPage() {
-  const state = useRaspiStatus()
+  const { t, locale } = useTranslation()
+  const state = useRaspiStatus(locale)
   const data = state.status === 'ready' ? state.data : null
-  const statusLabel = getDisplayStatus(state)
+  const statusLabel = getDisplayStatus(state, t)
+  const timeFormatter = useDateFormatter({
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+  })
 
   const metrics = useMemo(
     () => [
       {
-        label: 'temperature',
+        label: t('raspi.metricLabels.temperature'),
         value: formatTemp(data?.cpu_temperature ?? null),
         meter: data?.available
           ? Math.min(Math.max(((data.cpu_temperature ?? 0) / 85) * 100, 0), 100)
           : 0,
       },
       {
-        label: 'processor',
+        label: t('raspi.metricLabels.processor'),
         value: formatPercent(data?.cpu_usage ?? null),
         meter: data?.available ? clampPercent(data.cpu_usage) : 0,
       },
       {
-        label: 'memory',
+        label: t('raspi.metricLabels.memory'),
         value: formatPercent(data?.memory_usage ?? null),
         meter: data?.available ? clampPercent(data.memory_usage) : 0,
       },
     ],
-    [data],
+    [data, t],
   )
 
   return (
     <main className="raspi-page" aria-labelledby="raspi-title">
       <section className="raspi-hero">
         <div className="raspi-hero__copy">
-          <p className="section-kicker">raspi-status</p>
-          <h1 id="raspi-title">Onboard pulse</h1>
-          <StatusNote state={state} />
+          <p className="section-kicker">{t('raspi.kicker')}</p>
+          <h1 id="raspi-title">{t('raspi.title')}</h1>
+          <StatusNote state={state} t={t} timeFormatter={timeFormatter} />
           <div className="raspi-actions">
             <Link className="button button--primary" to="/">
-              Home
+              {t('raspi.homeCta')}
             </Link>
           </div>
         </div>
 
-        <div className="raspi-instrument" aria-label={`Raspi status: ${statusLabel}`}>
+        <div className="raspi-instrument" aria-label={t('a11y.raspiStatus', { status: statusLabel })}>
           <div className="raspi-instrument__plate">
             <span className="raspi-instrument__window" aria-hidden="true" />
             <span className="raspi-instrument__status">{statusLabel}</span>
@@ -177,7 +187,7 @@ export function RaspiStatusPage() {
         </div>
       </section>
 
-      <section className="raspi-readout" aria-label="Raspi telemetry">
+      <section className="raspi-readout" aria-label={t('a11y.raspiTelemetry')}>
         {metrics.map((metric) => (
           <MetricRow
             key={metric.label}

@@ -1,4 +1,4 @@
-import { type FormEvent, useEffect, useState } from 'react'
+import { type FormEvent, useEffect, useMemo, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { BrandSeal } from '../components/BrandSeal'
 import {
@@ -6,6 +6,7 @@ import {
   getAdminFlightLogEntries,
   login,
 } from '../lib/api'
+import { useTranslation } from '../lib/i18n'
 
 type SubmitState =
   | { status: 'idle' }
@@ -14,6 +15,7 @@ type SubmitState =
 
 export function LoginPage() {
   const navigate = useNavigate()
+  const { t, locale } = useTranslation()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [submitState, setSubmitState] = useState<SubmitState>({ status: 'idle' })
@@ -50,25 +52,31 @@ export function LoginPage() {
     } catch (error) {
       setSubmitState({
         status: 'error',
-        message: errorMessage(error, 'Could not sign in.'),
+        message: errorMessage(error, locale, 'login.error'),
       })
     }
   }
 
-  const submitText = submitState.status === 'submitting' ? 'Signing in' : 'Sign in'
+  const submitText = useMemo(
+    () =>
+      submitState.status === 'submitting'
+        ? t('login.submitSubmitting')
+        : t('login.submitIdle'),
+    [submitState.status, t],
+  )
 
   return (
     <main className="login-page">
       <div className="login-card">
         <div className="login-card__brand">
           <BrandSeal size={48} className="login-card__seal" />
-          <p className="section-kicker">admin</p>
-          <h1>Sign in</h1>
+          <p className="section-kicker">{t('login.kicker')}</p>
+          <h1>{t('login.title')}</h1>
         </div>
 
         <form className="login-form" onSubmit={handleSubmit}>
           <div className="login-field">
-            <label htmlFor="login-email">email</label>
+            <label htmlFor="login-email">{t('login.emailLabel')}</label>
             <input
               id="login-email"
               name="email"
@@ -84,7 +92,7 @@ export function LoginPage() {
           </div>
 
           <div className="login-field">
-            <label htmlFor="login-password">password</label>
+            <label htmlFor="login-password">{t('login.passwordLabel')}</label>
             <input
               id="login-password"
               name="password"
@@ -113,7 +121,7 @@ export function LoginPage() {
         </form>
 
         <Link className="button button--ghost login-card__home" to="/">
-          Home
+          {t('login.homeCta')}
         </Link>
       </div>
     </main>

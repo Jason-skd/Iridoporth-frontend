@@ -1,3 +1,5 @@
+import { t, type Locale } from './i18n'
+
 export type RaspiStatus = {
   available: boolean
   name: string | null
@@ -51,20 +53,18 @@ export function errorCode(error: unknown): string | null {
   return error instanceof ApiError ? error.code : null
 }
 
-export const ERROR_MESSAGES: Record<string, string> = {
-  unauthenticated: 'Wrong email or password.',
-  forbidden: "You don't have permission to do that.",
-  invalid_request: "That didn't look right.",
-  invalid_flight_log_entry_id: 'That note could not be found.',
-  flight_log_not_found: 'This note is gone.',
-  not_found: 'Could not find that.',
-  user_not_found: 'Could not find that account.',
-  internal_error: 'Something went wrong on the server.',
-}
-
-export function errorMessage(error: unknown, fallback = 'Something went wrong.'): string {
+export function errorMessage(
+  error: unknown,
+  locale: Locale,
+  fallbackKey = 'errors.generic',
+): string {
   const code = errorCode(error)
-  return (code && ERROR_MESSAGES[code]) || fallback
+  if (code) {
+    const key = `errors.${code}`
+    const message = t(locale, key)
+    if (message !== key) return message
+  }
+  return t(locale, fallbackKey)
 }
 
 const apiBase = import.meta.env.VITE_API_BASE_URL ?? ''
