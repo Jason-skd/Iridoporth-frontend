@@ -1,11 +1,7 @@
-import { NavLink, Route, Routes } from 'react-router-dom'
+import { NavLink } from 'react-router-dom'
 import { BrandSeal } from './components/BrandSeal'
 import { useTranslation } from './lib/i18n'
-import { AdminPage } from './pages/AdminPage'
-import { FlightLogPage } from './pages/FlightLogPage'
-import { HomePage } from './pages/HomePage'
-import { LoginPage } from './pages/LoginPage'
-import { RaspiStatusPage } from './pages/RaspiStatusPage'
+import { AppRouter } from './router/AppRouter'
 
 function Nav() {
   const { t } = useTranslation()
@@ -47,13 +43,7 @@ function App() {
     <div className="app-shell">
       <Nav />
 
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/raspi-status" element={<RaspiStatusPage />} />
-        <Route path="/flight-log" element={<FlightLogPage />} />
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/admin" element={<AdminPage />} />
-      </Routes>
+      <AppRouter />
     </div>
   )
 }
