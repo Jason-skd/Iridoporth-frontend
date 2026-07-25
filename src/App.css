@@ -24,7 +24,7 @@
   inset: 0.65rem -0.55rem;
   z-index: -1;
   border: 1px solid color-mix(in srgb, var(--ink) 12%, transparent);
-  border-radius: 999px;
+  border-radius: var(--radius-panel);
   background:
     linear-gradient(
       135deg,
@@ -98,7 +98,7 @@
   align-items: center;
   gap: 0.25rem;
   padding: 0.25rem;
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   background: color-mix(in srgb, var(--ink) 7%, transparent);
 }
 
@@ -107,7 +107,7 @@
   align-items: center;
   min-height: 2.3rem;
   padding: 0 0.85rem;
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   color: var(--muted);
   font-family: var(--mono);
   font-size: 0.78rem;
@@ -193,7 +193,7 @@
   min-height: 2.9rem;
   padding: 0 1.15rem;
   border: 1px solid transparent;
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   font-weight: 720;
   line-height: 1;
   text-decoration: none;
@@ -388,7 +388,7 @@
 .flight-log-preview--loading span {
   display: block;
   height: 0.86rem;
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   background: linear-gradient(
     90deg,
     color-mix(in srgb, var(--ink) 8%, transparent),
@@ -582,7 +582,7 @@
   width: 7.4rem;
   height: 11.8rem;
   border: 0.85rem solid var(--ink);
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   background:
     linear-gradient(var(--sun), var(--cloud) 42%, var(--altitude) 72%, var(--sky)),
     var(--cloud);
@@ -598,7 +598,7 @@
   left: 1.15rem;
   right: 1.15rem;
   height: 0.45rem;
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   background: color-mix(in srgb, #fff 72%, transparent);
 }
 
@@ -658,7 +658,7 @@
   bottom: 42%;
   width: 0.7rem;
   height: 0.7rem;
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   background: var(--signal);
 }
 
@@ -676,7 +676,7 @@
   bottom: 0;
   width: 0.28rem;
   height: 78%;
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   background: var(--ink);
   transform-origin: 50% 100%;
   transition: transform 420ms cubic-bezier(0.16, 1, 0.3, 1);
@@ -689,7 +689,7 @@
   bottom: -0.65rem;
   width: 1.3rem;
   height: 1.3rem;
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   background: var(--signal);
   transform: translateX(-50%);
 }
@@ -735,7 +735,7 @@
   display: block;
   height: 0.72rem;
   overflow: hidden;
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   background: color-mix(in srgb, var(--ink) 9%, transparent);
 }
 
@@ -825,7 +825,7 @@
 .flight-log-field input {
   width: 100%;
   border: 1px solid color-mix(in srgb, var(--ink) 13%, transparent);
-  border-radius: 18px;
+  border-radius: var(--radius-input);
   color: var(--ink);
   background: color-mix(in srgb, var(--paper) 74%, transparent);
   box-shadow: inset 0 1px 0 color-mix(in srgb, #fff 36%, transparent);
@@ -1015,7 +1015,7 @@
   width: 2.4rem;
   height: 2.4rem;
   border: 1px solid color-mix(in srgb, var(--ink) 12%, transparent);
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   color: var(--ink);
   background: color-mix(in srgb, var(--paper) 70%, transparent);
   cursor: pointer;
@@ -1175,7 +1175,7 @@
   min-height: 2rem;
   padding: 0 0.62rem;
   border: 1px solid transparent;
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   color: var(--muted);
   background: transparent;
   font-family: var(--mono);
@@ -1249,7 +1249,7 @@
   min-height: 3rem;
   padding: 0 1.1rem;
   border: 1px solid transparent;
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   color: var(--paper);
   background: var(--ink);
   font-weight: 720;
@@ -1618,7 +1618,7 @@
   min-height: 3rem;
   padding: 0 1rem;
   border: 1px solid color-mix(in srgb, var(--ink) 13%, transparent);
-  border-radius: 18px;
+  border-radius: var(--radius-input);
   color: var(--ink);
   background: color-mix(in srgb, var(--paper) 74%, transparent);
   box-shadow: inset 0 1px 0 color-mix(in srgb, #fff 36%, transparent);
@@ -1708,7 +1708,7 @@
   gap: 0.3rem;
   padding: 0.3rem;
   margin-bottom: 1.5rem;
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   background: color-mix(in srgb, var(--ink) 7%, transparent);
 }
 
@@ -1719,7 +1719,7 @@
   min-height: 2.3rem;
   padding: 0 0.9rem;
   border: none;
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   background: transparent;
   color: var(--muted);
   font-family: var(--mono);
@@ -1746,7 +1746,7 @@
   justify-content: center;
   min-width: 1.4rem;
   padding: 0 0.35rem;
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   background: color-mix(in srgb, var(--ink) 14%, transparent);
   color: inherit;
   font-size: 0.7rem;
@@ -1839,7 +1839,7 @@
   width: 1.7rem;
   height: 1.7rem;
   border: 1px solid transparent;
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   color: var(--muted);
   background: transparent;
   cursor: pointer;
@@ -1866,7 +1866,7 @@
   padding: 0.8rem 1rem;
   resize: vertical;
   border: 1px solid color-mix(in srgb, var(--ink) 13%, transparent);
-  border-radius: 18px;
+  border-radius: var(--radius-input);
   color: var(--ink);
   background: color-mix(in srgb, var(--paper) 80%, transparent);
   outline: none;
