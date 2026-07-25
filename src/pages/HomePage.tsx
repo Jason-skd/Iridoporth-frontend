@@ -22,6 +22,11 @@ const flightLogFallback: FlightLogEntry = {
   content: 'Nothing has been left here yet.',
   callsign: null,
   created_at: 0,
+  response: null,
+  responded_at: null,
+  created_by_this_user: false,
+  likes: 0,
+  liked_by_this_user: false,
 }
 
 function formatDate(seconds: number) {
