@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
+import { ScrollHint } from '../components/ScrollHint'
 import { errorMessage, getRaspiStatus, type RaspiStatus } from '../lib/api'
 import { clampPercent, formatPercent, formatTemp } from '../lib/format'
 import { useDateFormatter, useTranslation } from '../lib/i18n'
@@ -11,7 +12,7 @@ type RaspiState =
   | { status: 'ready'; data: RaspiStatus; updatedAt: Date }
   | { status: 'error'; message: string }
 
-function useRaspiStatus(locale: ReturnType<typeof useTranslation>['locale']) {
+function useRaspiStatus() {
   const [state, setState] = useState<RaspiState>({ status: 'loading' })
 
   useEffect(() => {
@@ -30,7 +31,7 @@ function useRaspiStatus(locale: ReturnType<typeof useTranslation>['locale']) {
         })
         .catch((error: unknown) => {
           if (!active || requestController.signal.aborted) return
-          setState({ status: 'error', message: errorMessage(error, locale) })
+          setState({ status: 'error', message: errorMessage(error) })
         })
     }
 
@@ -42,7 +43,7 @@ function useRaspiStatus(locale: ReturnType<typeof useTranslation>['locale']) {
       window.clearInterval(intervalId)
       controller?.abort()
     }
-  }, [locale])
+  }, [])
 
   return state
 }
@@ -124,8 +125,8 @@ function MetricRow({
 }
 
 export function RaspiStatusPage() {
-  const { t, locale } = useTranslation()
-  const state = useRaspiStatus(locale)
+  const { t } = useTranslation()
+  const state = useRaspiStatus()
   const data = state.status === 'ready' ? state.data : null
   const statusLabel = getDisplayStatus(state, t)
   const timeFormatter = useDateFormatter({
@@ -163,6 +164,7 @@ export function RaspiStatusPage() {
         <div className="raspi-hero__copy">
           <p className="section-kicker">{t('raspi.kicker')}</p>
           <h1 id="raspi-title">{t('raspi.title')}</h1>
+          <p className="raspi-hero__subtitle">{t('raspi.subtitle')}</p>
           <StatusNote state={state} t={t} timeFormatter={timeFormatter} />
           <div className="raspi-actions">
             <Link className="button button--primary" to="/">
@@ -185,6 +187,8 @@ export function RaspiStatusPage() {
             </div>
           </div>
         </div>
+
+        <ScrollHint className="raspi-scroll-hint" />
       </section>
 
       <section className="raspi-readout" aria-label={t('a11y.raspiTelemetry')}>

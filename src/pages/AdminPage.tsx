@@ -40,7 +40,7 @@ const TAB_KEYS: Bucket[] = ['unreplied', 'active', 'hidden', 'deleted']
 
 export function AdminPage() {
   const navigate = useNavigate()
-  const { t, locale } = useTranslation()
+  const { t } = useTranslation()
   const dateFormatter = useDateFormatter({
     month: 'short',
     day: 'numeric',
@@ -74,9 +74,9 @@ export function AdminPage() {
           setState({ status: 'forbidden' })
           return
         }
-        setState({ status: 'error', message: errorMessage(error, locale) })
+        setState({ status: 'error', message: errorMessage(error) })
       })
-  }, [navigate, locale])
+  }, [navigate])
 
   useEffect(() => {
     reload()

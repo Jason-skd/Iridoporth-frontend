@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { ChatCenteredDots, Check, ThumbsUp, Trash, X } from '@phosphor-icons/react'
 import { FlightLogComposer } from '../components/FlightLogComposer'
+import { ScrollHint } from '../components/ScrollHint'
 import {
   createFlightLogEntry,
   deleteFlightLogEntry,
@@ -252,7 +253,7 @@ function FlightLogEntries({
 }
 
 export function FlightLogPage() {
-  const { t, locale } = useTranslation()
+  const { t } = useTranslation()
   const { state, prependEntry, setLiked, removeEntry } = useFlightLogEntries()
   const [composerOpen, setComposerOpen] = useState(false)
 
@@ -293,7 +294,6 @@ export function FlightLogPage() {
   }
 
   function openComposer() {
-    window.scrollTo({ top: 0, behavior: 'smooth' })
     setComposerOpen(true)
   }
 
@@ -313,6 +313,8 @@ export function FlightLogPage() {
             {t('flightLog.browseCta')}
           </button>
         </div>
+
+        <ScrollHint className="flight-log-scroll-hint" />
       </section>
 
       <section
@@ -320,17 +322,13 @@ export function FlightLogPage() {
         className="flight-log-board"
         aria-label={t('a11y.flightLogBoard')}
       >
-        <FlightLogComposer
-          isOpen={composerOpen}
-          onOpen={() => setComposerOpen(true)}
-          onSubmit={async (content) => {
-            try {
-              await handleSubmit(content)
-            } catch (error) {
-              throw new Error(errorMessage(error, locale), { cause: error })
-            }
-          }}
-        />
+        <button
+          type="button"
+          className="flight-log-composer-bar"
+          onClick={() => setComposerOpen(true)}
+        >
+          {t('flightLog.composerPrompt')}
+        </button>
 
         <FlightLogEntries
           state={state}
@@ -338,6 +336,18 @@ export function FlightLogPage() {
           onDelete={deleteEntry}
         />
       </section>
+
+      <FlightLogComposer
+        isOpen={composerOpen}
+        onClose={() => setComposerOpen(false)}
+        onSubmit={async (content) => {
+          try {
+            await handleSubmit(content)
+          } catch (error) {
+            throw new Error(errorMessage(error), { cause: error })
+          }
+        }}
+      />
 
       <button
         type="button"

@@ -189,15 +189,12 @@ export function HomePage() {
   const { t } = useTranslation()
   const { raspi, latestFlightLogEntry } = useHomeSignals()
 
-  function scrollToRoutes() {
-    document.querySelector('.home-route-panel')?.scrollIntoView({ behavior: 'smooth' })
-  }
-
   return (
     <main className="home-page">
       <section className="hero-section" aria-labelledby="home-title">
         <div className="hero-copy">
           <h1 id="home-title">{t('home.title')}</h1>
+          <p className="hero-copy__subtitle">{t('home.subtitle')}</p>
           <div className="hero-actions" aria-label={t('home.primaryNavAria')}>
             <Link className="button button--primary" to="/flight-log">
               {t('home.flightLogCta')}
@@ -217,11 +214,7 @@ export function HomePage() {
           />
         </figure>
 
-        <ScrollHint
-          className="hero-scroll-hint"
-          label={t('a11y.scrollHint')}
-          onClick={scrollToRoutes}
-        />
+        <ScrollHint className="hero-scroll-hint" />
       </section>
 
       <section className="home-route-panel" aria-label={t('a11y.siteRoutes')}>
