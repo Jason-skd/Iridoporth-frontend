@@ -1,43 +1,27 @@
-import { type FormEvent, useEffect, useMemo, useState } from 'react'
-import { Link } from 'react-router-dom'
-import { Check, ThumbsUp, Trash, X } from '@phosphor-icons/react'
-import stampStrip from '../assets/home/stamp-strip.svg'
+import { useEffect, useState } from 'react'
+import { ChatCenteredDots, Check, ThumbsUp, Trash, X } from '@phosphor-icons/react'
+import { FlightLogComposer } from '../components/FlightLogComposer'
 import {
   createFlightLogEntry,
   deleteFlightLogEntry,
+  errorMessage,
   getFlightLogEntries,
   likeFlightLogEntry,
   unlikeFlightLogEntry,
   type FlightLogEntry,
 } from '../lib/api'
+import {
+  formatTimestamp,
+  useDateFormatter,
+  useTranslation,
+} from '../lib/i18n'
 
 type EntriesState =
   | { status: 'loading' }
   | { status: 'ready'; entries: FlightLogEntry[] }
   | { status: 'error'; message: string }
 
-type SubmitState =
-  | { status: 'idle' }
-  | { status: 'submitting' }
-  | { status: 'sent' }
-  | { status: 'error'; message: string }
-
-const NOTE_LIMIT = 300
-
-function getErrorMessage(error: unknown) {
-  return error instanceof Error ? error.message : 'Request failed'
-}
-
-function formatEntryTime(seconds: number | null) {
-  if (!seconds || seconds <= 0) return ''
-
-  return new Intl.DateTimeFormat(undefined, {
-    month: 'short',
-    day: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit',
-  }).format(new Date(seconds * 1000))
-}
+const BOARD_ID = 'flight-log-board'
 
 function useFlightLogEntries() {
   const [state, setState] = useState<EntriesState>({ status: 'loading' })
@@ -51,7 +35,7 @@ function useFlightLogEntries() {
       })
       .catch((error: unknown) => {
         if (controller.signal.aborted) return
-        setState({ status: 'error', message: getErrorMessage(error) })
+        setState({ status: 'error', message: error instanceof Error ? error.message : '' })
       })
 
     return () => {
@@ -66,21 +50,18 @@ function useFlightLogEntries() {
         if (current.status !== 'ready') {
           return { status: 'ready', entries: [entry] }
         }
-
         return { status: 'ready', entries: [entry, ...current.entries] }
       })
     },
     setLiked(id: number, liked: boolean) {
       setState((current) => {
         if (current.status !== 'ready') return current
-
         const entries = current.entries.map((entry) => {
           if (entry.id !== id) return entry
           const wasLiked = entry.liked_by_this_user
           const likes = entry.likes + (liked === wasLiked ? 0 : liked ? 1 : -1)
           return { ...entry, liked_by_this_user: liked, likes }
         })
-
         return { status: 'ready', entries }
       })
     },
@@ -113,7 +94,14 @@ type EntryCardProps = {
 }
 
 function EntryCard({ entry, onLikeChange, onDelete }: EntryCardProps) {
-  const callsign = entry.callsign?.trim() || 'anonymous'
+  const { t } = useTranslation()
+  const dateFormatter = useDateFormatter({
+    month: 'short',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+  })
+  const callsign = entry.callsign?.trim() || t('flightLog.anonymous')
   const [likeBusy, setLikeBusy] = useState(false)
   const [confirmingDelete, setConfirmingDelete] = useState(false)
   const [deleteBusy, setDeleteBusy] = useState(false)
@@ -126,7 +114,7 @@ function EntryCard({ entry, onLikeChange, onDelete }: EntryCardProps) {
     try {
       await onLikeChange(entry)
     } catch {
-      setNotice('Could not update your like.')
+      setNotice(t('flightLog.likeError'))
     } finally {
       setLikeBusy(false)
     }
@@ -139,7 +127,7 @@ function EntryCard({ entry, onLikeChange, onDelete }: EntryCardProps) {
     try {
       await onDelete(entry)
     } catch {
-      setNotice('Could not delete this note.')
+      setNotice(t('flightLog.deleteError'))
       setDeleteBusy(false)
       setConfirmingDelete(false)
     }
@@ -149,31 +137,19 @@ function EntryCard({ entry, onLikeChange, onDelete }: EntryCardProps) {
     <article className="flight-log-entry">
       <div className="flight-log-entry__meta">
         <span>{callsign}</span>
-        <time dateTime={String(entry.created_at)}>
-          {formatEntryTime(entry.created_at)}
+        <time dateTime={entry.created_at > 0 ? String(entry.created_at) : undefined}>
+          {formatTimestamp(entry.created_at, dateFormatter)}
         </time>
       </div>
 
       <p>{entry.content}</p>
-
-      {entry.response ? (
-        <div className="flight-log-entry__reply">
-          <span className="flight-log-entry__reply-label">reply</span>
-          <p>{entry.response}</p>
-          {entry.responded_at ? (
-            <time dateTime={String(entry.responded_at)}>
-              {formatEntryTime(entry.responded_at)}
-            </time>
-          ) : null}
-        </div>
-      ) : null}
 
       <div className="flight-log-entry__actions">
         <button
           type="button"
           className="flight-log-action flight-log-like"
           aria-pressed={entry.liked_by_this_user}
-          aria-label={entry.liked_by_this_user ? 'Unlike this note' : 'Like this note'}
+          aria-label={entry.liked_by_this_user ? t('flightLog.unlikeLabel') : t('flightLog.likeLabel')}
           disabled={likeBusy}
           onClick={handleLike}
         >
@@ -188,11 +164,11 @@ function EntryCard({ entry, onLikeChange, onDelete }: EntryCardProps) {
         {entry.created_by_this_user ? (
           confirmingDelete ? (
             <span className="flight-log-confirm">
-              <span>Delete?</span>
+              <span>{t('flightLog.deleteConfirm')}</span>
               <button
                 type="button"
                 className="flight-log-action flight-log-action--danger"
-                aria-label="Confirm delete"
+                aria-label={t('flightLog.confirmDeleteAria')}
                 disabled={deleteBusy}
                 onClick={handleDelete}
               >
@@ -201,7 +177,7 @@ function EntryCard({ entry, onLikeChange, onDelete }: EntryCardProps) {
               <button
                 type="button"
                 className="flight-log-action"
-                aria-label="Cancel delete"
+                aria-label={t('flightLog.cancelDeleteAria')}
                 disabled={deleteBusy}
                 onClick={() => setConfirmingDelete(false)}
               >
@@ -211,8 +187,8 @@ function EntryCard({ entry, onLikeChange, onDelete }: EntryCardProps) {
           ) : (
             <button
               type="button"
-              className="flight-log-action"
-              aria-label="Delete your note"
+              className="flight-log-action flight-log-action--danger"
+              aria-label={t('flightLog.deleteNoteAria')}
               onClick={() => setConfirmingDelete(true)}
             >
               <Trash size={15} aria-hidden="true" />
@@ -222,6 +198,18 @@ function EntryCard({ entry, onLikeChange, onDelete }: EntryCardProps) {
 
         {notice ? <span className="flight-log-action-notice">{notice}</span> : null}
       </div>
+
+      {entry.response ? (
+        <div className="flight-log-entry__reply">
+          <span className="flight-log-entry__reply-label">{t('flightLog.replyLabel')}</span>
+          <p>{entry.response}</p>
+          {entry.responded_at ? (
+            <time dateTime={String(entry.responded_at)}>
+              {formatTimestamp(entry.responded_at, dateFormatter)}
+            </time>
+          ) : null}
+        </div>
+      ) : null}
     </article>
   )
 }
@@ -235,18 +223,18 @@ function FlightLogEntries({
   onLikeChange: (entry: FlightLogEntry) => Promise<void>
   onDelete: (entry: FlightLogEntry) => Promise<void>
 }) {
+  const { t } = useTranslation()
+
   if (state.status === 'loading') return <EntrySkeletons />
 
   if (state.status === 'error') {
     return (
-      <p className="flight-log-board-note">
-        The cabin is quiet. {state.message}
-      </p>
+      <p className="flight-log-board-note">{t('flightLog.boardError', { message: state.message })}</p>
     )
   }
 
   if (state.entries.length === 0) {
-    return <p className="flight-log-board-note">No notes yet.</p>
+    return <p className="flight-log-board-note">{t('flightLog.noNotes')}</p>
   }
 
   return (
@@ -264,18 +252,9 @@ function FlightLogEntries({
 }
 
 export function FlightLogPage() {
+  const { t, locale } = useTranslation()
   const { state, prependEntry, setLiked, removeEntry } = useFlightLogEntries()
-  const [content, setContent] = useState('')
-  const [submitState, setSubmitState] = useState<SubmitState>({ status: 'idle' })
-
-  const trimmedContent = content.trim()
-  const canSubmit = trimmedContent.length > 0 && submitState.status !== 'submitting'
-
-  const submitText = useMemo(() => {
-    if (submitState.status === 'submitting') return 'Leaving'
-    if (submitState.status === 'sent') return 'Left'
-    return 'Leave note'
-  }, [submitState.status])
+  const [composerOpen, setComposerOpen] = useState(false)
 
   async function toggleLike(entry: FlightLogEntry) {
     const nextLiked = !entry.liked_by_this_user
@@ -294,97 +273,81 @@ export function FlightLogPage() {
     removeEntry(entry.id)
   }
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault()
-    if (!canSubmit) return
+  async function handleSubmit(content: string) {
+    const result = await createFlightLogEntry({ content })
+    prependEntry({
+      id: result.id,
+      content,
+      callsign: 'Anonymous',
+      created_at: result.created_at,
+      response: null,
+      responded_at: null,
+      created_by_this_user: true,
+      likes: 0,
+      liked_by_this_user: false,
+    })
+  }
 
-    setSubmitState({ status: 'submitting' })
+  function scrollToBoard() {
+    document.getElementById(BOARD_ID)?.scrollIntoView({ behavior: 'smooth' })
+  }
 
-    createFlightLogEntry({ content: trimmedContent })
-      .then((result) => {
-        prependEntry({
-          id: result.id,
-          content: trimmedContent,
-          callsign: 'Anonymous',
-          created_at: result.created_at,
-          response: null,
-          responded_at: null,
-          created_by_this_user: true,
-          likes: 0,
-          liked_by_this_user: false,
-        })
-        setContent('')
-        setSubmitState({ status: 'sent' })
-      })
-      .catch((error: unknown) => {
-        setSubmitState({ status: 'error', message: getErrorMessage(error) })
-      })
+  function openComposer() {
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+    setComposerOpen(true)
   }
 
   return (
     <main className="flight-log-page" aria-labelledby="flight-log-title">
       <section className="flight-log-hero">
         <div className="flight-log-copy">
-          <p className="section-kicker">flight-log</p>
-          <h1 id="flight-log-title">flight-log</h1>
-          <p>Leave a note beside the window.</p>
-          <Link className="button button--ghost" to="/">
-            Home
-          </Link>
+          <p className="section-kicker">{t('flightLog.kicker')}</p>
+          <h1 id="flight-log-title">{t('flightLog.title')}</h1>
+          <p className="flight-log-copy__subtitle">{t('flightLog.subtitle')}</p>
+          <p>{t('flightLog.description')}</p>
+          <button
+            type="button"
+            className="button button--primary"
+            onClick={scrollToBoard}
+          >
+            {t('flightLog.browseCta')}
+          </button>
         </div>
-
-        <form className="flight-log-composer" onSubmit={handleSubmit}>
-          <div className="flight-log-field">
-            <label htmlFor="flight-log-content">note</label>
-            <textarea
-              id="flight-log-content"
-              name="content"
-              value={content}
-              maxLength={NOTE_LIMIT}
-              required
-              rows={8}
-              placeholder="Leave your words."
-              onChange={(event) => {
-                setContent(event.target.value)
-                if (submitState.status !== 'submitting') {
-                  setSubmitState({ status: 'idle' })
-                }
-              }}
-            />
-          </div>
-
-          <div className="flight-log-submit-row">
-            <span>{content.length}/{NOTE_LIMIT}</span>
-            <button
-              className="button button--primary"
-              type="submit"
-              disabled={!canSubmit}
-            >
-              {submitText}
-            </button>
-          </div>
-
-          <p className="flight-log-submit-status" aria-live="polite">
-            {submitState.status === 'error' ? submitState.message : ''}
-            {submitState.status === 'sent' ? 'Sent.' : ''}
-          </p>
-        </form>
       </section>
 
-      <section className="flight-log-board" aria-label="flight-log notes">
-        <img
-          className="flight-log-stamps"
-          src={stampStrip}
-          width="1100"
-          height="240"
-          alt="Aircraft-window stamps and path labels."
+      <section
+        id={BOARD_ID}
+        className="flight-log-board"
+        aria-label={t('a11y.flightLogBoard')}
+      >
+        <FlightLogComposer
+          isOpen={composerOpen}
+          onOpen={() => setComposerOpen(true)}
+          onSubmit={async (content) => {
+            try {
+              await handleSubmit(content)
+            } catch (error) {
+              throw new Error(errorMessage(error, locale), { cause: error })
+            }
+          }}
         />
+
         <FlightLogEntries
           state={state}
           onLikeChange={toggleLike}
           onDelete={deleteEntry}
         />
       </section>
+
+      <button
+        type="button"
+        className="flight-log-fab"
+        aria-label={t('flightLog.fabAria')}
+        onClick={openComposer}
+      >
+        <ChatCenteredDots size={18} weight="fill" aria-hidden="true" />
+        <span>{t('flightLog.fabLabel')}</span>
+      </button>
     </main>
   )
 }

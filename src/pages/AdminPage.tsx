@@ -17,6 +17,7 @@ import {
   setFlightLogHidden,
   type AdminFlightLogEntry,
 } from '../lib/api'
+import { formatTimestamp, useDateFormatter, useTranslation } from '../lib/i18n'
 
 type AdminState =
   | { status: 'loading' }
@@ -25,13 +26,6 @@ type AdminState =
   | { status: 'error'; message: string }
 
 type Bucket = 'active' | 'unreplied' | 'hidden' | 'deleted'
-
-const TABS: { key: Bucket; label: string }[] = [
-  { key: 'unreplied', label: 'Unreplied' },
-  { key: 'active', label: 'Active' },
-  { key: 'hidden', label: 'Hidden' },
-  { key: 'deleted', label: 'Deleted' },
-]
 
 const NOTE_LIMIT = 300
 
@@ -42,18 +36,17 @@ function bucketOf(entry: AdminFlightLogEntry): Bucket {
   return 'active'
 }
 
-function formatTime(seconds: number | null) {
-  if (!seconds || seconds <= 0) return ''
-  return new Intl.DateTimeFormat(undefined, {
+const TAB_KEYS: Bucket[] = ['unreplied', 'active', 'hidden', 'deleted']
+
+export function AdminPage() {
+  const navigate = useNavigate()
+  const { t, locale } = useTranslation()
+  const dateFormatter = useDateFormatter({
     month: 'short',
     day: 'numeric',
     hour: '2-digit',
     minute: '2-digit',
-  }).format(new Date(seconds * 1000))
-}
-
-export function AdminPage() {
-  const navigate = useNavigate()
+  })
   const [state, setState] = useState<AdminState>({ status: 'loading' })
   const [tab, setTab] = useState<Bucket>('unreplied')
   const [notice, setNotice] = useState<string | null>(null)
@@ -81,9 +74,9 @@ export function AdminPage() {
           setState({ status: 'forbidden' })
           return
         }
-        setState({ status: 'error', message: errorMessage(error) })
+        setState({ status: 'error', message: errorMessage(error, locale) })
       })
-  }, [navigate])
+  }, [navigate, locale])
 
   useEffect(() => {
     reload()
@@ -101,7 +94,7 @@ export function AdminPage() {
         navigate('/login', { replace: true })
         return
       }
-      setNotice(`${label} failed.`)
+      setNotice(t('admin.actionFailed', { label }))
     }
     await reload()
   }
@@ -123,11 +116,12 @@ export function AdminPage() {
     const trimmed = replyText.trim()
     if (trimmed.length === 0) return
     const id = replyingId
-    runAction('Reply', () => respondFlightLogEntry(id, trimmed)).then(() => {
+    runAction(t('admin.replyAction'), () => respondFlightLogEntry(id, trimmed)).then(() => {
       cancelReply()
     })
   }
 
+  const tabs = TAB_KEYS.map((key) => ({ key, label: t(`admin.tabs.${key}`) }))
   const counts: Record<Bucket, number> = {
     active: 0,
     unreplied: 0,
@@ -146,18 +140,18 @@ export function AdminPage() {
       <header className="admin-header">
         <div className="admin-header__copy">
           <BrandSeal size={40} className="admin-header__seal" />
-          <p className="section-kicker">admin</p>
-          <h1>flight-log desk</h1>
+          <p className="section-kicker">{t('admin.kicker')}</p>
+          <h1>{t('admin.title')}</h1>
         </div>
         <Link className="button button--ghost" to="/">
-          Home
+          {t('admin.homeCta')}
         </Link>
       </header>
 
       {notice ? <p className="admin-notice" role="status">{notice}</p> : null}
 
-      <nav className="admin-tabs" aria-label="Admin lists">
-        {TABS.map((item) => (
+      <nav className="admin-tabs" aria-label={t('a11y.adminLists')}>
+        {tabs.map((item) => (
           <button
             key={item.key}
             type="button"
@@ -180,9 +174,10 @@ export function AdminPage() {
         onStartReply={startReply}
         onCancelReply={cancelReply}
         onReplySubmit={handleReplySubmit}
-        onHide={(id) => runAction('Hide', () => setFlightLogHidden(id, true))}
-        onDisplay={(id) => runAction('Display', () => setFlightLogHidden(id, false))}
-        onClearReply={(id) => runAction('Clear reply', () => clearFlightLogResponse(id))}
+        onHide={(id) => runAction(t('admin.hideAction'), () => setFlightLogHidden(id, true))}
+        onDisplay={(id) => runAction(t('admin.displayAction'), () => setFlightLogHidden(id, false))}
+        onClearReply={(id) => runAction(t('admin.clearReplyAction'), () => clearFlightLogResponse(id))}
+        dateFormatter={dateFormatter}
       />
     </main>
   )
@@ -200,6 +195,7 @@ type AdminListProps = {
   onHide: (id: number) => void
   onDisplay: (id: number) => void
   onClearReply: (id: number) => void
+  dateFormatter: Intl.DateTimeFormat
 }
 
 function AdminList({
@@ -214,7 +210,10 @@ function AdminList({
   onHide,
   onDisplay,
   onClearReply,
+  dateFormatter,
 }: AdminListProps) {
+  const { t } = useTranslation()
+
   if (state.status === 'loading') {
     return (
       <div className="admin-skeletons" aria-live="polite">
@@ -226,52 +225,33 @@ function AdminList({
   }
 
   if (state.status === 'forbidden') {
-    return <p className="admin-board-note">This account is not an admin.</p>
+    return <p className="admin-board-note">{t('admin.forbidden')}</p>
   }
 
   if (state.status === 'error') {
-    return <p className="admin-board-note">The desk is quiet. {state.message}</p>
+    return <p className="admin-board-note">{t('admin.boardError', { message: state.message })}</p>
   }
 
   if (entries.length === 0) {
-    return <p className="admin-board-note">Nothing in this list.</p>
+    return <p className="admin-board-note">{t('admin.emptyList')}</p>
   }
 
   return (
     <ul className="admin-list">
       {entries.map((entry) => {
         const bucket = bucketOf(entry)
+        const callsign = entry.callsign?.trim() || t('flightLog.anonymous')
         return (
           <li key={entry.id}>
             <article className="admin-row">
               <div className="admin-row__meta">
-                <span>{entry.callsign?.trim() || 'anonymous'}</span>
+                <span>{callsign}</span>
                 <time dateTime={String(entry.created_at)}>
-                  {formatTime(entry.created_at)}
+                  {formatTimestamp(entry.created_at, dateFormatter)}
                 </time>
               </div>
 
               <p>{entry.content}</p>
-
-              {entry.response ? (
-                <div className="admin-row__reply">
-                  <span className="admin-row__reply-label">reply</span>
-                  <p>{entry.response}</p>
-                  {entry.responded_at ? (
-                    <time dateTime={String(entry.responded_at)}>
-                      {formatTime(entry.responded_at)}
-                    </time>
-                  ) : null}
-                  <button
-                    type="button"
-                    className="admin-row__clear"
-                    aria-label="Clear reply"
-                    onClick={() => onClearReply(entry.id)}
-                  >
-                    <X size={15} aria-hidden="true" />
-                  </button>
-                </div>
-              ) : null}
 
               {replyingId === entry.id ? (
                 <form className="admin-reply" onSubmit={onReplySubmit}>
@@ -280,14 +260,14 @@ function AdminList({
                     value={replyText}
                     maxLength={NOTE_LIMIT}
                     rows={3}
-                    placeholder="Write a reply."
+                    placeholder={t('admin.replyPlaceholder')}
                     autoFocus
                     onChange={(event) => onReplyTextChange(event.target.value)}
                   />
                   <div className="admin-reply__actions">
                     <span>{replyText.length}/{NOTE_LIMIT}</span>
                     <button type="button" className="button button--ghost" onClick={onCancelReply}>
-                      Cancel
+                      {t('admin.cancelAction')}
                     </button>
                     <button
                       type="submit"
@@ -295,7 +275,7 @@ function AdminList({
                       disabled={replyText.trim().length === 0}
                     >
                       <PaperPlaneTilt size={15} aria-hidden="true" />
-                      Send
+                      {t('admin.sendAction')}
                     </button>
                   </div>
                 </form>
@@ -309,7 +289,7 @@ function AdminList({
                     onClick={() => onHide(entry.id)}
                   >
                     <EyeSlash size={15} aria-hidden="true" />
-                    <span>Hide</span>
+                    <span>{t('admin.hideAction')}</span>
                   </button>
                 ) : null}
 
@@ -321,7 +301,7 @@ function AdminList({
                       onClick={() => onStartReply(entry)}
                     >
                       <ChatTeardropDots size={15} aria-hidden="true" />
-                      <span>Reply</span>
+                      <span>{t('admin.replyAction')}</span>
                     </button>
                     <button
                       type="button"
@@ -329,7 +309,7 @@ function AdminList({
                       onClick={() => onHide(entry.id)}
                     >
                       <EyeSlash size={15} aria-hidden="true" />
-                      <span>Hide</span>
+                      <span>{t('admin.hideAction')}</span>
                     </button>
                   </>
                 ) : null}
@@ -341,14 +321,34 @@ function AdminList({
                     onClick={() => onDisplay(entry.id)}
                   >
                     <Eye size={15} aria-hidden="true" />
-                    <span>Display</span>
+                    <span>{t('admin.displayAction')}</span>
                   </button>
                 ) : null}
 
                 {bucket === 'deleted' ? (
-                  <span className="admin-row__muted">No actions available.</span>
+                  <span className="admin-row__muted">{t('admin.noActions')}</span>
                 ) : null}
               </div>
+
+              {entry.response ? (
+                <div className="admin-row__reply">
+                  <span className="admin-row__reply-label">{t('admin.replyLabel')}</span>
+                  <p>{entry.response}</p>
+                  {entry.responded_at ? (
+                    <time dateTime={String(entry.responded_at)}>
+                      {formatTimestamp(entry.responded_at, dateFormatter)}
+                    </time>
+                  ) : null}
+                  <button
+                    type="button"
+                    className="admin-row__clear"
+                    aria-label={t('admin.clearReplyAria')}
+                    onClick={() => onClearReply(entry.id)}
+                  >
+                    <X size={15} aria-hidden="true" />
+                  </button>
+                </div>
+              ) : null}
             </article>
           </li>
         )

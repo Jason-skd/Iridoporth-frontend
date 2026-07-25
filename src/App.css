@@ -55,15 +55,108 @@
   text-decoration: none;
 }
 
-.brand-mark__window {
-  width: 1.05rem;
-  height: 1.55rem;
-  border: 2px solid var(--ink);
+.brand-mark__seal {
+  flex-shrink: 0;
+  color: var(--ink);
+}
+
+.site-header__tools {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.locale-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.2rem;
+  min-height: 2.3rem;
+  padding: 0 0.4rem;
+  border: none;
   border-radius: 999px;
-  background:
-    linear-gradient(var(--sun), var(--cloud) 42%, var(--altitude) 76%, var(--sky)),
-    var(--cloud);
-  box-shadow: inset 0 0 0 3px var(--paper);
+  background: color-mix(in srgb, var(--ink) 7%, transparent);
+  color: var(--muted);
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  cursor: pointer;
+  transition: background-color 180ms ease;
+}
+
+.locale-toggle:hover {
+  background: color-mix(in srgb, var(--ink) 12%, transparent);
+}
+
+.locale-toggle span {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.8rem;
+  min-height: 1.7rem;
+  padding: 0 0.35rem;
+  border-radius: 999px;
+  transition:
+    background-color 180ms ease,
+    color 180ms ease;
+}
+
+.locale-toggle span.is-active {
+  color: var(--paper);
+  background: var(--ink);
+}
+
+.locale-toggle__divider {
+  min-width: 1px;
+  min-height: 1rem;
+  padding: 0;
+  border-radius: 0;
+  background: color-mix(in srgb, var(--ink) 18%, transparent);
+}
+
+.scroll-hint {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 3rem;
+  height: 3rem;
+  border: 1px solid color-mix(in srgb, var(--ink) 14%, transparent);
+  border-radius: 999px;
+  color: var(--muted);
+  background: color-mix(in srgb, var(--paper) 72%, transparent);
+  cursor: pointer;
+  transition:
+    color 180ms ease,
+    background-color 180ms ease,
+    transform 180ms ease;
+}
+
+.scroll-hint:hover {
+  color: var(--ink);
+  background: color-mix(in srgb, var(--paper) 92%, transparent);
+}
+
+.scroll-hint:not(:disabled):active {
+  transform: translateY(1px);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .scroll-hint svg {
+    animation: scroll-hint-bounce 2s ease-in-out infinite;
+  }
+
+  .scroll-hint:hover svg {
+    animation-play-state: paused;
+  }
+}
+
+@keyframes scroll-hint-bounce {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(4px);
+  }
 }
 
 .site-nav {
@@ -115,6 +208,7 @@
 }
 
 .hero-section {
+  position: relative;
   min-height: calc(100dvh - 72px);
   display: grid;
   grid-template-columns: minmax(0, 0.92fr) minmax(380px, 1.08fr);
@@ -265,6 +359,22 @@
   color: var(--ink);
   font-size: clamp(2rem, 3.5vw, 3.45rem);
   line-height: 0.98;
+}
+
+.route-card__subtitle {
+  position: relative;
+  z-index: 1;
+  margin: -0.75rem 0 1.5rem;
+  color: var(--signal);
+  font-family: var(--mono);
+  font-size: 0.82rem;
+}
+
+.hero-scroll-hint {
+  position: absolute;
+  left: 50%;
+  bottom: clamp(1rem, 3vw, 2rem);
+  transform: translateX(-50%);
 }
 
 .route-card--signal {
@@ -466,7 +576,7 @@
 }
 
 .raspi-hero {
-  min-height: calc(100dvh - 72px - clamp(2.5rem, 6vw, 5.5rem));
+  min-height: calc(100dvh - 72px - clamp(2.5rem, 6vw, 5.5rem) - 5rem);
   display: grid;
   grid-template-columns: minmax(0, 0.82fr) minmax(380px, 1.18fr);
   align-items: center;
@@ -671,7 +781,7 @@
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 1rem;
-  margin-top: clamp(2rem, 5vw, 4rem);
+  margin-top: clamp(1.5rem, 3vw, 2.5rem);
 }
 
 .raspi-metric-row {
@@ -728,15 +838,22 @@
 }
 
 .flight-log-hero {
-  min-height: calc(100dvh - 72px - clamp(2.5rem, 6vw, 5.5rem));
-  display: grid;
-  grid-template-columns: minmax(0, 0.78fr) minmax(380px, 1.22fr);
+  min-height: calc(100dvh - 72px - clamp(2.5rem, 6vw, 5.5rem) - 5rem);
+  display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: clamp(2rem, 6vw, 6rem);
+  justify-content: center;
+  text-align: center;
+  gap: 1.5rem;
+  padding: clamp(2.5rem, 6vw, 5.5rem) 0 clamp(3rem, 6vw, 5rem);
+}
+
+.flight-log-copy {
+  max-width: 42rem;
 }
 
 .flight-log-copy h1 {
-  max-width: 10ch;
+  max-width: none;
   margin: 0;
   color: var(--ink);
   font-size: clamp(3.35rem, 7vw, 6.5rem);
@@ -744,12 +861,25 @@
   line-height: 0.94;
 }
 
-.flight-log-copy p:not(.section-kicker) {
-  max-width: 18rem;
-  margin: 1.5rem 0 2rem;
+.flight-log-copy__subtitle {
+  margin: 0.6rem 0 0;
+  color: var(--signal);
+  font-family: var(--mono);
+  font-size: 0.86rem;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+.flight-log-copy p:not(.section-kicker):not(.flight-log-copy__subtitle) {
+  max-width: 28rem;
+  margin: 1.25rem auto 0;
   color: var(--text);
   font-size: 1.04rem;
   line-height: 1.55;
+}
+
+.flight-log-copy .button {
+  margin-top: 2rem;
 }
 
 .flight-log-composer {
@@ -878,9 +1008,40 @@
   font-size: 0.78rem;
 }
 
+.flight-log-composer-bar {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  max-width: 42rem;
+  margin: 0 auto 1.5rem;
+  padding: 1rem 1.2rem;
+  border: 1px dashed color-mix(in srgb, var(--ink) 20%, transparent);
+  border-radius: var(--radius-panel);
+  color: var(--muted);
+  background: color-mix(in srgb, var(--paper) 70%, transparent);
+  font-family: var(--sans);
+  font-size: 1rem;
+  text-align: left;
+  cursor: pointer;
+  transition:
+    color 180ms ease,
+    background-color 180ms ease,
+    border-color 180ms ease;
+}
+
+.flight-log-composer-bar:hover {
+  color: var(--ink);
+  background: color-mix(in srgb, var(--paper) 90%, transparent);
+  border-color: color-mix(in srgb, var(--signal) 50%, transparent);
+}
+
+.flight-log-composer-bar:not(:disabled):active {
+  transform: translateY(1px);
+}
+
 .flight-log-board {
-  margin-top: clamp(3rem, 7vw, 6rem);
-  padding-top: clamp(2.5rem, 5vw, 4rem);
+  margin-top: clamp(1.5rem, 3vw, 2.5rem);
+  padding-top: clamp(1.5rem, 3vw, 2.5rem);
   border-top: 1px solid color-mix(in srgb, var(--ink) 12%, transparent);
 }
 
@@ -894,17 +1055,18 @@
 }
 
 .flight-log-entry-grid {
-  columns: 3 17rem;
-  column-gap: 1rem;
+  display: grid;
+  grid-template-columns: minmax(0, 42rem);
+  justify-content: center;
+  gap: 1rem;
 }
 
 .flight-log-entry {
   position: relative;
-  display: inline-block;
+  display: block;
   width: 100%;
-  margin: 0 0 1rem;
+  margin: 0;
   padding: clamp(1rem, 2vw, 1.35rem);
-  break-inside: avoid;
   border: 1px solid color-mix(in srgb, var(--ink) 12%, transparent);
   border-radius: 20px;
   background:
@@ -915,11 +1077,11 @@
 }
 
 .flight-log-entry:nth-child(3n + 2) {
-  transform: rotate(0.7deg);
+  transform: rotate(0.4deg);
 }
 
 .flight-log-entry:nth-child(3n) {
-  transform: rotate(-0.55deg);
+  transform: rotate(-0.35deg);
 }
 
 .flight-log-entry__meta {
@@ -956,7 +1118,8 @@
 
 .flight-log-skeletons {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: minmax(0, 42rem);
+  justify-content: center;
   gap: 1rem;
 }
 
@@ -1051,11 +1214,43 @@
   font-size: 0.72rem;
 }
 
+.flight-log-fab {
+  position: fixed;
+  right: 1.25rem;
+  bottom: 1.25rem;
+  z-index: 30;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  min-height: 3rem;
+  padding: 0 1.1rem;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  color: var(--paper);
+  background: var(--ink);
+  font-weight: 720;
+  line-height: 1;
+  box-shadow: var(--shadow-lift);
+  cursor: pointer;
+  transition:
+    background-color 180ms ease,
+    transform 180ms ease;
+}
+
+.flight-log-fab:hover {
+  background: var(--sky);
+}
+
+.flight-log-fab:not(:disabled):active {
+  transform: translateY(1px);
+}
+
 .flight-log-entry__reply {
   margin-top: 0.95rem;
   padding: 0.7rem 0.9rem;
   border: 1px solid color-mix(in srgb, var(--ink) 8%, transparent);
-  border-radius: 14px;
+  border-left: 3px solid var(--signal);
+  border-radius: 0 14px 14px 0;
   background: color-mix(in srgb, var(--cloud) 34%, var(--paper));
 }
 
@@ -1096,6 +1291,8 @@
   .raspi-metric-row,
   .flight-log-copy,
   .flight-log-composer,
+  .flight-log-composer-bar,
+  .flight-log-fab,
   .flight-log-stamps,
   .flight-log-entry,
   .login-card,
@@ -1167,6 +1364,11 @@
     min-height: auto;
   }
 
+  .site-header__tools {
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
   .site-header::before {
     inset: 0.5rem -0.25rem;
     border-radius: 24px;
@@ -1184,8 +1386,7 @@
   .hero-section,
   .home-route-panel,
   .notebook-section,
-  .raspi-hero,
-  .flight-log-hero {
+  .raspi-hero {
     grid-template-columns: 1fr;
   }
 
@@ -1237,12 +1438,9 @@
     margin-top: 1rem;
   }
 
-  .flight-log-entry-grid {
-    columns: 2 16rem;
-  }
-
   .flight-log-skeletons {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 42rem);
+    justify-content: center;
   }
 }
 
@@ -1324,6 +1522,16 @@
     border-radius: 22px;
   }
 
+  .flight-log-fab {
+    right: 50%;
+    bottom: 1rem;
+    transform: translateX(50%);
+  }
+
+  .flight-log-fab:not(:disabled):active {
+    transform: translateX(50%) translateY(1px);
+  }
+
   .flight-log-composer {
     border-radius: 22px;
   }
@@ -1335,10 +1543,6 @@
 
   .flight-log-field--compact {
     max-width: none;
-  }
-
-  .flight-log-entry-grid {
-    columns: 1;
   }
 
   .flight-log-submit-row .button {
@@ -1595,7 +1799,8 @@
   position: relative;
   padding: 0.7rem 2.1rem 0.7rem 0.9rem;
   border: 1px solid color-mix(in srgb, var(--ink) 8%, transparent);
-  border-radius: 14px;
+  border-left: 3px solid var(--signal);
+  border-radius: 0 14px 14px 0;
   background: color-mix(in srgb, var(--cloud) 34%, var(--paper));
 }
 

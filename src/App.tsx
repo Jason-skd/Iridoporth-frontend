@@ -1,27 +1,31 @@
 import { NavLink, Route, Routes } from 'react-router-dom'
 import './App.css'
+import { BrandSeal } from './components/BrandSeal'
+import { LocaleToggle } from './components/LocaleToggle'
+import { LocaleProvider, useTranslation } from './lib/i18n'
 import { AdminPage } from './pages/AdminPage'
 import { FlightLogPage } from './pages/FlightLogPage'
 import { HomePage } from './pages/HomePage'
 import { LoginPage } from './pages/LoginPage'
 import { RaspiStatusPage } from './pages/RaspiStatusPage'
 
-const navItems = [
-  { to: '/', label: 'Home' },
-  { to: '/raspi-status', label: 'Raspi status' },
-  { to: '/flight-log', label: 'flight-log' },
-]
+function Nav() {
+  const { t } = useTranslation()
+  const navItems = [
+    { to: '/', label: t('nav.home') },
+    { to: '/raspi-status', label: t('nav.raspiStatus') },
+    { to: '/flight-log', label: t('nav.flightLog') },
+  ]
 
-function App() {
   return (
-    <div className="app-shell">
-      <header className="site-header">
-        <NavLink className="brand-mark" to="/" aria-label="Iridoporth home">
-          <span className="brand-mark__window" aria-hidden="true" />
-          <span>Iridoporth</span>
-        </NavLink>
+    <header className="site-header">
+      <NavLink className="brand-mark" to="/" aria-label={t('a11y.brandHome')}>
+        <BrandSeal size={28} className="brand-mark__seal" />
+        <span>{t('brand')}</span>
+      </NavLink>
 
-        <nav className="site-nav" aria-label="Primary">
+      <div className="site-header__tools">
+        <nav className="site-nav" aria-label={t('a11y.primaryNav')}>
           {navItems.map((item) => (
             <NavLink
               key={item.to}
@@ -35,16 +39,27 @@ function App() {
             </NavLink>
           ))}
         </nav>
-      </header>
+        <LocaleToggle />
+      </div>
+    </header>
+  )
+}
 
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/raspi-status" element={<RaspiStatusPage />} />
-        <Route path="/flight-log" element={<FlightLogPage />} />
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/admin" element={<AdminPage />} />
-      </Routes>
-    </div>
+function App() {
+  return (
+    <LocaleProvider>
+      <div className="app-shell">
+        <Nav />
+
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/raspi-status" element={<RaspiStatusPage />} />
+          <Route path="/flight-log" element={<FlightLogPage />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/admin" element={<AdminPage />} />
+        </Routes>
+      </div>
+    </LocaleProvider>
   )
 }
 
