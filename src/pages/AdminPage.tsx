@@ -8,6 +8,7 @@ import {
   X,
 } from '@phosphor-icons/react'
 import { BrandSeal } from '../components/BrandSeal'
+import { ChangePasswordDialog } from '../components/ChangePasswordDialog'
 import {
   clearFlightLogResponse,
   errorMessage,
@@ -50,6 +51,7 @@ export function AdminPage() {
   const [state, setState] = useState<AdminState>({ status: 'loading' })
   const [tab, setTab] = useState<Bucket>('unreplied')
   const [notice, setNotice] = useState<string | null>(null)
+  const [passwordOpen, setPasswordOpen] = useState(false)
   const [replyingId, setReplyingId] = useState<number | null>(null)
   const [replyText, setReplyText] = useState('')
   const abortRef = useRef<AbortController | null>(null)
@@ -143,9 +145,18 @@ export function AdminPage() {
           <p className="section-kicker">{t('admin.kicker')}</p>
           <h1>{t('admin.title')}</h1>
         </div>
-        <Link className="button button--ghost" to="/">
-          {t('admin.homeCta')}
-        </Link>
+        <div className="admin-header__actions">
+          <button
+            type="button"
+            className="button button--ghost"
+            onClick={() => setPasswordOpen(true)}
+          >
+            {t('admin.changePasswordCta')}
+          </button>
+          <Link className="button button--ghost" to="/">
+            {t('admin.homeCta')}
+          </Link>
+        </div>
       </header>
 
       {notice ? <p className="admin-notice" role="status">{notice}</p> : null}
@@ -178,6 +189,11 @@ export function AdminPage() {
         onDisplay={(id) => runAction(t('admin.displayAction'), () => setFlightLogHidden(id, false))}
         onClearReply={(id) => runAction(t('admin.clearReplyAction'), () => clearFlightLogResponse(id))}
         dateFormatter={dateFormatter}
+      />
+
+      <ChangePasswordDialog
+        isOpen={passwordOpen}
+        onClose={() => setPasswordOpen(false)}
       />
     </main>
   )
