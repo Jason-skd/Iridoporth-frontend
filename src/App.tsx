@@ -1,8 +1,7 @@
 import { NavLink, Route, Routes } from 'react-router-dom'
 import './App.css'
 import { BrandSeal } from './components/BrandSeal'
-import { LocaleToggle } from './components/LocaleToggle'
-import { LocaleProvider, useTranslation } from './lib/i18n'
+import { useTranslation } from './lib/i18n'
 import { AdminPage } from './pages/AdminPage'
 import { FlightLogPage } from './pages/FlightLogPage'
 import { HomePage } from './pages/HomePage'
@@ -39,7 +38,6 @@ function Nav() {
             </NavLink>
           ))}
         </nav>
-        <LocaleToggle />
       </div>
     </header>
   )
@@ -47,19 +45,17 @@ function Nav() {
 
 function App() {
   return (
-    <LocaleProvider>
-      <div className="app-shell">
-        <Nav />
+    <div className="app-shell">
+      <Nav />
 
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/raspi-status" element={<RaspiStatusPage />} />
-          <Route path="/flight-log" element={<FlightLogPage />} />
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/admin" element={<AdminPage />} />
-        </Routes>
-      </div>
-    </LocaleProvider>
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/raspi-status" element={<RaspiStatusPage />} />
+        <Route path="/flight-log" element={<FlightLogPage />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/admin" element={<AdminPage />} />
+      </Routes>
+    </div>
   )
 }
 

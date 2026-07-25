@@ -15,7 +15,7 @@ type SubmitState =
 
 export function LoginPage() {
   const navigate = useNavigate()
-  const { t, locale } = useTranslation()
+  const { t } = useTranslation()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [submitState, setSubmitState] = useState<SubmitState>({ status: 'idle' })
@@ -52,7 +52,7 @@ export function LoginPage() {
     } catch (error) {
       setSubmitState({
         status: 'error',
-        message: errorMessage(error, locale, 'login.error'),
+        message: errorMessage(error, 'login.error'),
       })
     }
   }

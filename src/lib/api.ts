@@ -1,4 +1,4 @@
-import { t, type Locale } from './i18n'
+import { t } from './i18n'
 
 export type RaspiStatus = {
   available: boolean
@@ -55,16 +55,15 @@ export function errorCode(error: unknown): string | null {
 
 export function errorMessage(
   error: unknown,
-  locale: Locale,
   fallbackKey = 'errors.generic',
 ): string {
   const code = errorCode(error)
   if (code) {
     const key = `errors.${code}`
-    const message = t(locale, key)
+    const message = t(key)
     if (message !== key) return message
   }
-  return t(locale, fallbackKey)
+  return t(fallbackKey)
 }
 
 const apiBase = import.meta.env.VITE_API_BASE_URL ?? ''

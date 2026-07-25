@@ -11,6 +11,8 @@
   --text: #4f4a43;
   --muted: #766f64;
   --radius-panel: 28px;
+  --header-h: 72px;
+  --hero-peek: 7.5rem;
   --shadow-soft: 0 1.2rem 3rem color-mix(in srgb, var(--ink) 11%, transparent);
   --shadow-lift: 0 1.6rem 3.6rem color-mix(in srgb, var(--ink) 16%, transparent);
   --sans:
@@ -67,8 +69,8 @@ body {
   min-height: 100dvh;
   margin: 0;
   background:
-    linear-gradient(color-mix(in srgb, var(--ink) 4%, transparent) 1px, transparent 1px),
-    linear-gradient(90deg, color-mix(in srgb, var(--ink) 4%, transparent) 1px, transparent 1px),
+    linear-gradient(color-mix(in srgb, var(--ink) 2.5%, transparent) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in srgb, var(--ink) 2.5%, transparent) 1px, transparent 1px),
     transparent;
   background-size: 42px 42px;
 }
