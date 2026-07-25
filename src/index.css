@@ -11,6 +11,8 @@
   --text: #4f4a43;
   --muted: #766f64;
   --radius-panel: 28px;
+  --radius-pill: 999px;
+  --radius-input: 18px;
   --header-h: 72px;
   --hero-peek: 7.5rem;
   --shadow-soft: 0 1.2rem 3rem color-mix(in srgb, var(--ink) 11%, transparent);
